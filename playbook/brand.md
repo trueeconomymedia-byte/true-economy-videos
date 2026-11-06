@@ -25,3 +25,11 @@
 
 ## Video (scripts/video_card.py)
 - 4K vertical 2160x3840, 30 fps, length = the music loop (6-10 s), seamless loop; the first frame equals the last frame (platforms use the first frame as the thumbnail). The card, title, subtitle, footer and source never move. Only the animation layer moves: money streaks (flow ribbons), pulsing highlights (Card.pulse), or a soft sweep. Register animation through Card.ribbon / Card.pulse or pass anim={...} to Card.save.
+
+## Clarity first (applies to every post; checked in final QA)
+Before building, write one line: "the one comparison/idea is ___". Then:
+1. Elements that are compared (A vs B, before vs after, in vs out) share one chart and one scale, side by side or overlaid, never in separate sections.
+2. Different things get different colours; same kind of thing gets the same colour. Never colour two opposing items the same. Red = bad/loss/gap, green = good/gain (market cards), blue = main neutral series, yellow = the highlight. Use a colour for a meaning and keep that meaning across the whole card.
+3. A gap, difference or ratio the title talks about must be drawn: dotted connector line between the two ends, a bracket or a shaded band, with the value labelled on it.
+4. Labels sit on or next to what they describe (no legend lookup), and each number's unit and year are visible.
+5. Final QA question, answered by looking at the frame: "Could a stranger see in 3 seconds what is being compared and what the gap is?" If not, redesign before queueing.
