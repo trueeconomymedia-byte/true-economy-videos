@@ -34,3 +34,6 @@ Before building, write one line: "the one comparison/idea is ___". Then:
 4. Labels are for a first-time viewer: plain words with the number in the sentence ("US buys $1,260bn more than it sells"). No labels that only make sense if you already know the topic. Units and year visible.
 5. No collisions: check every label against every dotted line, bar and flag in the render; shorten the label or move it so it ends before the line. Do this on the SVG render BEFORE building the video.
 6. Final QA question, answered by looking at the frame: "Could a confused viewer explain each section back in one sentence, and see in 3 seconds what is compared and what the gap is?" If not, simplify or relabel and rebuild before queueing.
+
+## Caption limits
+- Instagram: at most 5 hashtags in total (caption + firstComment combined). TikTok 3-5. Facebook at most 2. YouTube 3. X/Threads/Bluesky at most 2. LinkedIn at most 3.
