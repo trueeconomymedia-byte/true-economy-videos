@@ -177,10 +177,10 @@ AJ = SVG.replace(".svg", ".anim.json")
 anim = json.load(open(AJ)) if os.path.exists(AJ) else {}
 if "flow" not in anim and os.path.exists(SVG.replace(".svg", ".ribbons.json")):
     anim["flow"] = json.load(open(SVG.replace(".svg", ".ribbons.json")))
-if not anim: anim["sweep"] = {"rgb": [7, 96, 241], "alpha": 0.10}     # default: a soft light band sweeps once per loop
+if not anim: anim["sweep"] = {"rgb": [51, 98, 206], "alpha": 0.10}     # default: a soft light band sweeps once per loop
 print("animation layers:", list(anim), flush=True)
 
-PCOL = {"#0760F1": (7, 96, 241), "#8DB8FF": (7, 96, 241), "#5B9BFF": (7, 96, 241), "#0548B5": (7, 96, 241),
+PCOL = {"#3362CE": (51, 98, 206), "#A4BBE8": (51, 98, 206),
         "#E23B3B": (214, 52, 46), "#FFF205": (217, 205, 0)}
 parts = []
 for (xs, ys0, ys1, xd, yd0, yd1, col) in anim.get("flow", []):
@@ -188,7 +188,7 @@ for (xs, ys0, ys1, xd, yd0, yd1, col) in anim.get("flow", []):
     n = int(max(3, round(hgt * ln / 27 ** 2)))
     cyc = int(min(8, max(1, round(62 * DUR / max(ln, 1)))))
     for i in range(n):
-        parts.append((xs, ys0, ys1, xd, yd0, yd1, (i + rng.random() * 0.8) / n, rng.random(), cyc, PCOL.get(col, (7, 96, 241))))
+        parts.append((xs, ys0, ys1, xd, yd0, yd1, (i + rng.random() * 0.8) / n, rng.random(), cyc, PCOL.get(col, (51, 98, 206))))
 def bez(p0, p1, p2, p3, t):
     u = 1 - t; return u*u*u*p0 + 3*u*u*t*p1 + 3*u*t*t*p2 + t*t*t*p3
 def chart_state(t):
@@ -211,7 +211,7 @@ def chart_state(t):
         sw = anim["sweep"]; u = t / DUR; cx = -300 + (1896 + 600) * u
         band = Image.new("RGBA", (1896, 2600), (0, 0, 0, 0)); bd = ImageDraw.Draw(band)
         a = int(255 * sw.get("alpha", 0.1))
-        bd.polygon([(cx - 120, 0), (cx + 120, 0), (cx + 120 - 700, 2600), (cx - 120 - 700, 2600)], fill=tuple(sw.get("rgb", [7, 96, 241])) + (a,))
+        bd.polygon([(cx - 120, 0), (cx + 120, 0), (cx + 120 - 700, 2600), (cx - 120 - 700, 2600)], fill=tuple(sw.get("rgb", [51, 98, 206])) + (a,))
         lay = Image.alpha_composite(lay, band.filter(ImageFilter.GaussianBlur(40)))
     lay = lay.filter(ImageFilter.GaussianBlur(0.9)) if parts else lay
     img.alpha_composite(lay)
