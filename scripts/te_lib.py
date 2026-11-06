@@ -169,6 +169,58 @@ class Card:
             s._o("".join(o)); s.text(cx, cy + r * 0.28, code, r * 0.8, INK, "b", "m")
         else:
             o.append(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="#00000022" stroke-width="1.5"/>'); s._o("".join(o))
+    def alluvial(s, cols, series, x_left, x_right, y_top, y_bottom, colors, flags=None, node_w=16, gap=4, fmt=None,
+                 label_cols=(0, -1), animate=True, op=0.9, small=14):
+        """Wave / bump-ribbon chart: ranked stacks at each time column joined by smooth S-curve ribbons whose width = value.
+        cols = ["1980","2000","2025"]; series = {"US":[2.9,10.3,30.6], ...} (None = absent in that column); colors = {"US": "#0760F1", ...};
+        flags = {"US":"US"}; fmt = lambda v: f"${v:.1f}T". Stacks are bottom-aligned, largest on top, same scale for every column.
+        Draw inside `with c.group("body")`; labels are drawn in the same group. Returns {name:[(x,y0,y1),...]} node geometry."""
+        n = len(cols); xs = [x_left + (x_right - x_left - node_w) * i / (n - 1) for i in range(n)]
+        fmt = fmt or (lambda v: f"{v:g}")
+        tot = [sum((v[i] or 0) for v in series.values()) for i in range(n)]
+        cnt = [sum(1 for v in series.values() if v[i]) for i in range(n)]
+        k = min((y_bottom - y_top - gap * (cnt[i] - 1)) / tot[i] for i in range(n) if tot[i])
+        geo = {nm: [None] * n for nm in series}
+        for i in range(n):
+            order = sorted([nm for nm in series if series[nm][i]], key=lambda nm: -series[nm][i])
+            y = y_bottom - (sum(series[nm][i] for nm in order) * k + gap * (len(order) - 1))
+            for nm in order:
+                h = series[nm][i] * k; geo[nm][i] = (xs[i], y, y + h); y += h + gap
+        for i in range(n - 1):                      # ribbons first (under the nodes)
+            for nm in series:
+                a, b = geo[nm][i], geo[nm][i + 1]
+                if a and b: s.ribbon(a[0] + node_w, a[1], a[2], b[0], b[1], b[2], colors[nm], op, animate)
+        for nm in series:                           # nodes
+            for g in geo[nm]:
+                if g: s.rect(g[0], g[1], node_w, g[2] - g[1], colors[nm])
+        for ci in label_cols:                       # labels at first / last column, fanned upward so they never collide
+            i = ci % n; left = (i == 0)
+            items = sorted([[(geo[nm][i][1] + geo[nm][i][2]) / 2, nm] for nm in series if geo[nm][i]], key=lambda t: -t[0])
+            prev = None
+            for it in items:                        # bottom-up: each label sits at least `need` px above the one below
+                nm = it[1]; big = (geo[nm][i][2] - geo[nm][i][1]) > 44; need = 46 if big else 24
+                cy = it[0] if prev is None else min(it[0], prev - need)
+                cy = min(cy, y_bottom - 6) if prev is None else cy
+                it.append(cy); it.append(big); prev = cy
+            for cy0, nm, cy, big in items:
+                v = series[nm][i]; fs = 26 if big else small + 4
+                x = xs[i] - 10 if left else xs[i] + node_w + 10; an = "r" if left else "l"
+                if flags and nm in flags:
+                    s.flag(x + (-14 if left else 14), cy, 14 if big else 10, flags[nm]); x += -34 if left else 34
+                if big:
+                    s.text(x, cy - 2, nm, fs, INK, "b", an); s.text(x, cy + fs * 0.85, fmt(v), fs * 0.72, GREY, "sb", an)
+                else:                                # small node: one line "name  value"
+                    vt = fmt(v); wv = width("sb", vt, fs * 0.8)
+                    if left: s.text(x, cy + 6, vt, fs * 0.8, GREY, "sb", "r"); s.text(x - wv - 8, cy + 6, nm, fs, INK, "b", "r")
+                    else: s.text(x, cy + 6, nm, fs, INK, "b", "l"); s.text(x + width("b", nm, fs) + 8, cy + 6, vt, fs * 0.8, GREY, "sb", "l")
+        for i in range(1, n - 1):                   # middle columns: value only, on the node
+            for nm in series:
+                g = geo[nm][i]
+                if g and (g[2] - g[1]) > 22: s.text(g[0] + node_w + 8, (g[1] + g[2]) / 2 + 6, fmt(series[nm][i]), 17, INK, "sb")
+        for i, cl in enumerate(cols):               # column headings
+            s.text(xs[i] + (node_w if i == 0 else 0) / 2 + (0 if i < n - 1 else node_w), y_top - 14, cl, 34, INK, "cb", "l" if i == 0 else ("r" if i == n - 1 else "m"))
+        return geo
+
     # --- template pieces (fixed positions: do not move)
     def title(s, line1, line2=None, mark=None):
         """Serif title on two lines. `mark` = substring of line1/line2 that gets the yellow marker. b1=137 headroom is fixed."""

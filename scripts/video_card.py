@@ -18,7 +18,7 @@ CARD = (64, 296, 2094, 3360)               # x0, bar top, x1, bottom of white
 BAR_B = 472
 CH_X, CH_Y = 66, 476                       # chart canvas origin (2028 x 2882)
 rng = np.random.default_rng(7)
-random.seed(7)
+random.seed(int(os.environ.get("SEED", 7)))
 
 # ---------------- background (filtered topic image) ----------------
 BW, BH = 2700, 4600
@@ -50,12 +50,72 @@ def motif_chips():
                                  (cx - 36, cy + t, cx, cy + t), (cx + s, cy + t, cx + s + 36, cy + t)]:
                 d.line((a, b, c, e), fill=190, width=10)
     return im
+
+def _noise(scale, seed):
+    r = np.random.default_rng(seed)
+    g = r.random((BH // scale + 2, BW // scale + 2)).astype(np.float32)
+    return np.asarray(Image.fromarray((g * 255).astype(np.uint8)).resize((BW, BH), Image.BICUBIC), dtype=np.float32) / 255
+def motif_contours():            # topographic map lines
+    s = int(os.environ.get("SEED", 7)); f = 0.6 * _noise(900, s) + 0.3 * _noise(350, s + 1) + 0.1 * _noise(120, s + 2)
+    ph = (f * 16) % 1.0; line = np.abs(ph - 0.5) > 0.455
+    a = np.full((BH, BW), 90, np.uint8); a[line] = 175
+    return Image.fromarray(a)
+def motif_graph():               # graph paper + rising/falling data lines
+    im = Image.new("L", (BW, BH), 90); d = ImageDraw.Draw(im)
+    for x in range(0, BW, 90): d.line((x, 0, x, BH), fill=120, width=3 if x % 450 else 6)
+    for y in range(0, BH, 90): d.line((0, y, BW, y), fill=120, width=3 if y % 450 else 6)
+    for _ in range(7):
+        y = random.randrange(600, BH - 600); pts = []
+        for x in range(-100, BW + 200, 90):
+            y += random.randint(-150, 140); y = min(max(y, 200), BH - 200); pts.append((x, y))
+        d.line(pts, fill=random.choice([170, 190, 60]), width=random.choice([8, 12]), joint="curve")
+        for p in pts[::3]: d.rectangle((p[0] - 12, p[1] - 12, p[0] + 12, p[1] + 12), fill=200)
+    return im
+def motif_skyline():             # layered city blocks
+    im = Image.new("L", (BW, BH), 85); d = ImageDraw.Draw(im)
+    for layer, (base_y, fill, hmax) in enumerate([(BH * 0.62, 110, 1500), (BH * 0.74, 135, 1700), (BH * 0.88, 165, 1900)]):
+        x = -50
+        while x < BW:
+            w = random.randint(140, 320); h = random.randint(300, hmax)
+            d.rectangle((x, base_y - h, x + w, BH), fill=fill, outline=fill + 25, width=4)
+            for wy in range(int(base_y - h + 40), int(base_y), 80):
+                for wx in range(x + 24, x + w - 24, 56):
+                    if random.random() < 0.45: d.rectangle((wx, wy, wx + 20, wy + 34), fill=fill + 55)
+            x += w + random.randint(0, 40)
+    return im
+def motif_halftone():            # halftone dot field with a soft diagonal swell
+    im = Image.new("L", (BW, BH), 90); d = ImageDraw.Draw(im); step = 54
+    f = _noise(1200, int(os.environ.get("SEED", 7)) + 5)
+    for yy in range(0, BH, step):
+        for xx in range(0, BW, step):
+            r = 4 + 20 * float(f[min(yy, BH - 1), min(xx, BW - 1)]) ** 1.5
+            d.ellipse((xx - r, yy - r, xx + r, yy + r), fill=175)
+    return im
+def motif_candles():             # candlestick chart
+    im = Image.new("L", (BW, BH), 90); d = ImageDraw.Draw(im); y = BH * 0.5; step = 76
+    for x in range(40, BW, step):
+        o = y; c = y + random.randint(-170, 170); hi = min(o, c) - random.randint(20, 150); lo = max(o, c) + random.randint(20, 150)
+        up = c < o; col = 185 if up else 60
+        d.line((x, hi, x, lo), fill=col, width=7); d.rectangle((x - 22, min(o, c), x + 22, max(o, c) + 4), fill=col, outline=190, width=3)
+        y = min(max(c, 500), BH - 500)
+    return im
+def motif_globe():               # latitude / longitude lines
+    im = Image.new("L", (BW, BH), 90); d = ImageDraw.Draw(im); cx, cy, R = BW * 0.55, BH * 0.45, 1500
+    for k in range(-6, 7):
+        d.ellipse((cx - R * abs(math.cos(k * math.pi / 14)), cy - R, cx + R * abs(math.cos(k * math.pi / 14)), cy + R), outline=170, width=7)
+    for k in range(-5, 6):
+        yy = cy + R * math.sin(k * math.pi / 12); rx = R * math.cos(k * math.pi / 12)
+        d.arc((cx - rx, yy - 0.18 * rx, cx + rx, yy + 0.18 * rx), 0, 360, fill=170, width=7)
+    d.ellipse((cx - R, cy - R, cx + R, cy + R), outline=190, width=10)
+    return im
+MOTIFS = {"chips": motif_chips, "contours": motif_contours, "graph": motif_graph, "skyline": motif_skyline,
+          "halftone": motif_halftone, "candles": motif_candles, "globe": motif_globe}
 def from_photo(path):
     im = Image.open(path).convert("L")
     r = max(BW / im.width, BH / im.height)
     im = im.resize((int(im.width * r) + 1, int(im.height * r) + 1), Image.LANCZOS)
     return im.crop((0, 0, BW, BH))
-base = motif_chips() if BG == "chips" else from_photo(BG)
+base = MOTIFS[BG]() if BG in MOTIFS else from_photo(BG)
 base = base.filter(ImageFilter.GaussianBlur(7))                      # out-of-focus depth
 a = np.asarray(base, dtype=np.float32) / 255
 # paper-like cloud + crease texture (same muted olive-grey look as the template)
@@ -64,7 +124,7 @@ def cloud(w, h, scale, seed):
     g = r.random((h // scale + 2, w // scale + 2)).astype(np.float32)
     return np.asarray(Image.fromarray((g * 255).astype(np.uint8)).resize((w, h), Image.BICUBIC), dtype=np.float32) / 255
 paper = 0.5 * cloud(BW, BH, 400, 1) + 0.3 * cloud(BW, BH, 120, 2) + 0.2 * cloud(BW, BH, 30, 3)
-lum = 0.45 + (a - 0.35) * 0.30 + (paper - 0.5) * 0.30
+lum = 0.45 + (a - 0.35) * 0.60 + (paper - 0.5) * 0.30
 lum = np.clip(lum, 0, 1)
 tone = np.stack([lum * 255 * 0.70 + 55, lum * 255 * 0.68 + 52, lum * 255 * 0.62 + 46], axis=2)  # olive-grey like the template
 yy, xx = np.mgrid[0:BH, 0:BW].astype(np.float32)

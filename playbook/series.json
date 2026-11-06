@@ -153,11 +153,11 @@
    "kind": "data",
    "gap_days": 14,
    "desc": "A flowing 'wave' / ridge / ribbon style graphic comparing 8-10 countries on one statistic (the user's saved Instagram reference). If reference_style is missing, make the nicest clean wave: smooth sorted ribbon or stacked wave with flags at each country.",
-   "reference_style": "Not yet provided by the user. When the user sends the Instagram screenshot, update this entry and brand/feedback.",
+   "reference_style": "User's saved reference (a 'Top 10 economies 1980-2025' style graphic): a ranked bump/alluvial chart. 3-4 time columns, country stacks bottom-aligned with the largest on top, joined by smooth S-curve ribbons whose width = the value, each country its own colour, round flag at every node, values at the nodes, big condensed headline, one-line takeaway. Build OUR version with Card.alluvial() in scripts/te_lib.py (True Economy fonts, the Canva card, our palette extended with tints). Do not copy the reference's design, fonts, colours or wording; it is for the idea only. Left labels need room: use x_left = X0+190 when the first column has small stacks.",
    "forms": [
+    "Card.alluvial ribbons across 3-4 years (preferred)",
     "smooth sorted wave line with flag markers",
-    "stacked wave bands",
-    "ridge lines"
+    "stacked wave bands"
    ],
    "sources": [
     "World Bank",
@@ -168,6 +168,14 @@
    ],
    "verify": "Same year and definition for every country; mark the highlighted country in red.",
    "topics": [
+    "Top 10 economies 1980 vs 2000 vs 2025 (GDP, current US$, IMF WEO)",
+    "Top 10 by population 1950-2050 (UN)",
+    "Biggest stock markets by value over time",
+    "Largest exporters 1990-2024",
+    "Top 10 carbon emitters over time",
+    "Richest countries per person over time",
+    "Top 10 trading partners of the US/UK over time",
+    "Biggest banks by assets over time",
     "GDP per person",
     "Average wages",
     "Inflation",
@@ -509,5 +517,17 @@
    "verify": "Fact-check the claim itself. If a viral claim is false, make the card about the real numbers. No speculation, no politics-as-opinion.",
    "topics": []
   }
+ },
+ "backgrounds": {
+  "options": [
+   "chips",
+   "contours",
+   "graph",
+   "skyline",
+   "halftone",
+   "candles",
+   "globe"
+  ],
+  "rule": "Pick the background motif that fits the topic (chips=tech/semiconductors, contours=geography/energy/land/housing, graph=markets/data/inflation, skyline=cities/property/business/banks, halftone=people/wealth/inequality/wages, candles=stock market/investing/trading, globe=countries/trade/global comparisons). Never the same motif two posts in a row (check log.jsonl `bg`). Pass it as the third argument to video_card.py and set SEED=<YYYYMMDD mod 1000> so each day's pattern differs; log it as `bg`."
  }
 }
