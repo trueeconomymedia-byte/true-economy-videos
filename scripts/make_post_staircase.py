@@ -12,7 +12,7 @@ with c.group("body"):
     for i,v,val,l1,l2,l3 in cols:
         x=i*(bw+gap)
         if i<2:
-            c.rect(x,base-v*k,bw,v*k,BLUE)
+            c.rect(x,base-v*k,bw,v*k,BLUE_L)   # context columns = light blue so the focal column 3 stands out
         else:
             c.rect(x,base-65*k,bw,65*k,BLUE)
             c.rect(x,base-165*k,bw,100*k,GREEN)
@@ -31,4 +31,4 @@ with c.group("note"):
 c.pulse(2*(bw+gap),base-165*k,bw,100*k,(255,255,255))   # white overlay = the green gets LIGHTER on every pulse, back to base between pulses
 c.footer("The US added about 100,000 more jobs than economists expected")
 c.source("Source: US Bureau of Labor Statistics, 6 Nov 2026 · forecasts: Bloomberg, Dow Jones, Yahoo Finance")
-c.save("/mnt/user-data/outputs/us-jobs-october-v3.svg")
+c.save("/mnt/user-data/outputs/us-jobs-october-v4.svg")
