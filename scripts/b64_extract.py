@@ -6,7 +6,7 @@ best = ""
 def walk(o):
     global best
     if isinstance(o, str):
-        if len(o) > len(best): best = o
+        if len(o) > len(best) and re.fullmatch(r"(data:[^,]*,)?[A-Za-z0-9+/_=\s-]+", o): best = o
         try: walk(json.loads(o))
         except Exception: pass
     elif isinstance(o, dict):
