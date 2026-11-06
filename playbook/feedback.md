@@ -8,3 +8,4 @@
 
 - 2026-11-06 TEMPLATE CHANGE (wins over any older size in the task prompts): canvas is now 948 x 1300 filling the safe zone edge to edge; plain white full-width card. Ignore '1014' / '2028' / '4056' widths in task prompts: use -w 948 / 1896 / 3792. Scripts already updated; never change the geometry. Backgrounds still vary: new motif and SEED every post (video_card.py, video_mkts.py and video_flow.py all support chips, contours, graph, skyline, halftone, candles, globe as 3rd argument).
 - 2026-11-06 YELLOW is now #FFF205 everywhere (headline marker, net-income tiles/ribbons, any yellow). Never use #EDE22E.
+- 2026-11-06 HEADLINE: always two lines with the black bar to the left spanning both lines (see brand.md Headline). Applies to every card; word the headline to span two balanced lines.

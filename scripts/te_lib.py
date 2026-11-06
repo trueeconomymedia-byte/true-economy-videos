@@ -223,18 +223,28 @@ class Card:
 
     # --- template pieces (fixed positions: do not move)
     def title(s, line1, line2=None, mark=None):
-        """Serif title on two lines. `mark` = substring of line1/line2 that gets the yellow marker. b1=66 is fixed."""
-        size = min(92.0, 948 / width("cb", line1, 1), 948 / width("cb", line2, 1) if line2 else 92.0)
+        """Serif title ALWAYS on two lines, with the black bar on its left (new template). `mark` = substring that gets the yellow marker.
+        If only line1 is given it is split into two balanced lines automatically. Choose wording so both lines are of similar length. b1=66 is fixed."""
+        if not line2:
+            ws = line1.split(); best = None
+            for i in range(1, len(ws)):
+                a_, b_ = " ".join(ws[:i]), " ".join(ws[i:]); d_ = abs(width("cb", a_, 1) - width("cb", b_, 1))
+                if best is None or d_ < best[0]: best = (d_, a_, b_)
+            assert best, "title needs at least two words (or give line1 and line2)"
+            _, line1, line2 = best
+        TX = 34
+        size = min(92.0, (948 - TX) / width("cb", line1, 1), (948 - TX) / width("cb", line2, 1))
         b1 = 66; pitch = size * 0.93
         with s.group("title"):
+            s.rect(X0, b1 - size * 0.70, 8, size * 0.70 + pitch, INK)
             if mark:
                 for ln, by in ((line1, b1), (line2, b1 + pitch)):
                     if ln and mark in ln:
                         i = ln.index(mark); wp = width("cb", ln[:i], size); wn = width("cb", mark, size)
-                        s.rect(X0 + wp - 6, by - size * 0.76, wn + 12, size * 0.93, YEL)
-            s.text(X0, b1, line1, size, INK, "cb")
-            if line2: s.text(X0, b1 + pitch, line2, size, INK, "cb")
-        s._ty = b1 + (pitch if line2 else 0)
+                        s.rect(X0 + TX + wp - 6, by - size * 0.76, wn + 12, size * 0.93, YEL)
+            s.text(X0 + TX, b1, line1, size, INK, "cb")
+            s.text(X0 + TX, b1 + pitch, line2, size, INK, "cb")
+        s._ty = b1 + pitch
     def subtitle(s, t):
         with s.group("title"): s.text(X0, s._ty + 52, t, 24, GREY, "m")
         s.top = s._ty + 52 + 70           # first y below the subtitle for KPI row / chart

@@ -75,13 +75,15 @@ yoy = lambda a, b: f"{(a / b - 1) * 100:+.0f}% YoY"
 X0 = 0
 # ---- title (same look as the template: bold serif, yellow marker behind company name)
 line1 = f"How {co} makes"
-size = min(92.0, 948 / width("cb", line1, 1))
+TX = 34
+size = min(92.0, (948 - TX) / width("cb", line1, 1))
 b1 = 66; pitch = size * 0.93
 out.append('<g id="title">')
 wp = width("cb", "How ", size); wn = width("cb", co, size)
-rect(X0 + wp - 6, b1 - size * 0.76, wn + 12, size * 0.93, YEL)
-text(X0, b1, line1, size, INK, "cb")
-text(X0, b1 + pitch, "money?", size, INK, "cb")
+rect(X0, b1 - size * 0.70, 8, size * 0.70 + pitch, INK)
+rect(X0 + TX + wp - 6, b1 - size * 0.76, wn + 12, size * 0.93, YEL)
+text(X0 + TX, b1, line1, size, INK, "cb")
+text(X0 + TX, b1 + pitch, "money?", size, INK, "cb")
 text(X0, b1 + pitch + 52, f"Where each quarter’s revenue goes · {d['period']}", 24, GREY, "m")
 out.append('</g>')
 
