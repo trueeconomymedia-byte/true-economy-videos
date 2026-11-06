@@ -1,0 +1,9 @@
+Connector check 2026-11-06
+Buffer: WORKS. get_account OK (org "My organization"); list_channels OK: tiktok trueeconomy, instagram trueeconomymedia, facebook True Economy. Nothing posted.
+Google Drive: WORKS (search/list). Folder "True Economy Music" found; 15+ ES_*.mp3 files listed (more pages exist), smallest seen 3.9 MB.
+Drive download: NOT TESTED - no file under 2 MB in the pages listed (all 3.9-8.0 MB), so download_file_content was not called.
+GitHub add_repo: tool not exposed in this session (repo was already in session scope, no error).
+GitHub clone: WORKS (git clone --depth 1 to /tmp/vids succeeded).
+raw.githubusercontent.com headers: WORKS - HTTP/2 200, cache-control max-age=300.
+Yahoo chart API: WORKS - HTTP 200.
+GitHub push: see message (result of this push).
