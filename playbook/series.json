@@ -1,0 +1,513 @@
+{
+ "version": 1,
+ "rules": [
+  "ONE daily card post. Slot = ISO week number mod 4 -> row of `rotation`, weekday Mon=0 -> column.",
+  "Monthly special: if today is a Saturday, no us_vs_uk in the last 28 days, and the month has no us_vs_uk yet, use us_vs_uk instead of the planned series.",
+  "how_company only if a candidate company has a NEWER reported quarter than the one in the log; otherwise use `fallbacks`.",
+  "trend only if a topic is clearly trending today and verifiable; otherwise use `fallbacks`.",
+  "Never the same series as yesterday. Never repeat a topic within 56 days. Never repeat a company until it reports a newer quarter.",
+  "Never post an unverified number. If a series cannot be verified today, pick the next fallback.",
+  "Stock Market Today is a separate task and does not count here."
+ ],
+ "fallbacks": [
+  "explained",
+  "country_vs_country",
+  "who_owns",
+  "price_of",
+  "how_finance",
+  "how_business",
+  "inflation_pocket",
+  "where_tax_goes",
+  "wealth_gap",
+  "biggest_companies",
+  "wave"
+ ],
+ "rotation": [
+  [
+   "country_vs_country",
+   "how_company",
+   "explained",
+   "who_owns",
+   "wave",
+   "how_business",
+   "price_of"
+  ],
+  [
+   "wave",
+   "how_company",
+   "how_finance",
+   "country_vs_country",
+   "explained",
+   "who_owns",
+   "inflation_pocket"
+  ],
+  [
+   "explained",
+   "how_company",
+   "country_vs_country",
+   "how_business",
+   "wave",
+   "who_owns",
+   "trend"
+  ],
+  [
+   "who_owns",
+   "how_company",
+   "wave",
+   "how_finance",
+   "country_vs_country",
+   "explained",
+   "how_business"
+  ]
+ ],
+ "series": {
+  "how_company": {
+   "name": "How (company) makes money?",
+   "kind": "data",
+   "gap_days": 14,
+   "desc": "Quarterly income-statement flow chart: revenue segments -> gross profit -> operating profit -> net income, with costs and tax. THE reference template (scripts/make_flow.py + video flow streaks).",
+   "how": "Use scripts/make_flow.py exactly (data.json per the make_flow docstring in the old prompt: company, period, rev, cogs, opex, other, tax, prior{rev,gp,op,ni}, segments, other_label, cogs_name, opex_name, tax_name, source). Only when a company has reported a quarter NEWER than the one already charted (see log). Verify the numbers tie to the filing.",
+   "sources": [
+    "company earnings release",
+    "SEC 10-Q/10-K"
+   ],
+   "topics": [
+    "Apple",
+    "Microsoft",
+    "Amazon",
+    "Alphabet",
+    "Meta",
+    "Tesla",
+    "Netflix",
+    "Walmart",
+    "Costco",
+    "Target",
+    "Home Depot",
+    "Coca-Cola",
+    "PepsiCo",
+    "McDonald's",
+    "Starbucks",
+    "Disney",
+    "Nike",
+    "Adobe",
+    "Salesforce",
+    "Oracle",
+    "Broadcom",
+    "Micron",
+    "Dell",
+    "FedEx",
+    "Visa",
+    "Mastercard",
+    "Intel",
+    "AMD",
+    "Qualcomm",
+    "Uber",
+    "Airbnb",
+    "Spotify",
+    "Nvidia",
+    "Lululemon"
+   ],
+   "note": "Charted so far: Nvidia (Q2 FY27), Apple (Q4 FY26). Earnings seasons: mid-Jan to Feb, mid-Apr to May, mid-Jul to Aug, mid-Oct to Nov; off-cycle reporters fill gaps."
+  },
+  "country_vs_country": {
+   "name": "Country vs country",
+   "kind": "data",
+   "gap_days": 10,
+   "desc": "Two (sometimes three) countries compared on 4-6 relevant economic measures with one clear verdict per measure. Pick matchups people care about or are in the news.",
+   "forms": [
+    "head-to-head split with big numbers and winner marker",
+    "mirrored bars",
+    "slope chart (then vs now)",
+    "scorecard of 5 mini bars with flags",
+    "dot-grid per 100 people"
+   ],
+   "sources": [
+    "World Bank",
+    "IMF WEO",
+    "OECD",
+    "national statistics offices",
+    "UN"
+   ],
+   "verify": "Each number needs a named source and a year; same year for both countries; state units (PPP vs nominal). Prefer latest full-year data.",
+   "topics": [
+    "US vs China economy",
+    "UK vs France",
+    "India vs China",
+    "Germany vs Japan",
+    "US vs Canada",
+    "UK vs Germany",
+    "Brazil vs Mexico",
+    "South Korea vs Japan",
+    "Saudi Arabia vs UAE",
+    "Australia vs Canada",
+    "Italy vs Spain",
+    "Nigeria vs South Africa",
+    "Poland vs Czechia",
+    "Switzerland vs Singapore",
+    "Turkey vs Argentina",
+    "Vietnam vs Thailand"
+   ]
+  },
+  "wave": {
+   "name": "Wave visual: 8-10 countries compared",
+   "kind": "data",
+   "gap_days": 14,
+   "desc": "A flowing 'wave' / ridge / ribbon style graphic comparing 8-10 countries on one statistic (the user's saved Instagram reference). If reference_style is missing, make the nicest clean wave: smooth sorted ribbon or stacked wave with flags at each country.",
+   "reference_style": "Not yet provided by the user. When the user sends the Instagram screenshot, update this entry and brand/feedback.",
+   "forms": [
+    "smooth sorted wave line with flag markers",
+    "stacked wave bands",
+    "ridge lines"
+   ],
+   "sources": [
+    "World Bank",
+    "IMF",
+    "OECD",
+    "UN",
+    "Eurostat"
+   ],
+   "verify": "Same year and definition for every country; mark the highlighted country in red.",
+   "topics": [
+    "GDP per person",
+    "Average wages",
+    "Inflation",
+    "Unemployment",
+    "Public debt as % of GDP",
+    "Tax take as % of GDP",
+    "Life expectancy vs health spend",
+    "Minimum wage",
+    "Billionaires per million people",
+    "Cost of a Big Mac",
+    "Working hours per year",
+    "Retirement age",
+    "Rent as % of income",
+    "Defence spending % of GDP",
+    "Renewable energy share"
+   ]
+  },
+  "explained": {
+   "name": "Explained: Why are / Why do / What are",
+   "kind": "evergreen",
+   "gap_days": 4,
+   "desc": "One sharp economic question answered visually in one card. Titles start with 'Why are...', 'Why do...' or 'What are...'. Over-simplified but correct.",
+   "forms": [
+    "cause-and-effect chain of 3-4 boxes with a number each",
+    "before/after split",
+    "single big number with 3 reasons",
+    "timeline",
+    "dot grid"
+   ],
+   "sources": [
+    "central banks",
+    "statistics offices",
+    "IMF/World Bank",
+    "peer-reviewed or institutional research"
+   ],
+   "verify": "Every claim needs a named source. Where economists disagree say 'one reason' not 'the reason'.",
+   "topics": [
+    "Why are houses so expensive?",
+    "Why do prices keep rising (inflation)?",
+    "Why are eggs so expensive?",
+    "Why do airlines go bankrupt?",
+    "Why are interest rates raised to fight inflation?",
+    "What are tariffs?",
+    "What is a recession?",
+    "Why is the Swiss franc so strong?",
+    "Why are concert tickets so expensive?",
+    "What is national debt?",
+    "Why do currencies fall?",
+    "What are bonds?",
+    "Why is petrol cheaper in the US?",
+    "What is quantitative easing?",
+    "Why do rich countries have lower growth?",
+    "Why is gold at record highs?",
+    "What is a trade deficit?",
+    "Why are banks so profitable?"
+   ]
+  },
+  "who_owns": {
+   "name": "Who owns...?",
+   "kind": "data",
+   "gap_days": 10,
+   "desc": "Ownership breakdown of a famous company, asset or sector (shareholders, funds, families, governments).",
+   "forms": [
+    "stacked ownership bar",
+    "donut with top holders",
+    "tree/ownership chain",
+    "ranked list with logos replaced by coloured initials"
+   ],
+   "sources": [
+    "SEC proxy statements and 13F",
+    "company annual reports",
+    "Companies House",
+    "Bloomberg-style public holder lists via Yahoo Finance"
+   ],
+   "verify": "Cross-check two sources and show the as-of date. Never state ownership of private individuals' wealth as fact unless published by a reliable source.",
+   "topics": [
+    "Who owns Apple?",
+    "Who owns Tesla?",
+    "Who owns Coca-Cola?",
+    "Who owns the UK's water companies?",
+    "Who owns US national debt?",
+    "Who owns Manchester United?",
+    "Who owns the NYSE?",
+    "Who owns Instagram, WhatsApp, Facebook (Meta)?",
+    "Who owns the UK's energy firms?",
+    "Who owns Nvidia?",
+    "Who owns Amazon?",
+    "Who owns the big four banks in the UK?",
+    "Who owns US farmland?",
+    "Who owns gold?"
+   ]
+  },
+  "how_business": {
+   "name": "How (business) makes money?",
+   "kind": "evergreen",
+   "gap_days": 8,
+   "desc": "A flow chart of a typical everyday business: what comes in, what goes out, profit, tax. Label clearly as 'typical / illustrative' unless sourced.",
+   "forms": [
+    "Sankey flow (reuse the reference style)",
+    "waterfall",
+    "pound/dollar split into coins as dot grid"
+   ],
+   "sources": [
+    "industry reports",
+    "trade bodies",
+    "company filings of listed examples"
+   ],
+   "verify": "Use sourced typical margins (state source and year); label 'illustrative' for any estimate; never invent a precise figure.",
+   "topics": [
+    "Nightclub",
+    "Coffee shop",
+    "Cinema",
+    "Airline",
+    "Supermarket",
+    "Gym",
+    "Hotel",
+    "Restaurant",
+    "Barber shop",
+    "Football club",
+    "Uber driver",
+    "Car dealership",
+    "Pub",
+    "Streaming service",
+    "Fast-food franchise",
+    "Dentist",
+    "Airbnb host"
+   ]
+  },
+  "how_finance": {
+   "name": "How (finance) works",
+   "kind": "evergreen",
+   "gap_days": 10,
+   "desc": "Over-simplified visual explainer of a financial system idea (banks, central banks, markets).",
+   "forms": [
+    "flow diagram with arrows and numbers",
+    "stack of layers",
+    "step-by-step 4-5 box chain"
+   ],
+   "sources": [
+    "Bank of England",
+    "Federal Reserve",
+    "BIS",
+    "IMF"
+   ],
+   "verify": "Simplify wording but keep the mechanism correct; show a worked example with round numbers.",
+   "topics": [
+    "How banks create money",
+    "How the Federal Reserve works",
+    "How interest rates move your mortgage",
+    "How the stock market works",
+    "How bonds work",
+    "How inflation is measured",
+    "How a central bank prints money",
+    "How the national debt works",
+    "How credit scores work",
+    "How insurance makes money",
+    "How pensions work",
+    "How a stock exchange makes money",
+    "How hedge funds make money",
+    "How exchange rates work",
+    "How taxes are collected"
+   ]
+  },
+  "price_of": {
+   "name": "Price of... comparisons",
+   "kind": "data",
+   "gap_days": 7,
+   "desc": "One item compared across countries or across time (a Big Mac, a pint, rent, a cinema ticket, a coffee).",
+   "forms": [
+    "ranked bars with flags",
+    "then vs now split",
+    "index chart"
+   ],
+   "sources": [
+    "The Economist Big Mac index",
+    "Numbeo (label as crowdsourced)",
+    "national statistics",
+    "OECD"
+   ],
+   "verify": "Same currency conversion date; state year; label crowdsourced data as such.",
+   "topics": [
+    "Big Mac price by country",
+    "Price of a pint in Europe",
+    "Cost of a coffee in 10 cities",
+    "Average rent in 10 cities",
+    "Price of petrol by country",
+    "Cost of a cinema ticket",
+    "Cost of a new iPhone by country",
+    "Price of a Netflix subscription by country",
+    "Average house price to income ratio"
+   ]
+  },
+  "inflation_pocket": {
+   "name": "What £100 / $100 bought then vs now",
+   "kind": "evergreen",
+   "gap_days": 14,
+   "desc": "Purchasing power over time with simple items.",
+   "forms": [
+    "then vs now split",
+    "dot grid of what 100 buys",
+    "timeline"
+   ],
+   "sources": [
+    "Bank of England inflation calculator",
+    "BLS CPI",
+    "ONS"
+   ],
+   "verify": "State the years and CPI source; use real CPI series not guesses.",
+   "topics": [
+    "£100 in 1980 vs today",
+    "$100 in 2000 vs today",
+    "A pint in 1990 vs now",
+    "House price vs wages 1985 vs now",
+    "Cost of a loaf of bread over time",
+    "Minimum wage vs rent over time",
+    "Petrol price over time"
+   ]
+  },
+  "us_vs_uk": {
+   "name": "US vs UK economy",
+   "kind": "data",
+   "gap_days": 28,
+   "max_per_month": 1,
+   "desc": "The big US vs UK economy comparison for the current period. At MOST once a month, only as an occasional special.",
+   "forms": [
+    "head-to-head scorecard",
+    "mirrored bars",
+    "slope chart"
+   ],
+   "sources": [
+    "IMF WEO",
+    "ONS",
+    "BEA",
+    "BLS",
+    "Bank of England",
+    "Federal Reserve"
+   ],
+   "verify": "Same period and units for both; convert currencies at a stated rate; GDP per person in PPP and nominal if both used.",
+   "topics": [
+    "US vs UK economy this year (as of October)",
+    "US vs UK wages",
+    "US vs UK house prices",
+    "US vs UK inflation and interest rates",
+    "US vs UK health spending",
+    "US vs UK taxes",
+    "US vs UK debt"
+   ]
+  },
+  "where_tax_goes": {
+   "name": "Where does the tax go?",
+   "kind": "evergreen",
+   "gap_days": 14,
+   "desc": "Government budget split as a flow chart or donut: where each £/$ of tax goes.",
+   "forms": [
+    "Sankey from taxes to spending",
+    "donut",
+    "dot grid of 100"
+   ],
+   "sources": [
+    "HM Treasury",
+    "OBR",
+    "US Treasury",
+    "CBO"
+   ],
+   "verify": "Latest published budget year; state it.",
+   "topics": [
+    "Where each £1 of UK tax goes",
+    "Where each $1 of US federal tax goes",
+    "Who pays the most income tax in the UK",
+    "Where each £1 of VAT comes from",
+    "UK vs US tax burden"
+   ]
+  },
+  "wealth_gap": {
+   "name": "Wealth and inequality",
+   "kind": "data",
+   "gap_days": 14,
+   "desc": "Distribution of income or wealth.",
+   "forms": [
+    "100-dot grid by wealth share",
+    "stacked bar by percentile",
+    "ranked countries with flags"
+   ],
+   "sources": [
+    "World Inequality Database",
+    "OECD",
+    "ONS",
+    "Federal Reserve DFA"
+   ],
+   "verify": "Define wealth vs income; state year.",
+   "topics": [
+    "Top 1% share of wealth in 10 countries",
+    "If the world were 100 people",
+    "Median vs average wealth",
+    "Billionaire wealth vs a country's GDP",
+    "Gender pay gap by country"
+   ]
+  },
+  "biggest_companies": {
+   "name": "Biggest companies / rankings",
+   "kind": "data",
+   "gap_days": 14,
+   "desc": "Ranked lists with bold bars: biggest companies, richest countries, largest economies.",
+   "forms": [
+    "ranked bars",
+    "bar race snapshot with then vs now",
+    "treemap-style blocks"
+   ],
+   "sources": [
+    "companiesmarketcap-style public market cap data via Yahoo Finance",
+    "World Bank",
+    "IMF"
+   ],
+   "verify": "State the date of market caps; use a single date for all.",
+   "topics": [
+    "World's biggest companies by value",
+    "Biggest economies in 2030 (IMF projection)",
+    "Companies bigger than countries",
+    "Most valuable brands",
+    "Largest banks by assets",
+    "Biggest employers on Earth"
+   ]
+  },
+  "trend": {
+   "name": "Trending now (economic)",
+   "kind": "conditional",
+   "gap_days": 3,
+   "desc": "A card on a genuinely trending, economically relevant topic (viral news, market event, policy shock, viral claim). ONLY if the topic is clearly trending today (several major outlets cover it) and the data can be verified. Otherwise do not use this series.",
+   "forms": [
+    "any form that fits"
+   ],
+   "sources": [
+    "Reuters",
+    "AP",
+    "BBC",
+    "FT",
+    "official statistics"
+   ],
+   "verify": "Fact-check the claim itself. If a viral claim is false, make the card about the real numbers. No speculation, no politics-as-opinion.",
+   "topics": []
+  }
+ }
+}

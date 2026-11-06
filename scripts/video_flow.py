@@ -8,7 +8,8 @@ from PIL import Image, ImageDraw, ImageFilter
 
 SVG, OUT = sys.argv[1], sys.argv[2]
 BG = sys.argv[3] if len(sys.argv) > 3 else "chips"
-TPL = "/home/claude/vid/t0.png"          # frame 0 of the user's template (logo source)
+LOGO_B64 = "iVBORw0KGgoAAAANSUhEUgAAADQAAAAwCAAAAAB7ggYhAAADjUlEQVR42p2W308cVRTHP+fO7E+G7q5YqKyiUMAEoyFtxBpCow+Gl6o18cX4x/UP6LuJ8Uf0obFKNUTCDyMGaaLgIrAsDCw7M/f4MDt0WRhZvS+TzZ7Pved8z497Rbh8KenL8D9WOiRXQPLfGBARMZQu2IjpthJ59gsQK5I1cfiKICK2ZY17fhurGsX6xLjJjAy0nRKMGBEgtN2nr+6rArR3G3j9/Xg3e2QjRoHc0Y6fGE+0vw8e75FASnRcHSvmIv+vrbV1ezJXqpINdr5eFcDJlfLXJ8sqsvfdzw0SKE6jU3QOH60t1+oE/e8ATlDbrGMV8dw/Zu6ORWFjaTs8gwCsBMdPlx/WtsHkrAoW9euHAPhsbbbul7PLi5Ge5UkAi7/70+frewIiBUQweJVEKbv+xRPdWdxKlHFByTdVWt9/s9SMbbKRYKF51M6KwuZnL+6sHkKHe03UXXq0cmBAUAVBjT4rXBH/h5mNreAcBFpbWqm3JVG0q8jFDQ++3T2mCzrZWqvbOAIFDFEHk8nZwDyRoBMSEL4CUNFzNVgMAqBy13ypGmC7WkNV41DO1+1xAJRmP6zmyHaendpPEYBkCsOz89NZB6KOMN3ODpKudi84xdzMe7e9voK0Ojd0006yVKrB4MuvvV32Ar+J6JWQX4Dn77zklZ+byHvGdo+Zy6E+Ik43fgmGJvKDeBfiTnVPDjaWn1aGXv34Ru6Cjaspg0Sj5pHTaPz65yfXBno+KVkLQzeKvbsn1gLK47HR3qHku7+QjIgz2VMrwhiNQDGs/HakUOgxJgVRpLUWNuEEkHa+3PR5rUl7LeZ9RAtOK9ArhUjiMLulENcp50+2e7tqVIUg+ptKFL3x0XCP95MIqBTNob35wUQ+FRLBYON2BlVFTWDM5Kdz5UaKeiKxtYiqkICRGX7rtjomVXLF9TxVR0QLJyiI0czo/Py4puZJsa6XLSiosXUbH16qvntvBLF6GRT74tycKlrr2vJQaQ/AqU7dmxxXm+StC1IBKpN3pq0hVG/klRAYvP7mrVm/4UVOqnt9I1O3pr14ls5NLADT/S9c20f2HFPLXrjEY9XGJ8dttv8UgPDUYpwicSyt4sqPv18Cgdh8MTiuNDAWYxzVKLJiHIBmKfBJgdwwE6oB3FY8CbX9D0bPBqZzgbbxPBcVAdV26ylWlfQql44HlXT28JnmTk/Pmn9/UElPT7d/ANnncqYfvJHOAAAAAElFTkSuQmCC"
+import base64, io
 W, H, FPS = 2160, 3840, 30
 DUR = round(float(os.environ.get("LOOP_LEN", 10)) * FPS) / FPS
 AUDIO = os.environ.get("AUDIO")
@@ -88,7 +89,7 @@ paper_card = 250 + rng.normal(0, 1.1, (y1 - y0, x1 - x0, 1)) + 1.2 * np.asarray(
     Image.fromarray((rng.random((y1 // 60, x1 // 60)) * 255).astype(np.uint8)).resize((x1 - x0, y1 - y0), Image.BICUBIC), dtype=np.float32)[..., None] / 255
 card_full = np.clip(paper_card, 0, 255).astype(np.uint8).repeat(3, axis=2)
 card_full[: BAR_B - y0, :, :] = 0
-logo = Image.open(TPL).convert("L").crop((56, 168, 108, 216))
+logo = Image.open(io.BytesIO(base64.b64decode(LOGO_B64))).convert("L")
 logo = logo.resize((logo.width * 4, logo.height * 4), Image.LANCZOS)
 la = np.asarray(logo, dtype=np.float32)
 la = np.clip((la - 70) / (185 - 70), 0, 1) * 232                      # firm up the edges, keep the original soft white
@@ -107,7 +108,7 @@ def render(ids, name):
     subprocess.run(["rsvg-convert", "-w", "2028", f"/tmp/{name}.svg", "-o", f"/tmp/{name}.png"], check=True)
     return Image.open(f"/tmp/{name}.png").convert("RGBA")
 paper = Image.fromarray(chart_bg.astype(np.uint8)).convert("RGBA")
-paper.alpha_composite(render(["title", "kpis", "segments", "spine", "footer"], "ly_static"))
+paper.alpha_composite(render(["title", "kpis", "segments", "spine", "footer", "source"], "ly_static"))
 chart_static = paper
 L_labels = render(["labels"], "ly_labels")
 ribbons = json.load(open(SVG.replace(".svg", ".ribbons.json")))
