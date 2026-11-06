@@ -68,10 +68,10 @@ def money(v):
 d = json.load(open(sys.argv[1]))
 X0=0; CW=948
 l1="Stock market"
-TX=34; size=min(92.0, (948-TX)/width("cb",l1,1)); b1=66; pitch=size*0.93
+TX=38; size=min(92.0, (948-TX)/width("cb",l1,1)); b1=66; pitch=size*0.93
 out.append('<g id="title">')
 wt=width("cb","today.",size)
-rect(X0, b1-size*0.70, 8, size*0.70+pitch, INK)
+rect(X0, b1-size*0.70, 12, size*0.70+pitch, INK)
 rect(X0+TX-6, b1+pitch-size*0.76, wt+12, size*0.93, YEL)
 text(X0+TX,b1,l1,size,INK,"cb"); text(X0+TX,b1+pitch,"today.",size,INK,"cb")
 text(X0,b1+pitch+52,d["date"]+" · US close",24,GREY,"m")

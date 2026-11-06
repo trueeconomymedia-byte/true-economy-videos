@@ -232,11 +232,11 @@ class Card:
                 if best is None or d_ < best[0]: best = (d_, a_, b_)
             assert best, "title needs at least two words (or give line1 and line2)"
             _, line1, line2 = best
-        TX = 34
+        TX = 38
         size = min(92.0, (948 - TX) / width("cb", line1, 1), (948 - TX) / width("cb", line2, 1))
         b1 = 66; pitch = size * 0.93
         with s.group("title"):
-            s.rect(X0, b1 - size * 0.70, 8, size * 0.70 + pitch, INK)
+            s.rect(X0, b1 - size * 0.70, 12, size * 0.70 + pitch, INK)
             if mark:
                 for ln, by in ((line1, b1), (line2, b1 + pitch)):
                     if ln and mark in ln:
