@@ -28,8 +28,9 @@
 
 ## Clarity first (applies to every post; checked in final QA)
 Before building, write one line: "the one comparison/idea is ___". Then:
-1. Elements that are compared (A vs B, before vs after, in vs out) share one chart and one scale, side by side or overlaid, never in separate sections.
-2. Different things get different colours; same kind of thing gets the same colour. Never colour two opposing items the same. Red = bad/loss/gap, green = good/gain (market cards), blue = main neutral series, yellow = the highlight. Use a colour for a meaning and keep that meaning across the whole card.
-3. A gap, difference or ratio the title talks about must be drawn: dotted connector line between the two ends, a bracket or a shaded band, with the value labelled on it.
-4. Labels sit on or next to what they describe (no legend lookup), and each number's unit and year are visible.
-5. Final QA question, answered by looking at the frame: "Could a stranger see in 3 seconds what is being compared and what the gap is?" If not, redesign before queueing.
+1. Colour logic matches meaning. Things of the same kind get the SAME colour (e.g. bought and sold are both blue; never different shades just for variety). Only the difference, gap or problem is True Economy red. A positive item that reduces a red total is green and carries a short note such as "cuts the gap". Keep each colour's meaning across the whole card.
+2. Show relationships on ONE chart, not in separate sections. A derived figure (gap, net, share) is drawn on the same scale, aligned under or over its source, joined by thin dotted guide lines.
+3. Build breakdowns as a visible sum: number the steps (1. 2. 3.) and write the arithmetic in the last label (e.g. "$1,260bn − $328bn = the trade deficit"). Direction must be obvious.
+4. Labels are for a first-time viewer: plain words with the number in the sentence ("US buys $1,260bn more than it sells"). No labels that only make sense if you already know the topic. Units and year visible.
+5. No collisions: check every label against every dotted line, bar and flag in the render; shorten the label or move it so it ends before the line. Do this on the SVG render BEFORE building the video.
+6. Final QA question, answered by looking at the frame: "Could a confused viewer explain each section back in one sentence, and see in 3 seconds what is compared and what the gap is?" If not, simplify or relabel and rebuild before queueing.
