@@ -181,7 +181,7 @@ if not anim: anim["sweep"] = {"rgb": [7, 96, 241], "alpha": 0.10}     # default:
 print("animation layers:", list(anim), flush=True)
 
 PCOL = {"#0760F1": (7, 96, 241), "#8DB8FF": (7, 96, 241), "#5B9BFF": (7, 96, 241), "#0548B5": (7, 96, 241),
-        "#E23B3B": (214, 52, 46), "#EDE22E": (200, 187, 16)}
+        "#E23B3B": (214, 52, 46), "#FFF205": (217, 205, 0)}
 parts = []
 for (xs, ys0, ys1, xd, yd0, yd1, col) in anim.get("flow", []):
     hgt = ((ys1 - ys0) + (yd1 - yd0)) / 2; ln = abs(xd - xs) + abs((yd0 - ys0)) * 0.3

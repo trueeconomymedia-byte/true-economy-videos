@@ -6,10 +6,10 @@
 - Fixed positions (Facebook's feed crops the top and bottom of vertical video): title baseline 1 at y=137 (the headroom above is deliberate), footer takeaway line at y=H-100 (1341), source line at y=H-57 (1384). Left margin x=72, content width 870 (right edge 942). The chart body lives between `Card.top` and `Card.bottom` (H-150).
 - `scripts/te_lib.py` builds all of this: Card.title / subtitle / kpi_row / footer / source. Use it for every new card. make_flow.py is the original reference post ("How Nvidia makes money?") and is still used for the How (company) series.
 - Pure flat vector: paths only, text outlined, solid colours (no opacity, gradients, images, filters, drop shadows). Must stay sharp when imported into Canva. Groups must be flat (no nested groups except flag clip-paths).
-- Title: Charter bold serif, up to 92 px, two lines max, yellow marker (#EDE22E) behind the key word. Subtitle 24 px grey Inter Medium. Footer 30 px Inter Bold, one punchy takeaway sentence. Source line 15 px grey: "Source: <names> · <year/date>" with real middle dots.
+- Title: Charter bold serif, up to 92 px, two lines max, yellow marker (#FFF205) behind the key word. Subtitle 24 px grey Inter Medium. Footer 30 px Inter Bold, one punchy takeaway sentence. Source line 15 px grey: "Source: <names> · <year/date>" with real middle dots.
 
 ## Colours
-- True Economy red #E23B3B (negative, loss, danger, "the highlight country/company"), blue #0760F1 (primary), dark blue #0548B5, light blue #5B9BFF / #8DB8FF, yellow #EDE22E (marker, highlights, "net/keeps"), green #1FA35C (gains only), ink #111111, grey #555555, pale box #EEEEEC.
+- True Economy red #E23B3B (negative, loss, danger, "the highlight country/company"), blue #0760F1 (primary), dark blue #0548B5, light blue #5B9BFF / #8DB8FF, yellow #FFF205 (marker, highlights, "net/keeps"), green #1FA35C (gains only), ink #111111, grey #555555, pale box #EEEEEC.
 - Red must be the exact True Economy red, never orange-ish.
 
 ## Style (from the user's stated preferences)

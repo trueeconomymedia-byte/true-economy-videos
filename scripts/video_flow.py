@@ -172,9 +172,9 @@ paper.alpha_composite(render(["title", "kpis", "segments", "spine", "footer", "s
 chart_static = paper
 L_labels = render(["labels"], "ly_labels")
 ribbons = json.load(open(SVG.replace(".svg", ".ribbons.json")))
-GOLD = "#C8BB10"
+GOLD = "#D9CD00"
 PCOL = {"#0760F1": (7, 96, 241), "#8DB8FF": (7, 96, 241), "#5B9BFF": (7, 96, 241), "#0548B5": (7, 96, 241),
-        "#E23B3B": (214, 52, 46), "#EDE22E": (200, 187, 16)}
+        "#E23B3B": (214, 52, 46), "#FFF205": (217, 205, 0)}
 parts = []   # one record per money streak: ribbon geometry, lane, phase, cycles, colour
 for (xs, ys0, ys1, xd, yd0, yd1, col) in ribbons:
     hgt = ((ys1 - ys0) + (yd1 - yd0)) / 2; ln = abs(xd - xs) + abs((yd0 - ys0)) * 0.3

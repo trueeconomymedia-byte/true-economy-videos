@@ -23,7 +23,7 @@ from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.basePen import NullPen
 
 W, H = 948, 1300
-RED, BLUE, YEL = "#E23B3B", "#0760F1", "#EDE22E"           # True Economy red / blue / yellow
+RED, BLUE, YEL = "#E23B3B", "#0760F1", "#FFF205"           # True Economy red / blue / yellow
 GREEN = "#1FA35C"
 BLUE_D, BLUE_L, BLUE_XL = "#0548B5", "#5B9BFF", "#8DB8FF"
 INK, GREY, PALE = "#111111", "#555555", "#EEEEEC"
