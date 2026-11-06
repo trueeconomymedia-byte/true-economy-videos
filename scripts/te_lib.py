@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """True Economy card library. Every card post is built on this so branding and the template stay identical.
-Canvas 1014x1441 = the white area (title included) of the user's Canva card. Pure flat vector: paths only, text outlined, no opacity.
+Canvas 948x1300 = the safe zone (fills edge to edge) of the white card (title included) of the user's Canva card. Pure flat vector: paths only, text outlined, no opacity.
 
     from te_lib import *
     c = Card()
@@ -13,7 +13,7 @@ Canvas 1014x1441 = the white area (title included) of the user's Canva card. Pur
         ...
     c.footer("62¢ of every $1 of revenue became profit"); c.source("Source: ...")
     c.save("/mnt/user-data/outputs/<slug>.svg", anim={...})        # writes <slug>.svg (+ .anim.json for the video script)
-Rules: keep b1=137 headroom, source line at H-57, footer at H-100 (Facebook feed crops top and bottom). Groups must be flat (no nested <g>)."""
+Rules: keep b1=66 (headline touches the top), source line at H-4, footer at H-40 (Facebook feed crops top and bottom). Groups must be flat (no nested <g>)."""
 import json, re, math
 from fontTools.ttLib import TTFont
 from fontTools.t1Lib import T1Font
@@ -27,7 +27,7 @@ RED, BLUE, YEL = "#E23B3B", "#0760F1", "#EDE22E"           # True Economy red / 
 GREEN = "#1FA35C"
 BLUE_D, BLUE_L, BLUE_XL = "#0548B5", "#5B9BFF", "#8DB8FF"
 INK, GREY, PALE = "#111111", "#555555", "#EEEEEC"
-X0, CW = 0, 948                                             # left margin, content width (right edge = 942)
+X0, CW = 0, 948                                             # left margin, content width (right edge = 948)
 IF = "/usr/share/fonts/opentype/inter/Inter-%s.otf"
 
 class _F:
@@ -59,7 +59,7 @@ def money(v, cur="$"):
 
 class Card:
     def __init__(s):
-        s.groups = {}; s.cur = None; s.top = 0; s.bottom = H - 150; s.anim = {}
+        s.groups = {}; s.cur = None; s.top = 0; s.bottom = H - 80; s.anim = {}
     # --- groups
     class _G:
         def __init__(g, c, n): g.c, g.n = c, n
@@ -223,9 +223,9 @@ class Card:
 
     # --- template pieces (fixed positions: do not move)
     def title(s, line1, line2=None, mark=None):
-        """Serif title on two lines. `mark` = substring of line1/line2 that gets the yellow marker. b1=137 headroom is fixed."""
-        size = min(92.0, 871 / width("cb", line1, 1), 871 / width("cb", line2, 1) if line2 else 92.0)
-        b1 = 137; pitch = size * 0.93
+        """Serif title on two lines. `mark` = substring of line1/line2 that gets the yellow marker. b1=66 is fixed."""
+        size = min(92.0, 948 / width("cb", line1, 1), 948 / width("cb", line2, 1) if line2 else 92.0)
+        b1 = 66; pitch = size * 0.93
         with s.group("title"):
             if mark:
                 for ln, by in ((line1, b1), (line2, b1 + pitch)):
@@ -239,9 +239,9 @@ class Card:
         with s.group("title"): s.text(X0, s._ty + 52, t, 24, GREY, "m")
         s.top = s._ty + 52 + 70           # first y below the subtitle for KPI row / chart
     def footer(s, t):
-        with s.group("footer"): s.text(X0, H - 100, t, fit("b", t, 30, CW), INK, "b")
+        with s.group("footer"): s.text(X0, H - 40, t, fit("b", t, 30, CW), INK, "b")
     def source(s, t):
-        with s.group("source"): s.text(X0, H - 57, t, fit("m", t, 15, CW), GREY, "m")
+        with s.group("source"): s.text(X0, H - 4, t, fit("m", t, 15, CW), GREY, "m")
     def kpi_row(s, items, y=None, hi=3):
         """4 KPI boxes: items = [(label, value_text, sub_text)...]; box index `hi` is yellow. Returns bottom y."""
         y = s.top if y is None else y; n = len(items); gap = 14; bw = (CW - gap * (n - 1)) / n

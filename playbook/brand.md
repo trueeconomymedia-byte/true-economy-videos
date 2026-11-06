@@ -2,7 +2,7 @@
 
 ## Template (fixed, never changes)
 - The card is the user's Canva card: black bar with the "E" logo on top, white paper area below, over a blurred grey topic background in the video.
-- The chart canvas is 1014 x 1441 (the whole white area, title included). Everything fills that area; no empty bottom third.
+- NEW UNIFORM TEMPLATE (from 6 Nov 2026, same on every platform): the card is plain white and full width (4K x 0-2160, y 296-3360), black bar with the logo on top, background texture only above and below the card. The chart canvas is 948 x 1300 (the platforms' safe zone; 4K x 132-2028, y 620-3220) and the design, headline included, FILLS it edge to edge (headline touches the top edge, source line the bottom edge, content spans the full width, no empty margins). Render previews with rsvg-convert -w 948 (or -w 1896 for 2x, -w 3792 for 4x).
 - Fixed positions (Facebook's feed crops the top and bottom of vertical video): title baseline 1 at y=137 (the headroom above is deliberate), footer takeaway line at y=H-100 (1341), source line at y=H-57 (1384). Left margin x=72, content width 870 (right edge 942). The chart body lives between `Card.top` and `Card.bottom` (H-150).
 - `scripts/te_lib.py` builds all of this: Card.title / subtitle / kpi_row / footer / source. Use it for every new card. make_flow.py is the original reference post ("How Nvidia makes money?") and is still used for the How (company) series.
 - Pure flat vector: paths only, text outlined, solid colours (no opacity, gradients, images, filters, drop shadows). Must stay sharp when imported into Canva. Groups must be flat (no nested groups except flag clip-paths).

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """True Economy 'Stock Market Today' card. Usage: python3 make_mkts.py data.json
-Canvas 1014x1441 = the white area (title included) of the user's Canva card. Transparent SVG, text outlined."""
+Canvas 948x1300 = the safe zone of the white card (fills edge to edge). Transparent SVG, text outlined."""
 import json, sys, re
 from fontTools.ttLib import TTFont
 from fontTools.t1Lib import T1Font
