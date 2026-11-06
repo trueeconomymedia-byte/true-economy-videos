@@ -24,7 +24,7 @@ from fontTools.pens.basePen import NullPen
 
 W, H = 948, 1300
 RED, BLUE, YEL = "#E23B3B", "#0760F1", "#FFF205"           # True Economy red / blue / yellow
-GREEN = "#1FA35C"
+GREEN = "#6CBF3F"
 BLUE_D, BLUE_L, BLUE_XL = "#0548B5", "#5B9BFF", "#8DB8FF"
 INK, GREY, PALE = "#111111", "#555555", "#EEEEEC"
 X0, CW = 0, 948                                             # left margin, content width (right edge = 948)

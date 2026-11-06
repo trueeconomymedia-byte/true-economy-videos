@@ -76,7 +76,7 @@ rect(X0+TX-6, b1+pitch-size*0.76, wt+12, size*0.93, YEL)
 text(X0+TX,b1,l1,size,INK,"cb"); text(X0+TX,b1+pitch,"today.",size,INK,"cb")
 text(X0,b1+pitch+52,d["date"]+" · US close",24,GREY,"m")
 out.append('</g>')
-GREEN="#1FA35C"; CHH=int(__import__("os").environ.get("CHH","380"))
+GREEN="#6CBF3F"; CHH=int(__import__("os").environ.get("CHH","380"))
 UP=d["sp_pts"][-1][1]>=d["sp_ref"]
 TC=GREEN if UP else RED
 TL_="#DDF2E5" if UP else "#FBE0DE"
