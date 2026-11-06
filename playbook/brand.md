@@ -36,4 +36,4 @@ Before building, write one line: "the one comparison/idea is ___". Then:
 6. Final QA question, answered by looking at the frame: "Could a confused viewer explain each section back in one sentence, and see in 3 seconds what is compared and what the gap is?" If not, simplify or relabel and rebuild before queueing.
 
 ## Caption limits
-- Instagram: at most 5 hashtags in total (caption + firstComment combined). TikTok 3-5. Facebook at most 2. YouTube 3. X/Threads/Bluesky at most 2. LinkedIn at most 3.
+- Instagram: at most 5 hashtags in total (caption + firstComment combined). TikTok 3-5. Facebook at most 2 (and every Facebook reel gets a title via assets[0].video.metadata.title plus a ~900-1,300 character news-article caption: see feedback.md). YouTube 3. X/Threads/Bluesky at most 2. LinkedIn at most 3.
