@@ -1,0 +1,167 @@
+[
+{
+"title": "ES_77 Cycles - Lennon Hutton 2",
+"driveId": "1oOu18ogOGUlIGntyZXG2uuhS4a0rsEyK",
+"start_s": 54.387,
+"length_s": 8.8,
+"join": 0.876,
+"bpm": 136.0,
+"tension": -0.3,
+"uplift": 0.26,
+"usable": true
+},
+{
+"title": "ES_BLACKWATER - STRLGHT 2",
+"driveId": "1gbmZfO3WxJd8ef56CBEPlpqGo_X-EGl0",
+"start_s": 52.245,
+"length_s": 9.6,
+"join": 0.925,
+"bpm": 99.4,
+"tension": -0.02,
+"uplift": 0.23,
+"usable": true
+},
+{
+"title": "ES_Carbon - Truvio",
+"driveId": "1PJxPnFWTU9pR4W-O9YFVvtNkld07FTf9",
+"start_s": 41.471,
+"length_s": 7.0667,
+"join": 0.918,
+"bpm": 136.0,
+"tension": -0.03,
+"uplift": 0.14,
+"usable": true
+},
+{
+"title": "ES_Cold War Games - Gabriel Lewis",
+"driveId": "1PICB3qIo6nvRXkhHItIGMATVb2I1L_e2",
+"start_s": 76.301,
+"length_s": 9.6,
+"join": 0.848,
+"bpm": 99.4,
+"tension": -0.08,
+"uplift": -0.27,
+"usable": true
+},
+{
+"title": "ES_Fragment - Lennon Hutton",
+"driveId": "1l6OZJMB4oqUtlbPbdtB8tsa19YNGTFpC",
+"start_s": 107.892,
+"length_s": 8.5667,
+"join": 0.895,
+"bpm": 139.7,
+"tension": -0.64,
+"uplift": 0.64,
+"usable": true
+},
+{
+"title": "ES_Inferadise - Lupus Nocte",
+"driveId": "1lVYeFRpoSYYqjj5UToyTcJIMCpA5wvUR",
+"start_s": 61.324,
+"length_s": 6.2333,
+"join": 0.818,
+"bpm": 152.0,
+"tension": 0.22,
+"uplift": 0.5,
+"usable": true
+},
+{
+"title": "ES_Mindscape - Lennon Hutton 3",
+"driveId": "1RvcflEeVnDF3Rh0L37gw2WeaJKPMkr8Q",
+"start_s": 1.115,
+"length_s": 6.6667,
+"join": 0.929,
+"bpm": 107.7,
+"tension": 0.34,
+"uplift": -0.87,
+"usable": true
+},
+{
+"title": "ES_Mine - Duckmaw",
+"driveId": "1ofLI940m8BAe-dNN9FmkbHe7-ke--P0l",
+"start_s": 3.657,
+"length_s": 7.6667,
+"join": 0.919,
+"bpm": 126.0,
+"tension": 0.69,
+"uplift": -0.15,
+"usable": true
+},
+{
+"title": "ES_Road to Nowhere - Max Anson",
+"driveId": "1nAlG633pOXrn3ToPoQPvHyUuJURc7rP6",
+"start_s": 5.642,
+"length_s": 6.2333,
+"join": 0.935,
+"bpm": 152.0,
+"tension": 0.71,
+"uplift": -0.41,
+"usable": true
+},
+{
+"title": "ES_Shadowed - John B- Lund 3",
+"driveId": "1Q4OocI_aLASAHixF_Co-DQT7bC3HV4_I",
+"start_s": 8.499,
+"length_s": 6.6667,
+"join": 0.851,
+"bpm": 143.6,
+"tension": -0.46,
+"uplift": 0.52,
+"usable": true
+},
+{
+"title": "ES_Soundbed - Blue Saga",
+"driveId": "14-gHkrnPj6tYd6JWmqveqMuFAGWEfuL9",
+"start_s": 46.626,
+"length_s": 7.9,
+"join": 0.866,
+"bpm": 152.0,
+"tension": 0.05,
+"uplift": -0.03,
+"usable": true
+},
+{
+"title": "ES_Trace - Lennon Hutton 2",
+"driveId": "1NWlC5fA0TPvi5LIQaom5QyQ5CT4Jk7Fj",
+"start_s": 42.017,
+"length_s": 6.1667,
+"join": 0.953,
+"bpm": 156.6,
+"tension": -0.73,
+"uplift": 0.81,
+"usable": true
+},
+{
+"title": "ES_Tree of Life - Broad Sky",
+"driveId": "1NI42_P6IT2ki3bH2HiFGD3uSQjSG8Tgb",
+"start_s": 62.647,
+"length_s": 9.2333,
+"join": 0.876,
+"bpm": 103.4,
+"tension": -0.18,
+"uplift": -0.4,
+"usable": true
+},
+{
+"title": "ES_Under Neon Lights - Max Anson",
+"driveId": "1q3Zp_iQJhe9KLN5NGQurqeExV7oFBecS",
+"start_s": 53.986,
+"length_s": 8.9333,
+"join": 0.771,
+"bpm": 80.7,
+"tension": -0.14,
+"uplift": -0.44,
+"usable": false
+},
+{
+"title": "ES_Vapor - Ben Elson 2",
+"driveId": "1uiZaJPiY_guJRiyNeoFqn-PgxS5pySys",
+"start_s": 20.294,
+"length_s": 9.8,
+"join": 0.964,
+"bpm": 99.4,
+"tension": 0.59,
+"uplift": -0.52,
+"usable": true
+}
+]
