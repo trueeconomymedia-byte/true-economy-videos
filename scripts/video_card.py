@@ -14,9 +14,9 @@ W, H, FPS = 2160, 3840, 30
 DUR = round(float(os.environ.get("LOOP_LEN", 10)) * FPS) / FPS
 AUDIO = os.environ.get("AUDIO")
 S = 2                                      # 1080-space -> 4K
-CARD = (64, 296, 2094, 3360)               # x0, bar top, x1, bottom of white
-BAR_B = 472
-CH_X, CH_Y = 66, 476                       # chart canvas origin (2028 x 2882)
+CARD = (0, 296, 2160, 3360)               # x0, bar top, x1, bottom of white
+BAR_B = 474
+CH_X, CH_Y = 132, 620                       # chart canvas origin (1896 x 2600)
 rng = np.random.default_rng(7)
 random.seed(int(os.environ.get("SEED", 7)))
 
@@ -153,10 +153,10 @@ logo = Image.open(io.BytesIO(base64.b64decode(LOGO_B64))).convert("L")
 logo = logo.resize((logo.width * 4, logo.height * 4), Image.LANCZOS)
 la = np.asarray(logo, dtype=np.float32)
 la = np.clip((la - 70) / (185 - 70), 0, 1) * 232                      # firm up the edges, keep the original soft white
-lx, ly = 56 * S - x0, 168 * S - y0
+lx, ly = 64 * S - x0, 168 * S - y0
 card_full[ly:ly + la.shape[0] // 2, lx:lx + la.shape[1] // 2, :] = np.asarray(
     Image.fromarray(la.astype(np.uint8)).resize((la.shape[1] // 2, la.shape[0] // 2), Image.LANCZOS))[..., None]
-chart_bg = card_full[CH_Y - y0:CH_Y - y0 + 2882, CH_X - x0:CH_X - x0 + 2028].astype(np.float32)
+chart_bg = card_full[CH_Y - y0:CH_Y - y0 + 2600, CH_X - x0:CH_X - x0 + 1896].astype(np.float32)
 
 # ---------------- chart layers: every group is static except the animation layer ----------------
 import json
@@ -164,8 +164,8 @@ svg = open(SVG).read()
 groups = dict(re.findall(r'<g id="(\w+)">(.*?)\n</g>', svg, re.S))   # group closes on its own line, so flags may nest <g>
 def render(ids, name):
     body = "".join(f'<g id="{i}">{groups[i]}</g>' for i in ids)
-    open(f"/tmp/{name}.svg", "w").write(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1014 1441" width="2028" height="2882">{body}</svg>')
-    subprocess.run(["rsvg-convert", "-w", "2028", f"/tmp/{name}.svg", "-o", f"/tmp/{name}.png"], check=True)
+    open(f"/tmp/{name}.svg", "w").write(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 948 1300" width="1896" height="2600">{body}</svg>')
+    subprocess.run(["rsvg-convert", "-w", "1896", f"/tmp/{name}.svg", "-o", f"/tmp/{name}.png"], check=True)
     return Image.open(f"/tmp/{name}.png").convert("RGBA")
 TOPG = [g for g in groups if g == "labels" or g.startswith("top")]       # drawn above the animation
 STATICG = [g for g in groups if g not in TOPG]                           # title, body, footer, source ... never move
@@ -193,7 +193,7 @@ def bez(p0, p1, p2, p3, t):
     u = 1 - t; return u*u*u*p0 + 3*u*u*t*p1 + 3*u*t*t*p2 + t*t*t*p3
 def chart_state(t):
     img = chart_static.copy()
-    lay = Image.new("RGBA", (2028, 2882), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    lay = Image.new("RGBA", (1896, 2600), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
     for (xs, ys0, ys1, xd, yd0, yd1, ph, u, cyc, rgb) in parts:                  # money streaks along ribbons
         tt = (ph + cyc * t / DUR) % 1.0
         xm = (xs + xd) / 2
@@ -208,10 +208,10 @@ def chart_state(t):
         k = 0.5 + 0.5 * math.sin((t / DUR) * 2 * math.pi * (cyc or max(1, round(DUR))) - math.pi / 2)
         d.rounded_rectangle([px * 2, py * 2, (px + pw) * 2, (py + ph_) * 2], radius=rad * 2, fill=tuple(rgb) + (int(255 * 0.45 * k),))
     if "sweep" in anim:                                                              # soft diagonal light band, offscreen at t=0 and t=DUR
-        sw = anim["sweep"]; u = t / DUR; cx = -300 + (2028 + 600) * u
-        band = Image.new("RGBA", (2028, 2882), (0, 0, 0, 0)); bd = ImageDraw.Draw(band)
+        sw = anim["sweep"]; u = t / DUR; cx = -300 + (1896 + 600) * u
+        band = Image.new("RGBA", (1896, 2600), (0, 0, 0, 0)); bd = ImageDraw.Draw(band)
         a = int(255 * sw.get("alpha", 0.1))
-        bd.polygon([(cx - 120, 0), (cx + 120, 0), (cx + 120 - 700, 2882), (cx - 120 - 700, 2882)], fill=tuple(sw.get("rgb", [7, 96, 241])) + (a,))
+        bd.polygon([(cx - 120, 0), (cx + 120, 0), (cx + 120 - 700, 2600), (cx - 120 - 700, 2600)], fill=tuple(sw.get("rgb", [7, 96, 241])) + (a,))
         lay = Image.alpha_composite(lay, band.filter(ImageFilter.GaussianBlur(40)))
     lay = lay.filter(ImageFilter.GaussianBlur(0.9)) if parts else lay
     img.alpha_composite(lay)
@@ -228,7 +228,7 @@ for f in range(n):
     fr = bg_frame(t)
     st = chart_state(t)
     fr[y0:y1, x0:x1] = card_full
-    fr[CH_Y:CH_Y + 2882, CH_X:CH_X + 2028] = np.clip(st, 0, 255).astype(np.uint8)
+    fr[CH_Y:CH_Y + 2600, CH_X:CH_X + 1896] = np.clip(st, 0, 255).astype(np.uint8)
     ff.stdin.write(fr.tobytes())
     if f % 30 == 0: print("frame", f, flush=True)
 ff.stdin.close(); ff.wait()

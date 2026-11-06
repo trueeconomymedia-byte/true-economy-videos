@@ -9,7 +9,7 @@ from fontTools.pens.svgPathPen import SVGPathPen
 from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.basePen import NullPen
 
-W, H = 1014, 1441
+W, H = 948, 1300
 RED, BLUE, YEL = "#E23B3B", "#0760F1", "#EDE22E"
 BLUE_D, BLUE_L, BLUE_XL = "#0548B5", "#5B9BFF", "#8DB8FF"
 INK, GREY = "#111111", "#555555"
@@ -72,11 +72,11 @@ assert min(gp, op, pbt, ni) > 0 and oth >= 0, "losses/negative other income need
 pr = d["prior"]  # prior-year rev, gp, op, ni
 yoy = lambda a, b: f"{(a / b - 1) * 100:+.0f}% YoY"
 
-X0 = 72
+X0 = 0
 # ---- title (same look as the template: bold serif, yellow marker behind company name)
 line1 = f"How {co} makes"
-size = min(92.0, 871 / width("cb", line1, 1))
-b1 = 137; pitch = size * 0.93
+size = min(92.0, 948 / width("cb", line1, 1))
+b1 = 66; pitch = size * 0.93
 out.append('<g id="title">')
 wp = width("cb", "How ", size); wn = width("cb", co, size)
 rect(X0 + wp - 6, b1 - size * 0.76, wn + 12, size * 0.93, YEL)
@@ -90,7 +90,7 @@ ky = b1 + pitch + 52 + 70
 out.append('<g id="kpis">')
 kp = [("Revenue", rev, yoy(rev, pr["rev"]), "#EEEEEC"), ("Gross profit", gp, yoy(gp, pr["gp"]), "#EEEEEC"),
       ("Operating profit", op, yoy(op, pr["op"]), "#EEEEEC"), ("Net income", ni, yoy(ni, pr["ni"]), YEL)]
-bw, gap = 207, 14
+bw, gap = 226.5, 14
 for i, (lab, val, yy, col) in enumerate(kp):
     bx = X0 + i * (bw + gap)
     text(bx + bw / 2, ky, lab, 19, INK, "sb", "m")
@@ -101,10 +101,11 @@ out.append('</g>')
 
 # ---- sankey geometry
 NW = 14
-XA, XR, XG, XO, XP, XF = X0 + 175, X0 + 300, X0 + 435, X0 + 570, X0 + 705, X0 + 840
+_s = 934/840
+XA, XR, XG, XO, XP, XF = [X0 + v*_s for v in (175, 300, 435, 570, 705, 840)]
 segs = d["segments"]; nseg = len(segs)
 TOP = ky + 14 + 92 + 70       # top of the sankey block
-BOT = H - 150                 # lowest point allowed
+BOT = H - 90                 # lowest point allowed
 TG = 54
 fixed = 2 * TG + 46
 k = min((BOT - TOP - fixed) / (oth + pbt + opex + cogs), (BOT - TOP - 14 * (nseg - 1) - oth * 6) / rev, 6.2)
@@ -164,10 +165,10 @@ term(yTax, H_tax, tax, d["tax_name"]); term(yOpx, opex*k, opex, d["opex_name"]);
 out.append('</g>')
 
 out.append('<g id="footer">')
-text(X0, H - 100, f"{round(ni / rev * 100)}¢ of every $1 of revenue became profit", 30, INK, "b")
+text(X0, H - 40, f"{round(ni / rev * 100)}¢ of every $1 of revenue became profit", 30, INK, "b")
 out.append('</g>')
 out.append('<g id="source">')
-text(X0, H - 57, d["source"], 15, GREY, "m")
+text(X0, H - 4, d["source"], 15, GREY, "m")
 out.append('</g>')
 
 slug = re.sub(r"[^a-z0-9]+", "-", co.lower()).strip("-")

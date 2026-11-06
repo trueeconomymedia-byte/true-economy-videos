@@ -9,7 +9,7 @@ from fontTools.pens.svgPathPen import SVGPathPen
 from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.basePen import NullPen
 
-W, H = 1014, 1441
+W, H = 948, 1300
 RED, BLUE, YEL = "#E23B3B", "#0760F1", "#EDE22E"
 BLUE_D, BLUE_L, BLUE_XL = "#0548B5", "#5B9BFF", "#8DB8FF"
 INK, GREY = "#111111", "#555555"
@@ -66,29 +66,29 @@ def money(v):
 
 
 d = json.load(open(sys.argv[1]))
-X0=72; CW=870
+X0=0; CW=948
 l1="Stock market"
-size=min(92.0, 871/width("cb",l1,1)); b1=137; pitch=size*0.93
+size=min(92.0, 948/width("cb",l1,1)); b1=66; pitch=size*0.93
 out.append('<g id="title">')
 wt=width("cb","today.",size)
 rect(X0-6, b1+pitch-size*0.76, wt+12, size*0.93, YEL)
 text(X0,b1,l1,size,INK,"cb"); text(X0,b1+pitch,"today.",size,INK,"cb")
 text(X0,b1+pitch+52,d["date"]+" · US close",24,GREY,"m")
 out.append('</g>')
-GREEN="#1FA35C"
+GREEN="#1FA35C"; CHH=int(__import__("os").environ.get("CHH","380"))
 UP=d["sp_pts"][-1][1]>=d["sp_ref"]
 TC=GREEN if UP else RED
 TL_="#DDF2E5" if UP else "#FBE0DE"
 def pct(v): return f"{v:+.2f}%".replace("-","−")
 y0=b1+pitch+52+95
 out.append('<g id="kpis">')
-BS=min(140,870/width("b",d["big"],1)); SH=0.72*(BS-104)
+BS=min(140,948/width("b",d["big"],1)); SH=0.72*(BS-104)
 text(X0,y0+34+SH,d["big"],BS,TC,"b")
 text(X0,y0+74+SH,d["big_cap"],26,INK,"sb")
 out.append('</g>')
 # ---- S&P 500 price action (verified key points only)
 HY=y0+112+SH+30
-CY0,CY1=HY+22,y0+112+420      # plot top/bottom
+CY0,CY1=HY+22,y0+112+CHH      # plot top/bottom
 PX0,PX1=X0+4,X0+CW-4
 _v=[v for _,v in d["sp_pts"]]+[d["sp_ref"]]; _sp=max(max(_v)-min(_v),0.003*_v[0]); lo_,hi_=min(_v)-0.1*_sp,max(_v)+0.1*_sp
 def PY(v): return CY1-(v-lo_)/(hi_-lo_)*(CY1-CY0)
@@ -166,8 +166,8 @@ for i,(nm,p,code,sub) in enumerate(d["world"]):
 gbottom=GY+22+2*rh+14
 out.append('</g>')
 print("grid bottom",gbottom,"footer top",H-130)
-out.append('<g id="footer">'); text(X0,H-100,d["footer"],30,INK,"b"); out.append('</g>')
-out.append('<g id="source">'); text(X0,H-57,d["source"],15,GREY,"m"); out.append('</g>')
+out.append('<g id="footer">'); text(X0,H-40,d["footer"],30,INK,"b"); out.append('</g>')
+out.append('<g id="source">'); text(X0,H-4,d["source"],15,GREY,"m"); out.append('</g>')
 path=d["out"]
 open(path,"w").write(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W*2}" height="{H*2}">\n'+"\n".join(out)+"\n</svg>\n")
 json.dump(TILES,open(path.replace(".svg",".tiles.json"),"w"))

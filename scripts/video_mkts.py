@@ -16,9 +16,9 @@ AUDIO = os.environ.get("AUDIO")                                   # optional loo
 S = 2                                      # 1080-space -> 4K
 DY = int(os.environ.get("DY", 0))          # card stays where the template has it
 CS = float(os.environ.get("CS", 0))        # chart content shifted down inside the card (1080-space units = chart units)          # shift the whole card down so it is vertically centred (Facebook feed crops top/bottom)
-CARD = (64, 296 + DY, 2094, 3360 + DY)     # x0, bar top, x1, bottom of white
-BAR_B = 472 + DY
-CH_X, CH_Y = 66, 476 + DY                       # chart canvas origin (2028 x 2882)
+CARD = (0, 296 + DY, 2160, 3360 + DY)     # x0, bar top, x1, bottom of white
+BAR_B = 474 + DY
+CH_X, CH_Y = 132, 620 + DY                       # chart canvas origin (1896 x 2600)
 rng = np.random.default_rng(7)
 random.seed(int(os.environ.get("SEED", 7)))
 
@@ -156,10 +156,10 @@ logo = Image.open(io.BytesIO(base64.b64decode(LOGO_B64))).convert("L")
 logo = logo.resize((logo.width * 4, logo.height * 4), Image.LANCZOS)
 la = np.asarray(logo, dtype=np.float32)
 la = np.clip((la - 70) / (185 - 70), 0, 1) * 232                      # firm up the edges, keep the original soft white
-lx, ly = 56 * S - x0, 168 * S + DY - y0
+lx, ly = 64 * S - x0, 168 * S + DY - y0
 card_full[ly:ly + la.shape[0] // 2, lx:lx + la.shape[1] // 2, :] = np.asarray(
     Image.fromarray(la.astype(np.uint8)).resize((la.shape[1] // 2, la.shape[0] // 2), Image.LANCZOS))[..., None]
-chart_bg = card_full[CH_Y - y0:CH_Y - y0 + 2882, CH_X - x0:CH_X - x0 + 2028].astype(np.float32)
+chart_bg = card_full[CH_Y - y0:CH_Y - y0 + 2600, CH_X - x0:CH_X - x0 + 1896].astype(np.float32)
 
 # ---------------- chart layers (all static except the money streaks) ----------------
 import json
@@ -167,8 +167,8 @@ svg = open(SVG).read()
 groups = dict(re.findall(r'<g id="(\w+)">(.*?)\n</g>', svg, re.S))
 def render(ids, name):
     body = "".join(f'<g id="{i}">{groups[i]}</g>' for i in ids)
-    open(f"/tmp/{name}.svg", "w").write(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1014 1441" width="2028" height="2882"><g transform="translate(0,{CS})">{body}</g></svg>')
-    subprocess.run(["rsvg-convert", "-w", "2028", f"/tmp/{name}.svg", "-o", f"/tmp/{name}.png"], check=True)
+    open(f"/tmp/{name}.svg", "w").write(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 948 1300" width="1896" height="2600"><g transform="translate(0,{CS})">{body}</g></svg>')
+    subprocess.run(["rsvg-convert", "-w", "1896", f"/tmp/{name}.svg", "-o", f"/tmp/{name}.png"], check=True)
     return Image.open(f"/tmp/{name}.png").convert("RGBA")
 paper = Image.fromarray(chart_bg.astype(np.uint8)).convert("RGBA")
 paper.alpha_composite(render(["title", "kpis", "segments", "footer", "source"], "ly_static"))
@@ -179,7 +179,7 @@ L_spine = render(["spine"], "ly_spine")
 BASE = np.array([238, 238, 236], np.float32); TINT = {-1: np.array([246, 176, 171], np.float32), 1: np.array([172, 226, 196], np.float32)}
 def chart_state(t):
     img = chart_static.copy()                                  # chart itself is static: no animation
-    lay = Image.new("RGBA", (2028, 2882), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    lay = Image.new("RGBA", (1896, 2600), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
     for i, (x, y, w, h, sg) in enumerate(TILES):               # losers flash red, winners flash green (2 soft pulses per loop)
         k = 0.5 + 0.5 * math.sin((t / DUR) * 2 * math.pi * FLASHES - math.pi / 2)
         c = BASE * (1 - 0.85 * k) + TINT[sg] * (0.85 * k)
@@ -198,7 +198,7 @@ for f in range(n):
     fr = bg_frame(t)
     st = chart_state(t)
     fr[y0:y1, x0:x1] = card_full
-    fr[CH_Y:CH_Y + 2882, CH_X:CH_X + 2028] = np.clip(st, 0, 255).astype(np.uint8)
+    fr[CH_Y:CH_Y + 2600, CH_X:CH_X + 1896] = np.clip(st, 0, 255).astype(np.uint8)
     ff.stdin.write(fr.tobytes())
     if f % 30 == 0: print("frame", f, flush=True)
 ff.stdin.close(); ff.wait()
