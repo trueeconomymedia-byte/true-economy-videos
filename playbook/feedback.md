@@ -57,3 +57,6 @@
 ## HEADLINE: BAR OR NO BAR (user, 7 Nov) - both are approved looks, choose per card
 - Card.title(..., accent="blue"|"red"|"ink"|"none"). "none" = no bar, headline flush left on the chart's left edge (slightly larger).
 - Choose per card for the best overall design (record the choice in the log "form" field): use "none" when the chart has a hard flush-left edge (columns, bars, ranked lists, tables: the headline then lines up with the chart edge); use a short bar ("blue" default, "red" only for a loss/miss story, "ink" if the chart is mostly blue) when the left side is airy or irregular (donuts, slopes, flows, maps, timelines) or the card is text-led. Do not alternate just for variety; do not use the tall black bar again.
+
+## Stock Market Today: NO film grain (user, 7 Nov)
+- The user tried A2 grain on Stock Market Today and chose NOT to use it there. video_mkts.py keeps GRAIN default 0 (off); never turn it on for this card. All other card videos keep A2 grain.
