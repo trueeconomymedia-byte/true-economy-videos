@@ -51,3 +51,5 @@ Before building, write one line: "the one comparison/idea is ___". Then:
 - Stock Market Today: tiles flash AND a soft light sweep passes through the green/red price-line fill (no arrows).
 
 - Gain colour (7 Nov, final): teal-green #249972 (focal, WHITE text) + light teal #B2DCCE (context, ink text). Text on any dark fill is white; ink on light fills. Stock Market Today keeps #6CBF3F.
+
+- Film grain A2 on every card video from video_card.py (default on; not on Stock Market Today). See feedback.md.

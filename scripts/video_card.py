@@ -247,7 +247,7 @@ def _make_arrow_mask():
 ARROW_MASK = _make_arrow_mask()
 
 # ---------------- film grain over the white card (user chose "A2": ~2 px grain at 1896 px card width, amplitude 10) ----------------
-GRAIN = float(os.environ.get("GRAIN", 0))                    # 1 = on, 0 = off (default OFF until the user approves it as the standing look)
+GRAIN = float(os.environ.get("GRAIN", 1))                    # 1 = on (DEFAULT, user-approved 7 Nov "A2"), 0 = off
 GR_Y0 = BAR_B                                                # below the black logo bar
 def _grain_frame(seed):
     r = np.random.default_rng(seed); gs = 2.0 * (W / 1896.0)

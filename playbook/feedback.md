@@ -40,3 +40,8 @@
 - TEXT ON DARK FILLS IS WHITE (user: "white text on a chart looks better"): white on dark teal #249972 (contrast 3.6:1, so keep it large and semibold/bold: 23 px or more), white on main blue #3362CE, white on red #E23B3B for focal numbers. Dark ink #111111 stays on the LIGHT fills (light teal, light blue, yellow) and for small text on white.
 - Stock Market Today still keeps #6CBF3F (unchanged, already optimal). #4A9A51, #A5CCAD, #29A35C, #6CBF3F (outside Stock Market Today) are retired.
 - Positive story = light teal context + dark teal focal with white chevrons; miss = light blue context + red focal with falling chevrons; neutral = the two blues.
+
+## FILM GRAIN "A2" (user, 7 Nov) - default on every card video made with video_card.py (Markets Daily non-stock cards + Daily Post)
+- A fine film grain (about 2 px at 1896 px card width, amplitude 10) sits over the WHITE card area (not the black logo bar), refreshing 15x/s like real film. Built into video_card.py, ON by default (env GRAIN=0 turns it off). Do not remove it or call it a defect in QA; it is intentional. Text stays crisp.
+- It makes videos bigger (about 30 MB for an 8 s 4K loop at crf 24): fine for Buffer/GitHub (limit 100 MB per file); if a file ever exceeds 90 MB re-encode at a higher crf.
+- Stock Market Today (video_mkts.py) keeps its own paper texture and is not changed.
