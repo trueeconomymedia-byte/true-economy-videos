@@ -177,7 +177,7 @@ AJ = SVG.replace(".svg", ".anim.json")
 anim = json.load(open(AJ)) if os.path.exists(AJ) else {}
 if "flow" not in anim and os.path.exists(SVG.replace(".svg", ".ribbons.json")):
     anim["flow"] = json.load(open(SVG.replace(".svg", ".ribbons.json")))
-if not anim: anim["sweep"] = {"rgb": [51, 98, 206], "alpha": 0.10}     # default: a soft light band sweeps once per loop
+if not anim and os.environ.get("SWEEP") == "1": anim["sweep"] = {"rgb": [51, 98, 206], "alpha": 0.10}     # default sweep REMOVED (user, 7 Nov): static cards get no animation unless SWEEP=1
 print("animation layers:", list(anim), flush=True)
 
 PCOL = {"#3362CE": (51, 98, 206), "#A4BBE8": (51, 98, 206),
