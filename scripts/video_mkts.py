@@ -218,6 +218,17 @@ def chart_state(t):
     img.alpha_composite(L_labels)
     return np.asarray(img)[..., :3].astype(np.float32)
 
+# ---------------- film grain over the white card (user chose "A2": ~2 px grain at 1896 px card width, amplitude 10) ----------------
+GRAIN = float(os.environ.get("GRAIN", 0))                    # 1 = on, 0 = off (default OFF on this card until the user approves it)
+GR_Y0 = BAR_B                                                # below the black logo bar
+def _grain_frame(seed):
+    r = np.random.default_rng(seed); gs = 2.0 * (W / 1896.0)
+    h, w = int((y1 - GR_Y0) / gs) + 2, int((x1 - x0) / gs) + 2
+    g = Image.fromarray(np.clip(r.normal(0, 1, (h, w)) * 40 + 128, 0, 255).astype(np.uint8)).resize((x1 - x0, y1 - GR_Y0), Image.BICUBIC)
+    g = g.filter(ImageFilter.GaussianBlur(0.5)); n = (np.asarray(g, dtype=np.float32) - 128) / 40
+    return (n / n.std() * 10.0)[..., None]
+GRAIN_BANK = [_grain_frame(100 + i) for i in range(4)] if GRAIN else []
+
 ff = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
                        *(["-i", AUDIO] if AUDIO else ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"]), "-t", f"{DUR:.4f}", "-c:v", "libx264", "-preset", "medium", "-crf", "24",
                        "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k" if AUDIO else "64k", "-movflags", "+faststart", "-shortest", OUT], stdin=subprocess.PIPE)
@@ -228,6 +239,9 @@ for f in range(n):
     st = chart_state(t)
     fr[y0:y1, x0:x1] = card_full
     fr[CH_Y:CH_Y + 2600, CH_X:CH_X + 1896] = np.clip(st, 0, 255).astype(np.uint8)
+    if GRAIN:
+        reg = fr[GR_Y0:y1, x0:x1].astype(np.float32) + GRAIN_BANK[(f // 2) % 4]
+        fr[GR_Y0:y1, x0:x1] = np.clip(reg, 0, 255).astype(np.uint8)
     ff.stdin.write(fr.tobytes())
     if f % 30 == 0: print("frame", f, flush=True)
 ff.stdin.close(); ff.wait()
