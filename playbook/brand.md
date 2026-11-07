@@ -49,3 +49,5 @@ Before building, write one line: "the one comparison/idea is ___". Then:
 - RISING / FALLING CHEVRONS (Card.arrows, built 2026-11-06, user's favourite): many thin white chevrons "^" (or "v") flowing constantly through ONE focal block, random positions, sizes (+-25%) and speeds, fading at the edges, seamless loop. Rules: (1) direction is ONLY up or down, never sideways; (2) use it ONLY when it helps show that the focal quantity has GROWN / is GROWING (direction "up", green block) or has FALLEN / is FALLING (direction "down", red block); (3) never on neutral levels, rankings, shares or decoration; (4) one focal block per card, context items stay still; (5) text on the block goes in group "toplabels" in dark ink. Call: c.arrows(x, y, w, h, n=28, size=13, shape="chevron", direction="up"|"down"). Reference build: scripts/make_post_staircase.py.
 
 - Stock Market Today: tiles flash AND a soft light sweep passes through the green/red price-line fill (no arrows).
+
+- Gain colour (7 Nov, final): teal-green #249972 (focal, WHITE text) + light teal #B2DCCE (context, ink text). Text on any dark fill is white; ink on light fills. Stock Market Today keeps #6CBF3F.

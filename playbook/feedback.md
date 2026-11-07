@@ -34,3 +34,9 @@
 - Stock Market Today keeps #6CBF3F (make_mkts.py / video_mkts.py have their own constants): user says it is already optimal. Do NOT change it.
 - Positive story: use the green family (light green context, dark green focal), e.g. staircase columns 1-2 light green, column 3 base light green, beat dark green with the white chevrons. Negative/miss story: light blue context + red #E23B3B focal. Neutral: the two blues.
 - #6CBF3F is retired for everything except Stock Market Today (QA must accept #4A9A51 / #A5CCAD, not flag them).
+
+## FINAL GREEN (user, 7 Nov) - supersedes the #4A9A51 / #A5CCAD pair above
+- Gain/positive family is now TEAL-GREEN: dark #249972 (focal / the beat) and light #B2DCCE (context / de-emphasised positive items). te_lib.py GREEN and GREEN_L. The user chose it after comparing options against the blues and red; it sits well with #3362CE.
+- TEXT ON DARK FILLS IS WHITE (user: "white text on a chart looks better"): white on dark teal #249972 (contrast 3.6:1, so keep it large and semibold/bold: 23 px or more), white on main blue #3362CE, white on red #E23B3B for focal numbers. Dark ink #111111 stays on the LIGHT fills (light teal, light blue, yellow) and for small text on white.
+- Stock Market Today still keeps #6CBF3F (unchanged, already optimal). #4A9A51, #A5CCAD, #29A35C, #6CBF3F (outside Stock Market Today) are retired.
+- Positive story = light teal context + dark teal focal with white chevrons; miss = light blue context + red focal with falling chevrons; neutral = the two blues.

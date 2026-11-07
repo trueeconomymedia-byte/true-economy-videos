@@ -1,6 +1,7 @@
-# TEMPLATE for data_surprise cards. POSITIVE story = green family: light green #A5CCAD context columns, dark green #4A9A51 focal beat (ink text). MISS/negative story = light blue context + red #E23B3B focal; neutral = blues. See feedback.md.
+# TEMPLATE for data_surprise cards. POSITIVE story = teal-green family (te_lib GREEN #249972 focal with WHITE text, GREEN_L #B2DCCE context with ink text). MISS = light blue context + red #E23B3B focal (white text). Neutral = the two blues. See feedback.md.
 import sys; sys.path.insert(0,'/tmp')
 from te_lib import *
+
 c=Card()
 c.title("US employers add","165,000 jobs",mark="165,000")
 c.subtitle("October 2026 jobs report vs the forecast and the usual pace")
@@ -29,8 +30,8 @@ with c.group("body"):
         c.text(x,base+96,l3,fit("m",l3,20,bw),GREY,"m")
 with c.group("toplabels"):      # drawn ABOVE the pulse layer so the text stays crisp
     x=2*(bw+gap)
-    c.text(x+bw/2,base-165*k+(100*k)/2-2,"+100,000",42,INK,"b","m")
-    c.text(x+bw/2,base-165*k+(100*k)/2+34,"above the forecast",23,INK,"sb","m")
+    c.text(x+bw/2,base-165*k+(100*k)/2-2,"+100,000",42,"#FFFFFF","b","m")
+    c.text(x+bw/2,base-165*k+(100*k)/2+34,"above the forecast",23,"#FFFFFF","sb","m")
 with c.group("note"):
     c.rect(0,1125,948,84,PALE,1,6)
     t="Unemployment 4.1% (from 4.2%)  ·  Pay +0.4% in the month  ·  Aug–Sep revised up 84,000"
@@ -38,4 +39,4 @@ with c.group("note"):
 c.arrows(2*(bw+gap),base-165*k,bw,100*k,(255,255,255),n=28,alpha=0.6,size=13,shape="chevron")   # small chevrons flow constantly UPWARD through the focal green block (replaces the flash)
 c.footer("The US added about 100,000 more jobs than economists expected")
 c.source("Source: US Bureau of Labor Statistics, 6 Nov 2026 · forecasts: Bloomberg, Dow Jones, Yahoo Finance")
-c.save("/mnt/user-data/outputs/us-jobs-october-v9b.svg")
+c.save("/mnt/user-data/outputs/us-jobs-october-v12.svg")
