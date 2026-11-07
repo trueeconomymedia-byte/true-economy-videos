@@ -109,10 +109,10 @@ class Card:
     def pulse(s, x, y, w, h, rgb, cycles=None, r=6):
         """register a rectangle that gently flashes in the video (tile flash like Stock Market Today). rgb = (r,g,b)."""
         s.anim.setdefault("pulse", []).append([x, y, w, h, list(rgb), cycles, r])
-    def arrows(s, x, y, w, h, rgb=(255, 255, 255), n=28, alpha=0.55, size=13, shape="chevron", direction="up"):
+    def arrows(s, x, y, w, h, rgb=(255, 255, 255), n=28, alpha=0.55, size=13, shape="chevron", direction="up", avoid=None):
         """register a rectangle where n solid rounded UP-ARROWS flow constantly upward (video only; seamless loop). Positions, start heights, speeds (1 or 2 passes per loop)
-        and sizes (+-25%) are random but fixed, spread evenly across the width. size = base size in canvas px; shape "chevron" (thin open ^, the preferred style, size ~13) or "arrow" (solid rounded arrow, size ~24). direction "up" for growth (green) or "down" for a fall (red); NEVER sideways. Only use when it shows something that grew/is growing or fell/is falling. Use on the focal block instead of pulse."""
-        s.anim.setdefault("arrows", []).append([x, y, w, h, list(rgb), n, alpha, size, shape, direction])
+        and sizes (+-25%) are random but fixed, spread evenly across the width. size = base size in canvas px; shape "chevron" (thin open ^, the preferred style, size ~13) or "arrow" (solid rounded arrow, size ~24). direction "up" for growth (green) or "down" for a fall (red); NEVER sideways. avoid = optional list of (x, y, w, h) text boxes: chevrons fade to ~10% near them so text on the block stays readable (pass the "toplabels" text box). Only use when it shows something that grew/is growing or fell/is falling. Use on the focal block instead of pulse."""
+        s.anim.setdefault("arrows", []).append([x, y, w, h, list(rgb), n, alpha, size, shape, direction, [list(a_) for a_ in (avoid or [])]])
     _uid = 0
     def flag(s, cx, cy, r, code):
         """round flag icon. Known: US UK JP KR HK FR DE IT IE NL BE ES PL RU CH CN IN BR CA SE NO DK AU(approx none). Unknown code -> grey disc with the code."""
@@ -226,8 +226,8 @@ class Card:
         return geo
 
     # --- template pieces (fixed positions: do not move)
-    def title(s, line1, line2=None, mark=None):
-        """Serif title ALWAYS on two lines, with the black bar on its left (new template). `mark` = substring that gets the yellow marker.
+    def title(s, line1, line2=None, mark=None, accent="blue"):
+        """Serif title ALWAYS on two lines, with the black bar on its left (new template). `mark` = substring that gets the yellow marker. `accent` = colour of the short bar beside the FIRST line: "blue" (default), "red" (only for a loss/miss/problem story) or "ink" (when the chart is mostly blue).
         If only line1 is given it is split into two balanced lines automatically. Choose wording so both lines are of similar length. b1=66 is fixed."""
         if not line2:
             ws = line1.split(); best = None
@@ -240,7 +240,7 @@ class Card:
         size = min(92.0, (948 - TX) / width("cb", line1, 1), (948 - TX) / width("cb", line2, 1))
         b1 = 66; pitch = size * 0.93
         with s.group("title"):
-            s.rect(X0, b1 - size * 0.70, 12, size * 0.70 + pitch, INK)
+            s.rect(X0, b1 - size * 0.70, 12, size * 0.70, {"blue": BLUE, "red": RED, "ink": INK}[accent])   # short accent bar beside line 1 only (user choice, 7 Nov)
             if mark:
                 for ln, by in ((line1, b1), (line2, b1 + pitch)):
                     if ln and mark in ln:

@@ -80,7 +80,7 @@ size = min(92.0, (948 - TX) / width("cb", line1, 1))
 b1 = 66; pitch = size * 0.93
 out.append('<g id="title">')
 wp = width("cb", "How ", size); wn = width("cb", co, size)
-rect(X0, b1 - size * 0.70, 12, size * 0.70 + pitch, INK)
+rect(X0, b1 - size * 0.70, 12, size * 0.70, BLUE_D)   # short accent bar beside line 1 (user choice, 7 Nov)
 rect(X0 + TX + wp - 6, b1 - size * 0.76, wn + 12, size * 0.93, YEL)
 text(X0 + TX, b1, line1, size, INK, "cb")
 text(X0 + TX, b1 + pitch, "money?", size, INK, "cb")

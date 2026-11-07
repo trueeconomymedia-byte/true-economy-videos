@@ -45,3 +45,11 @@
 - A fine film grain (about 2 px at 1896 px card width, amplitude 10) sits over the WHITE card area (not the black logo bar), refreshing 15x/s like real film. Built into video_card.py, ON by default (env GRAIN=0 turns it off). Do not remove it or call it a defect in QA; it is intentional. Text stays crisp.
 - It makes videos bigger (about 30 MB for an 8 s 4K loop at crf 24): fine for Buffer/GitHub (limit 100 MB per file); if a file ever exceeds 90 MB re-encode at a higher crf.
 - Stock Market Today (video_mkts.py) keeps its own paper texture and is not changed.
+
+## HEADLINE ACCENT BAR (user, 7 Nov) - replaces the full-height black bar beside the title on all non-stock cards
+- The bar beside the headline is now SHORT (first line only, 12 px wide) and coloured, because a tall black bar looked too official/government. te_lib Card.title(..., accent="blue"|"red"|"ink"); make_flow.py (how_company) uses blue. Default = main blue #3362CE.
+- Choose the accent for what adds most to the design: blue by default (works with teal/green, light blue and neutral cards). Use RED only when the story itself is a loss/miss/problem (red is the brand's "gap/problem" colour, so a red accent on a neutral card would signal alarm that is not there). Use INK (black) when the chart is mostly blue so the accent does not blend in.
+- The Stock Market Today card keeps its own title bar for now (pending the user's call).
+
+## CHEVRONS vs TEXT (user, 7 Nov)
+- Card.arrows(..., avoid=[(x,y,w,h)]): pass the text box of every label sitting on the animated block so chevrons fade to ~10% near the text and never clutter it (the staircase template does this for "+100,000 / above the forecast").
