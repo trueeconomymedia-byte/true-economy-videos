@@ -183,7 +183,7 @@ _UP = bool(_th["up"]); _BASE = _th.get("base", max(y for _, y in _pts))
 _ACOL = (88, 160, 40) if _UP else (200, 45, 45)       # deeper than the fill tint so it reads on the pale area
 _px = [p[0] for p in _pts]; _py = [p[1] for p in _pts]
 _mask = Image.new("L", (1896, 2600), 0)
-ImageDraw.Draw(_mask).polygon([(x * 2, (y + CS + 1.2) * 2) for x, y in _pts] + [(_px[-1] * 2, (_BASE + CS) * 2), (_px[0] * 2, (_BASE + CS) * 2)], fill=255)
+ImageDraw.Draw(_mask).polygon([(x * 2, ((min(y, _BASE) if _UP else max(y, _BASE)) + CS + (1.2 if _UP else -1.2)) * 2) for x, y in _pts] + [(_px[-1] * 2, (_BASE + CS) * 2), (_px[0] * 2, (_BASE + CS) * 2)], fill=255)
 # soft diagonal light sweep through the fill (ambient; no shapes). Integer sweeps per loop => seamless.
 _m = np.asarray(_mask, dtype=np.float32) / 255
 _yy, _xx = np.mgrid[0:2600, 0:1896].astype(np.float32)

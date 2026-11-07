@@ -99,8 +99,11 @@ def PY(v): return CY1-(v-lo_)/(hi_-lo_)*(CY1-CY0)
 pts=[(PX0+(PX1-PX0)*f,PY(v)) for f,v in d["sp_pts"]]
 out.append('<g id="segments">')
 poly=" ".join(f"{x:.1f},{y:.1f}" for x,y in pts)
-out.append(f'<polygon points="{pts[0][0]:.1f},{CY1} {poly} {pts[-1][0]:.1f},{CY1}" fill="{TL_}"/>')
 yref=PY(d["sp_ref"])
+# tint fills only the gap between the price line and the dotted previous-close line (stops ON the dotted line)
+cp_=[(x,(min(y,yref) if UP else max(y,yref))) for x,y in pts]
+cpoly=" ".join(f"{x:.1f},{y:.1f}" for x,y in cp_)
+out.append(f'<polygon points="{cp_[0][0]:.1f},{yref:.1f} {cpoly} {cp_[-1][0]:.1f},{yref:.1f}" fill="{TL_}"/>')
 out.append(f'<polyline points="{poly}" fill="none" stroke="{TC}" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>')
 for i,(x,y) in enumerate(pts):
     if i not in (0,len(pts)-1) and len(pts)>2: continue
@@ -118,7 +121,7 @@ LW=max(width("sb",m1_,19),width("b",m2_,36))+14
 ex,ey=pts[-1]; xs0=PX1-LW-6
 near=[y for x,y in pts if x>=xs0-10]
 if UP: by=max(max(near)+26,yref+16)   # below the line AND below the dotted close line
-else: by=min(near)-26-62        # label sits above the line
+else: by=max(near)+26                  # down day: label sits below the price line (on white), clear of the dotted line
 by=max(CY0+4,min(by,CY1-66))
 text(PX1,by+20,m1_,19,INK,"sb","r"); text(PX1,by+58,m2_,36,TC,"b","r")
 for f,lab in [(0,d["prev_lab"]),(1,d["today_lab"])]:
@@ -177,6 +180,6 @@ out.append('<g id="source">'); text(X0,H-4,d["source"],15,GREY,"m"); out.append(
 path=d["out"]
 open(path,"w").write(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W*2}" height="{H*2}">\n'+"\n".join(out)+"\n</svg>\n")
 json.dump(TILES,open(path.replace(".svg",".tiles.json"),"w"))
-json.dump({"up":UP,"base":CY1},open(path.replace(".svg",".theme.json"),"w"))
+json.dump({"up":UP,"base":yref},open(path.replace(".svg",".theme.json"),"w"))
 json.dump([[round(x,1),round(y,1)] for x,y in pts],open(path.replace(".svg",".pts.json"),"w"))
 print("wrote",path)
