@@ -227,7 +227,7 @@ class Card:
 
     # --- template pieces (fixed positions: do not move)
     def title(s, line1, line2=None, mark=None, accent="blue"):
-        """Serif title ALWAYS on two lines, with the black bar on its left (new template). `mark` = substring that gets the yellow marker. `accent` = colour of the short bar beside the FIRST line: "blue" (default), "red" (only for a loss/miss/problem story) or "ink" (when the chart is mostly blue).
+        """Serif title ALWAYS on two lines, with the black bar on its left (new template). `mark` = substring that gets the yellow marker. `accent` = colour of the short bar beside the FIRST line: "blue" (default), "red" (only for a loss/miss/problem story) or "ink" (when the chart is mostly blue) or "none" (no bar, headline flush left, slightly larger).
         If only line1 is given it is split into two balanced lines automatically. Choose wording so both lines are of similar length. b1=66 is fixed."""
         if not line2:
             ws = line1.split(); best = None
@@ -236,11 +236,11 @@ class Card:
                 if best is None or d_ < best[0]: best = (d_, a_, b_)
             assert best, "title needs at least two words (or give line1 and line2)"
             _, line1, line2 = best
-        TX = 38
+        TX = 0 if accent == "none" else 38        # "none" = no bar, headline flush left on the chart edge
         size = min(92.0, (948 - TX) / width("cb", line1, 1), (948 - TX) / width("cb", line2, 1))
         b1 = 66; pitch = size * 0.93
         with s.group("title"):
-            s.rect(X0, b1 - size * 0.70, 12, size * 0.70, {"blue": BLUE, "red": RED, "ink": INK}[accent])   # short accent bar beside line 1 only (user choice, 7 Nov)
+            if accent != "none": s.rect(X0, b1 - size * 0.70, 12, size * 0.70, {"blue": BLUE, "red": RED, "ink": INK}[accent])   # short accent bar beside line 1 only (user choice, 7 Nov)
             if mark:
                 for ln, by in ((line1, b1), (line2, b1 + pitch)):
                     if ln and mark in ln:

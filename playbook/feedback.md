@@ -53,3 +53,7 @@
 
 ## CHEVRONS vs TEXT (user, 7 Nov)
 - Card.arrows(..., avoid=[(x,y,w,h)]): pass the text box of every label sitting on the animated block so chevrons fade to ~10% near the text and never clutter it (the staircase template does this for "+100,000 / above the forecast").
+
+## HEADLINE: BAR OR NO BAR (user, 7 Nov) - both are approved looks, choose per card
+- Card.title(..., accent="blue"|"red"|"ink"|"none"). "none" = no bar, headline flush left on the chart's left edge (slightly larger).
+- Choose per card for the best overall design (record the choice in the log "form" field): use "none" when the chart has a hard flush-left edge (columns, bars, ranked lists, tables: the headline then lines up with the chart edge); use a short bar ("blue" default, "red" only for a loss/miss story, "ink" if the chart is mostly blue) when the left side is airy or irregular (donuts, slopes, flows, maps, timelines) or the card is text-led. Do not alternate just for variety; do not use the tall black bar again.
