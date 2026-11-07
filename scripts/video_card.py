@@ -207,7 +207,8 @@ def chart_state(t):
     for (px, py, pw, ph_, rgb, cyc, rad) in anim.get("pulse", []):                # flashing rectangles (tile flash)
         k = 0.5 + 0.5 * math.sin((t / DUR) * 2 * math.pi * (cyc or max(1, round(DUR))) - math.pi / 2)
         d.rounded_rectangle([px * 2, py * 2, (px + pw) * 2, (py + ph_) * 2], radius=rad * 2, fill=tuple(rgb) + (int(255 * 0.45 * k),))
-    for (ax, ay, aw, ah, argb, an, aalpha, asize) in anim.get("arrows", []):        # constant upward flow of solid rounded arrows inside a rectangle (focal gain block)
+    for (ax, ay, aw, ah, argb, an, aalpha, asize, *_shp) in anim.get("arrows", []):
+        ashape = _shp[0] if _shp else "arrow"        # constant upward flow of solid rounded arrows inside a rectangle (focal gain block)
         rr = random.Random(int(ax * 7 + ay * 13 + aw))                             # fixed positions/phases/speeds/sizes -> identical every loop
         xs_ = [(i + rr.random()) / an for i in range(an)]; rr.shuffle(xs_)          # random look, but spread evenly across the width
         for i in range(an):
@@ -216,9 +217,14 @@ def chart_state(t):
             cy = ay + ah * (1 - q); edge = min(1.0, q / 0.16, (1 - q) / 0.16)
             al = int(255 * aalpha * max(edge, 0))
             if al > 3:
-                    u = sz; H_ = u * 1.08                                           # arrow sprite (rounded head + thick stem), scaled to size
-                    spr = ARROW_MASK.resize((max(2, int(u * 2)), max(2, int(H_ * 2))), Image.LANCZOS).point(lambda v: v * al // 255)
-                    lay.paste(tuple(argb) + (255,), (int((cx - u / 2) * 2), int((cy - H_ / 2) * 2)), spr)
+                    if ashape == "chevron":                                         # thin open chevron "^" (first style)
+                        a_, b_ = sz * 0.9, sz * 0.55
+                        cpts = [(cx - a_, cy + b_), (cx, cy - b_), (cx + a_, cy + b_)]
+                        d.line([(x_ * 2, y_ * 2) for x_, y_ in cpts], fill=tuple(argb) + (al,), width=max(2, int(sz * 0.42 * 2)), joint="curve")
+                    else:                                                           # solid rounded up-arrow sprite
+                        u = sz; H_ = u * 1.08
+                        spr = ARROW_MASK.resize((max(2, int(u * 2)), max(2, int(H_ * 2))), Image.LANCZOS).point(lambda v: v * al // 255)
+                        lay.paste(tuple(argb) + (255,), (int((cx - u / 2) * 2), int((cy - H_ / 2) * 2)), spr)
     if "sweep" in anim:                                                              # soft diagonal light band, offscreen at t=0 and t=DUR
         sw = anim["sweep"]; u = t / DUR; cx = -300 + (1896 + 600) * u
         band = Image.new("RGBA", (1896, 2600), (0, 0, 0, 0)); bd = ImageDraw.Draw(band)

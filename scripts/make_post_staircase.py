@@ -34,7 +34,7 @@ with c.group("note"):
     c.rect(0,1125,948,84,PALE,1,6)
     t="Unemployment 4.1% (from 4.2%)  ·  Pay +0.4% in the month  ·  Aug–Sep revised up 84,000"
     c.text(474,1175,t,fit("sb",t,22,900),INK,"sb","m")
-c.arrows(2*(bw+gap),base-165*k,bw,100*k,(255,255,255),n=30,alpha=0.55,size=24)   # small chevrons flow constantly UPWARD through the focal green block (replaces the flash)
+c.arrows(2*(bw+gap),base-165*k,bw,100*k,(255,255,255),n=28,alpha=0.55,size=13,shape="chevron")   # small chevrons flow constantly UPWARD through the focal green block (replaces the flash)
 c.footer("The US added about 100,000 more jobs than economists expected")
 c.source("Source: US Bureau of Labor Statistics, 6 Nov 2026 · forecasts: Bloomberg, Dow Jones, Yahoo Finance")
-c.save("/mnt/user-data/outputs/us-jobs-october-v7.svg")
+c.save("/mnt/user-data/outputs/us-jobs-october-v8.svg")
