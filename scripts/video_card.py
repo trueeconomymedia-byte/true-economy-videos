@@ -207,6 +207,17 @@ def chart_state(t):
     for (px, py, pw, ph_, rgb, cyc, rad) in anim.get("pulse", []):                # flashing rectangles (tile flash)
         k = 0.5 + 0.5 * math.sin((t / DUR) * 2 * math.pi * (cyc or max(1, round(DUR))) - math.pi / 2)
         d.rounded_rectangle([px * 2, py * 2, (px + pw) * 2, (py + ph_) * 2], radius=rad * 2, fill=tuple(rgb) + (int(255 * 0.45 * k),))
+    for (ax, ay, aw, ah, argb, an, aalpha, asize) in anim.get("arrows", []):        # constant upward flow of small chevrons inside a rectangle (focal gain block)
+        rr = random.Random(int(ax * 7 + ay * 13 + aw))                             # fixed lanes/phases/speeds -> identical every loop
+        for i in range(an):
+            lane = ax + aw * (0.12 + 0.76 * rr.random()); ph = rr.random(); cyc = rr.choice([1, 1, 2]); sz = asize * (0.75 + 0.5 * rr.random())
+            q = (ph + cyc * t / DUR) % 1.0                                           # 0 = bottom edge, 1 = top edge; integer cycles per loop = seamless
+            cy = ay + ah * (1 - q); edge = min(1.0, q / 0.18, (1 - q) / 0.18)
+            al = int(255 * aalpha * max(edge, 0))
+            if al > 3:
+                a_, b_ = sz * 0.9, sz * 0.55
+                pts = [(lane - a_, cy + b_), (lane, cy - b_), (lane + a_, cy + b_)]
+                d.line([(x * 2, y * 2) for x, y in pts], fill=tuple(argb) + (al,), width=max(2, int(sz * 0.42 * 2)), joint="curve")
     if "sweep" in anim:                                                              # soft diagonal light band, offscreen at t=0 and t=DUR
         sw = anim["sweep"]; u = t / DUR; cx = -300 + (1896 + 600) * u
         band = Image.new("RGBA", (1896, 2600), (0, 0, 0, 0)); bd = ImageDraw.Draw(band)

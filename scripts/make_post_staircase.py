@@ -7,6 +7,12 @@ base=1000; k=640/165.0; bw=300; gap=24
 cols=[(0,48,"48,000","1. The usual pace","Average jobs added a month,","over the past 12 months"),
       (1,65,"about 65,000","2. What economists expected","Forecasts ranged from","59,000 to 70,000"),
       (2,165,"165,000","3. What actually happened","US employers added 165,000","jobs in October")]
+GRID="#DADAD6"
+with c.group("grid"):                    # Y axis: faint gridlines + small labels, drawn BEHIND the columns
+    for v in (50,100,150):
+        yy=base-v*k
+        c.rect(0,yy-0.75,948,1.5,GRID)
+        c.text(0,yy-8,f"{v}k",18,GREY,"m")
 with c.group("body"):
     c.rect(0,base,948,3,INK)
     for i,v,val,l1,l2,l3 in cols:
@@ -28,7 +34,7 @@ with c.group("note"):
     c.rect(0,1125,948,84,PALE,1,6)
     t="Unemployment 4.1% (from 4.2%)  ·  Pay +0.4% in the month  ·  Aug–Sep revised up 84,000"
     c.text(474,1175,t,fit("sb",t,22,900),INK,"sb","m")
-c.pulse(2*(bw+gap),base-165*k,bw,100*k,(255,255,255))   # white overlay = the green gets LIGHTER on every pulse, back to base between pulses
+c.arrows(2*(bw+gap),base-165*k,bw,100*k,(255,255,255),n=16,alpha=0.55,size=13)   # small chevrons flow constantly UPWARD through the focal green block (replaces the flash)
 c.footer("The US added about 100,000 more jobs than economists expected")
 c.source("Source: US Bureau of Labor Statistics, 6 Nov 2026 · forecasts: Bloomberg, Dow Jones, Yahoo Finance")
-c.save("/mnt/user-data/outputs/us-jobs-october-v4.svg")
+c.save("/mnt/user-data/outputs/us-jobs-october-v5.svg")
