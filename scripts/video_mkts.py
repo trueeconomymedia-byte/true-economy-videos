@@ -183,26 +183,27 @@ _UP = bool(_th["up"]); _BASE = _th.get("base", max(y for _, y in _pts))
 _ACOL = (88, 160, 40) if _UP else (200, 45, 45)       # deeper than the fill tint so it reads on the pale area
 _px = [p[0] for p in _pts]; _py = [p[1] for p in _pts]
 _mask = Image.new("L", (1896, 2600), 0)
-ImageDraw.Draw(_mask).polygon([(x * 2, (y + CS) * 2) for x, y in _pts] + [(_px[-1] * 2, (_BASE + CS) * 2), (_px[0] * 2, (_BASE + CS) * 2)], fill=255)
-_rr = random.Random(11); _N = 44
-_xs = [(i + _rr.random()) / _N for i in range(_N)]; _rr.shuffle(_xs)
-_AR = []
-for i in range(_N):
-    ax = _px[0] + (_px[-1] - _px[0]) * (0.02 + 0.96 * _xs[i])
-    _AR.append((ax, _rr.random(), _rr.choice([1, 1, 2]), 14 * (0.75 + 0.5 * _rr.random())))
+ImageDraw.Draw(_mask).polygon([(x * 2, (y + CS + 1.2) * 2) for x, y in _pts] + [(_px[-1] * 2, (_BASE + CS) * 2), (_px[0] * 2, (_BASE + CS) * 2)], fill=255)
+# soft diagonal light sweep through the fill (ambient; no shapes). Integer sweeps per loop => seamless.
+_m = np.asarray(_mask, dtype=np.float32) / 255
+_yy, _xx = np.mgrid[0:2600, 0:1896].astype(np.float32)
+_u = _xx + 0.55 * _yy                                   # diagonal coordinate
+_u0, _u1 = float(_u[_m > 0].min()), float(_u[_m > 0].max())
+_BW_ = 420.0                                            # band half-width (px)
+_SWEEPS = max(1, round(DUR / 4.5))
+_SCOL = np.array([255, 255, 255], np.float32) if _UP or True else None
 def arrow_layer(t):
-    lay = Image.new("RGBA", (1896, 2600), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
-    for ax, ph, cyc, sz in _AR:
-        top = float(np.interp(ax, _px, _py)); h = _BASE - top
-        if h < 30: continue
-        q = (ph + cyc * t / DUR) % 1.0
-        cy = top + h * ((1 - q) if _UP else q); edge = min(1.0, q / 0.16, (1 - q) / 0.16)
-        al = int(255 * 0.75 * max(edge, 0))
-        X, Y, a = ax * 2, (cy + CS) * 2, sz * 2
-        dy = -a * 0.55 if _UP else a * 0.55
-        d.line([(X - a, Y - dy), (X, Y + dy), (X + a, Y - dy)], fill=_ACOL + (al,), width=int(sz * 0.42 * 2), joint="curve")
-    lay.putalpha(Image.fromarray(np.minimum(np.asarray(lay.getchannel("A")), np.asarray(_mask))))
-    return lay
+    q = (_SWEEPS * t / DUR) % 1.0
+    c = _u0 - _BW_ * 1.5 + q * (_u1 - _u0 + _BW_ * 3)
+    k = np.exp(-(((_u - c) / _BW_) ** 2)) * _m
+    lay = np.zeros((2600, 1896, 4), np.uint8)
+    # white highlight plus a slightly deeper tint trailing it, so it reads on the pale fill
+    k2 = np.exp(-(((_u - (c - _BW_ * 0.9)) / (_BW_ * 0.8)) ** 2)) * _m
+    lay[..., :3] = np.array(_ACOL, np.uint8)
+    lay[..., 3] = np.clip(k2 * 38, 0, 255).astype(np.uint8)
+    hi = Image.fromarray(np.dstack([np.full((2600, 1896, 3), 255, np.uint8), np.clip(k * 200, 0, 255).astype(np.uint8)]), "RGBA")
+    out = Image.fromarray(lay, "RGBA"); out.alpha_composite(hi)
+    return out
 def chart_state(t):
     img = chart_static.copy()                                  # chart itself is static: no animation
     lay = Image.new("RGBA", (1896, 2600), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
