@@ -41,3 +41,9 @@ Before building, write one line: "the one comparison/idea is ___". Then:
 ## Headline (new, 6 Nov 2026)
 - Every headline is on TWO lines, with a black vertical bar (12 px, same black as the logo bar) to its left spanning both lines, and the text indented 38 px from the bar. Card.title(line1, line2, mark) does this; give one string and it splits into two balanced lines automatically. make_mkts.py and make_flow.py already do it.
 - The designer (task) must WORD the headline so it reads well across two lines of similar length (about 14-24 characters per line, break at a natural phrase, e.g. "Why the US imports / more than it sells"), never one long line and never a one-word second line unless it is punchy ("money?", "today."). Yellow marker on the single key word or short phrase.
+
+## Motion effects catalogue (what the video layer can do; pick only what helps the data)
+- Soft sweep (default): a light diagonal band crosses the card once per loop; use when nothing is focal.
+- Flow streaks (Card.ribbon): money-style streaks along Sankey ribbons, for flow charts.
+- Pulse (Card.pulse): a gentle lighter flash; legacy, prefer the effects below for a focal block.
+- RISING / FALLING CHEVRONS (Card.arrows, built 2026-11-06, user's favourite): many thin white chevrons "^" (or "v") flowing constantly through ONE focal block, random positions, sizes (+-25%) and speeds, fading at the edges, seamless loop. Rules: (1) direction is ONLY up or down, never sideways; (2) use it ONLY when it helps show that the focal quantity has GROWN / is GROWING (direction "up", green block) or has FALLEN / is FALLING (direction "down", red block); (3) never on neutral levels, rankings, shares or decoration; (4) one focal block per card, context items stay still; (5) text on the block goes in group "toplabels" in dark ink. Call: c.arrows(x, y, w, h, n=28, size=13, shape="chevron", direction="up"|"down"). Reference build: scripts/make_post_staircase.py.
