@@ -174,7 +174,7 @@ L_labels = render(["labels"], "ly_labels")
 ribbons = json.load(open(SVG.replace(".svg", ".ribbons.json")))
 GOLD = "#D9CD00"
 PCOL = {"#3362CE": (51, 98, 206), "#A4BBE8": (51, 98, 206),
-        "#E23B3B": (214, 52, 46), "#FFF205": (217, 205, 0)}
+        "#E23B3B": (214, 52, 46), "#FFF205": (217, 205, 0), "#EDE22E": (208, 199, 30)}
 parts = []   # one record per money streak: ribbon geometry, lane, phase, cycles, colour
 for (xs, ys0, ys1, xd, yd0, yd1, col) in ribbons:
     hgt = ((ys1 - ys0) + (yd1 - yd0)) / 2; ln = abs(xd - xs) + abs((yd0 - ys0)) * 0.3

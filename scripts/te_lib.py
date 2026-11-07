@@ -23,7 +23,7 @@ from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.basePen import NullPen
 
 W, H = 948, 1300
-RED, BLUE, YEL = "#E23B3B", "#3362CE", "#FFF205"           # True Economy red / blue / yellow
+RED, BLUE, YEL = "#E23B3B", "#3362CE", "#EDE22E"           # True Economy red / blue / yellow (yellow back to #EDE22E, user 7 Nov)
 GREEN = "#249972"; GREEN_L = "#B2DCCE"           # teal-green (focal gain, WHITE text on it) + light teal (context, ink text). Stock Market Today keeps its own #6CBF3F
 BLUE_D, BLUE_L, BLUE_XL = "#3362CE", "#A4BBE8", "#A4BBE8"
 INK, GREY, PALE = "#111111", "#555555", "#EEEEEC"
@@ -44,7 +44,8 @@ class _F:
             g = s.gs[n]; g.draw(NullPen()); return g.width
         return s.f['hmtx'][n][0]
 fonts = {"b": _F(IF % "Bold"), "sb": _F(IF % "SemiBold"), "m": _F(IF % "Medium"), "xb": _F(IF % "ExtraBold"),
-         "cb": _F("/usr/share/fonts/X11/Type1/c0632bt_.pfb", True)}     # cb = Charter bold (serif titles)
+         "cb": _F("/usr/share/fonts/X11/Type1/c0632bt_.pfb", True),
+         "ci": _F("/usr/share/fonts/X11/Type1/c0649bt_.pfb", True)}     # cb = Charter bold (serif titles)
 def width(fk, t, size):
     f = fonts[fk]; return sum(f.adv(f.name(c)) for c in t) * size / f.upem
 def fit(fk, t, size, maxw):
@@ -236,6 +237,7 @@ class Card:
                 if best is None or d_ < best[0]: best = (d_, a_, b_)
             assert best, "title needs at least two words (or give line1 and line2)"
             _, line1, line2 = best
+        num = bool(mark and re.fullmatch(r"[£$€+\-−–]?\d[\d,.]*\s?(%|bn|tn|m|k|x)?", mark.strip()))   # highlighted number -> italic, not bold
         TX = 0 if accent == "none" else 38        # "none" = no bar, headline flush left on the chart edge
         size = min(92.0, (948 - TX) / width("cb", line1, 1), (948 - TX) / width("cb", line2, 1))
         b1 = 66; pitch = size * 0.93
@@ -244,10 +246,14 @@ class Card:
             if mark:
                 for ln, by in ((line1, b1), (line2, b1 + pitch)):
                     if ln and mark in ln:
-                        i = ln.index(mark); wp = width("cb", ln[:i], size); wn = width("cb", mark, size)
+                        i = ln.index(mark); wp = width("cb", ln[:i], size); mk = "ci" if num else "cb"; wn = width(mk, mark, size)
                         s.rect(X0 + TX + wp - 6, by - size * 0.76, wn + 12, size * 0.93, YEL)
-            s.text(X0 + TX, b1, line1, size, INK, "cb")
-            s.text(X0 + TX, b1 + pitch, line2, size, INK, "cb")
+            for ln, by in ((line1, b1), (line2, b1 + pitch)):
+                if num and mark and mark in ln:      # highlighted NUMBER: regular-weight italic (user rule, 7 Nov)
+                    i = ln.index(mark); wp = width("cb", ln[:i], size); wn = width("ci", mark, size)
+                    s.text(X0 + TX, by, ln[:i], size, INK, "cb"); s.text(X0 + TX + wp, by, mark, size, INK, "ci")
+                    s.text(X0 + TX + wp + wn, by, ln[i + len(mark):], size, INK, "cb")
+                else: s.text(X0 + TX, by, ln, size, INK, "cb")
         s._ty = b1 + pitch
     def subtitle(s, t):
         with s.group("title"): s.text(X0, s._ty + 52, t, 24, GREY, "m")
