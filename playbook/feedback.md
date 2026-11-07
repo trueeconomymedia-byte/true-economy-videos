@@ -28,3 +28,9 @@
 - The light green/red fill under the S&P line gets a soft diagonal light sweep (white highlight plus a slightly deeper tint trailing it), clipped to the fill, one sweep per ~4.5 s, integer sweeps per loop. No arrows/shapes here: the line already shows direction. Implemented in video_mkts.py arrow_layer() (needs theme.json "base"). Stated exception to the focal-point-only animation rule.
 - Stock Market Today, UP day layout: the close label (Close + %) must sit BELOW the dotted previous-close line, never on it. make_mkts.py leaves >=84 units under the dotted line (plot range extends down) and the dotted line is its own "refline" group drawn above the sweep so it stays crisp.
 - Stock Market Today: the green/red tint fills ONLY the gap between the price line and the dotted previous-close line (it stops on the dotted line, never below it). The sweep mask follows the same shape (theme.json "base" = dotted line y). Close label sits below the line/dotted line on both up and down days.
+
+## NEW GREEN FAMILY (user, 7 Nov) - replaces #6CBF3F everywhere EXCEPT Stock Market Today
+- Dark gain green #4A9A51 (focal / the beat; dark ink #111111 text, contrast 5.4:1) and light gain green #A5CCAD (context / de-emphasised positive items; dark ink text). te_lib.py: GREEN, GREEN_L.
+- Stock Market Today keeps #6CBF3F (make_mkts.py / video_mkts.py have their own constants): user says it is already optimal. Do NOT change it.
+- Positive story: use the green family (light green context, dark green focal), e.g. staircase columns 1-2 light green, column 3 base light green, beat dark green with the white chevrons. Negative/miss story: light blue context + red #E23B3B focal. Neutral: the two blues.
+- #6CBF3F is retired for everything except Stock Market Today (QA must accept #4A9A51 / #A5CCAD, not flag them).

@@ -1,3 +1,4 @@
+# TEMPLATE for data_surprise cards. POSITIVE story = green family: light green #A5CCAD context columns, dark green #4A9A51 focal beat (ink text). MISS/negative story = light blue context + red #E23B3B focal; neutral = blues. See feedback.md.
 import sys; sys.path.insert(0,'/tmp')
 from te_lib import *
 c=Card()
@@ -18,9 +19,9 @@ with c.group("body"):
     for i,v,val,l1,l2,l3 in cols:
         x=i*(bw+gap)
         if i<2:
-            c.rect(x,base-v*k,bw,v*k,BLUE_L)   # context columns = light blue so the focal column 3 stands out
+            c.rect(x,base-v*k,bw,v*k,GREEN_L)   # context columns = light blue so the focal column 3 stands out
         else:
-            c.rect(x,base-65*k,bw,65*k,BLUE)
+            c.rect(x,base-65*k,bw,65*k,GREEN_L)
             c.rect(x,base-165*k,bw,100*k,GREEN)
         c.text(x+bw/2,base-v*k-16,val,fit("b",val,38,bw),INK,"b","m")
         c.text(x,base+44,l1,fit("b",l1,24,bw),INK,"b")
@@ -34,7 +35,7 @@ with c.group("note"):
     c.rect(0,1125,948,84,PALE,1,6)
     t="Unemployment 4.1% (from 4.2%)  ·  Pay +0.4% in the month  ·  Aug–Sep revised up 84,000"
     c.text(474,1175,t,fit("sb",t,22,900),INK,"sb","m")
-c.arrows(2*(bw+gap),base-165*k,bw,100*k,(255,255,255),n=28,alpha=0.55,size=13,shape="chevron")   # small chevrons flow constantly UPWARD through the focal green block (replaces the flash)
+c.arrows(2*(bw+gap),base-165*k,bw,100*k,(255,255,255),n=28,alpha=0.6,size=13,shape="chevron")   # small chevrons flow constantly UPWARD through the focal green block (replaces the flash)
 c.footer("The US added about 100,000 more jobs than economists expected")
 c.source("Source: US Bureau of Labor Statistics, 6 Nov 2026 · forecasts: Bloomberg, Dow Jones, Yahoo Finance")
-c.save("/mnt/user-data/outputs/us-jobs-october-v8.svg")
+c.save("/mnt/user-data/outputs/us-jobs-october-v9b.svg")
