@@ -172,6 +172,6 @@ out.append('<g id="source">'); text(X0,H-4,d["source"],15,GREY,"m"); out.append(
 path=d["out"]
 open(path,"w").write(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W*2}" height="{H*2}">\n'+"\n".join(out)+"\n</svg>\n")
 json.dump(TILES,open(path.replace(".svg",".tiles.json"),"w"))
-json.dump({"up":UP},open(path.replace(".svg",".theme.json"),"w"))
+json.dump({"up":UP,"base":CY1},open(path.replace(".svg",".theme.json"),"w"))
 json.dump([[round(x,1),round(y,1)] for x,y in pts],open(path.replace(".svg",".pts.json"),"w"))
 print("wrote",path)

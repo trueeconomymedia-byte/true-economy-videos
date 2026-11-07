@@ -177,6 +177,32 @@ L_labels = render(["labels"], "ly_labels")
 TILES = json.load(open(SVG.replace(".svg", ".tiles.json")))
 L_spine = render(["spine"], "ly_spine")
 BASE = np.array([238, 238, 236], np.float32); TINT = {-1: np.array([246, 176, 171], np.float32), 1: np.array([172, 226, 196], np.float32)}
+# ---- flowing chevrons inside the light fill under the price line (up day: rise, down day: fall) ----
+_th = json.load(open(SVG.replace(".svg", ".theme.json"))); _pts = json.load(open(SVG.replace(".svg", ".pts.json")))
+_UP = bool(_th["up"]); _BASE = _th.get("base", max(y for _, y in _pts))
+_ACOL = (88, 160, 40) if _UP else (200, 45, 45)       # deeper than the fill tint so it reads on the pale area
+_px = [p[0] for p in _pts]; _py = [p[1] for p in _pts]
+_mask = Image.new("L", (1896, 2600), 0)
+ImageDraw.Draw(_mask).polygon([(x * 2, (y + CS) * 2) for x, y in _pts] + [(_px[-1] * 2, (_BASE + CS) * 2), (_px[0] * 2, (_BASE + CS) * 2)], fill=255)
+_rr = random.Random(11); _N = 44
+_xs = [(i + _rr.random()) / _N for i in range(_N)]; _rr.shuffle(_xs)
+_AR = []
+for i in range(_N):
+    ax = _px[0] + (_px[-1] - _px[0]) * (0.02 + 0.96 * _xs[i])
+    _AR.append((ax, _rr.random(), _rr.choice([1, 1, 2]), 14 * (0.75 + 0.5 * _rr.random())))
+def arrow_layer(t):
+    lay = Image.new("RGBA", (1896, 2600), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    for ax, ph, cyc, sz in _AR:
+        top = float(np.interp(ax, _px, _py)); h = _BASE - top
+        if h < 30: continue
+        q = (ph + cyc * t / DUR) % 1.0
+        cy = top + h * ((1 - q) if _UP else q); edge = min(1.0, q / 0.16, (1 - q) / 0.16)
+        al = int(255 * 0.75 * max(edge, 0))
+        X, Y, a = ax * 2, (cy + CS) * 2, sz * 2
+        dy = -a * 0.55 if _UP else a * 0.55
+        d.line([(X - a, Y - dy), (X, Y + dy), (X + a, Y - dy)], fill=_ACOL + (al,), width=int(sz * 0.42 * 2), joint="curve")
+    lay.putalpha(Image.fromarray(np.minimum(np.asarray(lay.getchannel("A")), np.asarray(_mask))))
+    return lay
 def chart_state(t):
     img = chart_static.copy()                                  # chart itself is static: no animation
     lay = Image.new("RGBA", (1896, 2600), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
@@ -185,6 +211,7 @@ def chart_state(t):
         c = BASE * (1 - 0.85 * k) + TINT[sg] * (0.85 * k)
         d.rounded_rectangle([x * 2, (y + CS) * 2, (x + w) * 2, (y + h + CS) * 2], radius=12, fill=tuple(int(v) for v in c) + (255,))
     img.alpha_composite(lay)
+    img.alpha_composite(arrow_layer(t))
     img.alpha_composite(L_spine)
     img.alpha_composite(L_labels)
     return np.asarray(img)[..., :3].astype(np.float32)
