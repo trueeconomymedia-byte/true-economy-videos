@@ -109,10 +109,10 @@ class Card:
     def pulse(s, x, y, w, h, rgb, cycles=None, r=6):
         """register a rectangle that gently flashes in the video (tile flash like Stock Market Today). rgb = (r,g,b)."""
         s.anim.setdefault("pulse", []).append([x, y, w, h, list(rgb), cycles, r])
-    def arrows(s, x, y, w, h, rgb=(255, 255, 255), per_lane=5, alpha=0.55, size=26):
-        """register a rectangle where solid rounded UP-ARROWS flow constantly upward (video only; seamless loop; random start positions and speeds per lane).
-        size = arrow width in canvas px; lanes = w / (1.5 * size); per_lane arrows per lane. Use on the focal gain block instead of pulse."""
-        s.anim.setdefault("arrows", []).append([x, y, w, h, list(rgb), per_lane, alpha, size])
+    def arrows(s, x, y, w, h, rgb=(255, 255, 255), n=30, alpha=0.55, size=24):
+        """register a rectangle where n solid rounded UP-ARROWS flow constantly upward (video only; seamless loop). Positions, start heights, speeds (1 or 2 passes per loop)
+        and sizes (+-25%) are random but fixed, spread evenly across the width. size = base arrow width in canvas px. Use on the focal gain block instead of pulse."""
+        s.anim.setdefault("arrows", []).append([x, y, w, h, list(rgb), n, alpha, size])
     _uid = 0
     def flag(s, cx, cy, r, code):
         """round flag icon. Known: US UK JP KR HK FR DE IT IE NL BE ES PL RU CH CN IN BR CA SE NO DK AU(approx none). Unknown code -> grey disc with the code."""
