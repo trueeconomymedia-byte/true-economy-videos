@@ -207,17 +207,20 @@ def chart_state(t):
     for (px, py, pw, ph_, rgb, cyc, rad) in anim.get("pulse", []):                # flashing rectangles (tile flash)
         k = 0.5 + 0.5 * math.sin((t / DUR) * 2 * math.pi * (cyc or max(1, round(DUR))) - math.pi / 2)
         d.rounded_rectangle([px * 2, py * 2, (px + pw) * 2, (py + ph_) * 2], radius=rad * 2, fill=tuple(rgb) + (int(255 * 0.45 * k),))
-    for (ax, ay, aw, ah, argb, an, aalpha, asize) in anim.get("arrows", []):        # constant upward flow of small chevrons inside a rectangle (focal gain block)
+    for (ax, ay, aw, ah, argb, per_lane, aalpha, asize) in anim.get("arrows", []):  # constant upward flow of solid rounded arrows inside a rectangle (focal gain block)
         rr = random.Random(int(ax * 7 + ay * 13 + aw))                             # fixed lanes/phases/speeds -> identical every loop
-        for i in range(an):
-            lane = ax + aw * (0.12 + 0.76 * rr.random()); ph = rr.random(); cyc = rr.choice([1, 1, 2]); sz = asize * (0.75 + 0.5 * rr.random())
-            q = (ph + cyc * t / DUR) % 1.0                                           # 0 = bottom edge, 1 = top edge; integer cycles per loop = seamless
-            cy = ay + ah * (1 - q); edge = min(1.0, q / 0.18, (1 - q) / 0.18)
-            al = int(255 * aalpha * max(edge, 0))
-            if al > 3:
-                a_, b_ = sz * 0.9, sz * 0.55
-                pts = [(lane - a_, cy + b_), (lane, cy - b_), (lane + a_, cy + b_)]
-                d.line([(x * 2, y * 2) for x, y in pts], fill=tuple(argb) + (al,), width=max(2, int(sz * 0.42 * 2)), joint="curve")
+        lanes = max(1, int(aw / (asize * 1.5))); lw = aw / lanes
+        for ln in range(lanes):
+            cyc = rr.choice([1, 1, 2]); off = rr.random(); jx = (rr.random() - 0.5) * lw * 0.3   # one speed per lane, evenly spaced arrows -> no overlaps
+            sz = asize * (0.8 + 0.4 * rr.random()); cx = ax + lw * (ln + 0.5) + jx
+            for k in range(per_lane):
+                q = (off + k / per_lane + cyc * t / DUR) % 1.0                         # 0 = bottom edge, 1 = top edge; integer cycles per loop = seamless
+                cy = ay + ah * (1 - q); edge = min(1.0, q / 0.16, (1 - q) / 0.16)
+                al = int(255 * aalpha * max(edge, 0))
+                if al > 3:
+                    u = sz; H_ = u * 1.08                                           # arrow sprite (rounded head + thick stem), scaled to size
+                    spr = ARROW_MASK.resize((max(2, int(u * 2)), max(2, int(H_ * 2))), Image.LANCZOS).point(lambda v: v * al // 255)
+                    lay.paste(tuple(argb) + (255,), (int((cx - u / 2) * 2), int((cy - H_ / 2) * 2)), spr)
     if "sweep" in anim:                                                              # soft diagonal light band, offscreen at t=0 and t=DUR
         sw = anim["sweep"]; u = t / DUR; cx = -300 + (1896 + 600) * u
         band = Image.new("RGBA", (1896, 2600), (0, 0, 0, 0)); bd = ImageDraw.Draw(band)
@@ -228,6 +231,16 @@ def chart_state(t):
     img.alpha_composite(lay)
     if L_top is not None: img.alpha_composite(L_top)
     return np.asarray(img)[..., :3].astype(np.float32)
+
+
+def _make_arrow_mask():
+    """rounded up-arrow mask (like the reference): polygon -> blur -> threshold -> soft edge"""
+    S = 256; im = Image.new("L", (S, int(S * 1.08)), 0); dd = ImageDraw.Draw(im)
+    P = [(0.50, 0.00), (1.00, 0.50), (0.93, 0.57), (0.64, 0.45), (0.64, 1.08), (0.36, 1.08), (0.36, 0.45), (0.07, 0.57), (0.00, 0.50)]
+    pad = 14; dd.polygon([(pad + x * (S - 2 * pad), pad + y * (S - 2 * pad)) for x, y in P], fill=255)
+    im = im.filter(ImageFilter.GaussianBlur(9)).point(lambda v: 255 if v > 128 else 0).filter(ImageFilter.GaussianBlur(1.6))
+    return im
+ARROW_MASK = _make_arrow_mask()
 
 # ---------------- encode ----------------
 ff = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
