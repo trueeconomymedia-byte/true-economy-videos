@@ -175,7 +175,7 @@ paper.alpha_composite(render(["title", "kpis", "segments", "footer", "source"], 
 chart_static = paper
 L_labels = render(["labels"], "ly_labels")
 TILES = json.load(open(SVG.replace(".svg", ".tiles.json")))
-L_spine = render(["spine"], "ly_spine")
+L_spine = render(["spine"], "ly_spine"); L_ref = render(["refline"], "ly_ref")
 BASE = np.array([238, 238, 236], np.float32); TINT = {-1: np.array([246, 176, 171], np.float32), 1: np.array([172, 226, 196], np.float32)}
 # ---- flowing chevrons inside the light fill under the price line (up day: rise, down day: fall) ----
 _th = json.load(open(SVG.replace(".svg", ".theme.json"))); _pts = json.load(open(SVG.replace(".svg", ".pts.json")))
@@ -213,6 +213,7 @@ def chart_state(t):
         d.rounded_rectangle([x * 2, (y + CS) * 2, (x + w) * 2, (y + h + CS) * 2], radius=12, fill=tuple(int(v) for v in c) + (255,))
     img.alpha_composite(lay)
     img.alpha_composite(arrow_layer(t))
+    img.alpha_composite(L_ref)                                  # dotted close line stays crisp above the sweep
     img.alpha_composite(L_spine)
     img.alpha_composite(L_labels)
     return np.asarray(img)[..., :3].astype(np.float32)

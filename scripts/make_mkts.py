@@ -92,18 +92,23 @@ HY=y0+112+SH+30
 CY0,CY1=HY+22,y0+112+CHH      # plot top/bottom
 PX0,PX1=X0+4,X0+CW-4
 _v=[v for _,v in d["sp_pts"]]+[d["sp_ref"]]; _sp=max(max(_v)-min(_v),0.003*_v[0]); lo_,hi_=min(_v)-0.1*_sp,max(_v)+0.1*_sp
+if UP:   # up day: leave >=84 units under the dotted close line so the close label sits below it, never on it
+    _f=84/(CY1-CY0); _lo=(d["sp_ref"]-_f*hi_)/(1-_f)
+    if _lo<lo_: lo_=_lo
 def PY(v): return CY1-(v-lo_)/(hi_-lo_)*(CY1-CY0)
 pts=[(PX0+(PX1-PX0)*f,PY(v)) for f,v in d["sp_pts"]]
 out.append('<g id="segments">')
 poly=" ".join(f"{x:.1f},{y:.1f}" for x,y in pts)
 out.append(f'<polygon points="{pts[0][0]:.1f},{CY1} {poly} {pts[-1][0]:.1f},{CY1}" fill="{TL_}"/>')
 yref=PY(d["sp_ref"])
-out.append(f'<line x1="{PX0}" x2="{PX1}" y1="{yref:.1f}" y2="{yref:.1f}" stroke="#999" stroke-width="2" stroke-dasharray="7 7"/>')
 out.append(f'<polyline points="{poly}" fill="none" stroke="{TC}" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>')
 for i,(x,y) in enumerate(pts):
     if i not in (0,len(pts)-1) and len(pts)>2: continue
     r=11 if i==len(pts)-1 else 8
     out.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="#FAFAFA" stroke="{TC}" stroke-width="5"/>')
+out.append('</g>')
+out.append('<g id="refline">')
+out.append(f'<line x1="{PX0}" x2="{PX1}" y1="{yref:.1f}" y2="{yref:.1f}" stroke="#999" stroke-width="2" stroke-dasharray="7 7"/>')
 out.append('</g>')
 out.append('<g id="labels">')
 text(PX0+8,yref-12,d["sp_ref_lab"],16,GREY,"sb")
@@ -112,7 +117,7 @@ text(PX0,HY,"S&P 500",38,INK,"b"); text(PX0+width("b","S&P 500",38)+16,HY,m2_,38
 LW=max(width("sb",m1_,19),width("b",m2_,36))+14
 ex,ey=pts[-1]; xs0=PX1-LW-6
 near=[y for x,y in pts if x>=xs0-10]
-if UP: by=max(near)+26          # label sits below the line (inside fill)
+if UP: by=max(max(near)+26,yref+16)   # below the line AND below the dotted close line
 else: by=min(near)-26-62        # label sits above the line
 by=max(CY0+4,min(by,CY1-66))
 text(PX1,by+20,m1_,19,INK,"sb","r"); text(PX1,by+58,m2_,36,TC,"b","r")

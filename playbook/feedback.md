@@ -26,3 +26,4 @@
 ## Stock Market Today card: light sweep in the price-fill (user, 7 Nov; replaces the chevrons idea)
 - Keep the flashing market tiles exactly as they are.
 - The light green/red fill under the S&P line gets a soft diagonal light sweep (white highlight plus a slightly deeper tint trailing it), clipped to the fill, one sweep per ~4.5 s, integer sweeps per loop. No arrows/shapes here: the line already shows direction. Implemented in video_mkts.py arrow_layer() (needs theme.json "base"). Stated exception to the focal-point-only animation rule.
+- Stock Market Today, UP day layout: the close label (Close + %) must sit BELOW the dotted previous-close line, never on it. make_mkts.py leaves >=84 units under the dotted line (plot range extends down) and the dotted line is its own "refline" group drawn above the sweep so it stays crisp.
