@@ -79,3 +79,9 @@
 - If you ever fetch scripts by curl instead of cloning, also fetch scripts/te_paper.py (all three video scripts import it). Copy all scripts together (cp scripts/*.py) so te_paper.py sits next to them; it also works under python3 -I.
 - Tunables (env, leave default): PAPER_K 0.72, PAPER_MIX 0.55, PAPER_SHARP 1.0.
 - The headline bar, headline layout, shadow above/below the card, yellow #FFF205 and all colours are unchanged.
+
+## 2026-11-08 EXCEPTION: STOCK MARKET TODAY STAYS PLAIN WHITE (user; WINS over the 2026-11-08 PAPER entry for this series only)
+- Stock Market Today (video_mkts.py, Markets Daily stock_market card) uses the PLAIN WHITE card: no paper texture on the card, no texture/ink effect on its elements, no sharpening, flat black logo tab. Keep the soft static shadow above and below the card so it looks raised. Never turn the paper on for this series; video_mkts.py does not import te_paper.py.
+- The paper surface (te_paper.py) applies to every other card video: video_card.py (Daily Post, Markets Daily non-stock cards) and video_flow.py (How X makes money).
+- Film grain stays retired everywhere (GRAIN default 0); the Stock Market Today card has no grain either.
+- QA for Stock Market Today: expect a clean white card, not paper.

@@ -52,6 +52,6 @@ Before building, write one line: "the one comparison/idea is ___". Then:
 
 - Gain colour (7 Nov, final): teal-green #249972 (focal, WHITE text) + light teal #B2DCCE (context, ink text). Text on any dark fill is white; ink on light fills. Stock Market Today keeps #6CBF3F.
 
-- CARD SURFACE (from 8 Nov 2026, supersedes plain white + film grain): static embossed watercolour-paper texture from scripts/te_paper.py on EVERY card video (video_card, video_flow, video_mkts incl. Stock Market Today): soft warm greige (237,234,227), crisp fine tooth, uniform from a distance, graphics printed into the paper, whole card sharpened, logo tab = soft black (17,17,17) with a hint of tooth. All static (no per-frame grain). See feedback.md 2026-11-08 PAPER.
+- CARD SURFACE (from 8 Nov 2026, supersedes plain white + film grain): static embossed watercolour-paper texture from scripts/te_paper.py on every card video EXCEPT Stock Market Today (video_card, video_flow; Stock Market Today / video_mkts stays plain white with flat black tab, shadow kept): soft warm greige (237,234,227), crisp fine tooth, uniform from a distance, graphics printed into the paper, whole card sharpened, logo tab = soft black (17,17,17) with a hint of tooth. All static (no per-frame grain). See feedback.md 2026-11-08 PAPER.
 
 - Headline accent: short coloured bar beside line 1 (blue default; red only for loss/miss stories; ink if the chart is mostly blue). Chevrons fade near text via Card.arrows(avoid=...).
