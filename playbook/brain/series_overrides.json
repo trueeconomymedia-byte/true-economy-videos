@@ -1,0 +1,92 @@
+[
+ {
+  "date": "2026-10-26",
+  "hour_from": 0,
+  "hour_to": 24,
+  "match": "wealth|richest|own",
+  "series": "wealth_gap"
+ },
+ {
+  "date": "2026-10-26",
+  "hour_from": 0,
+  "hour_to": 24,
+  "match": "AI|researchers|anthropic",
+  "series": "trend"
+ },
+ {
+  "date": "2026-10-27",
+  "hour_from": 0,
+  "hour_to": 24,
+  "match": "foldable|SpaceX|launched",
+  "series": "trend"
+ },
+ {
+  "date": "2026-10-27",
+  "hour_from": 0,
+  "hour_to": 24,
+  "match": "Amazon|cloud",
+  "series": "how_company"
+ },
+ {
+  "date": "2026-10-28",
+  "hour_from": 0,
+  "hour_to": 24,
+  "series": "how_company"
+ },
+ {
+  "date": "2026-10-29",
+  "hour_from": 0,
+  "hour_to": 24,
+  "series": "wave"
+ },
+ {
+  "date": "2026-10-30",
+  "hour_from": 0,
+  "hour_to": 24,
+  "series": "explained"
+ },
+ {
+  "date": "2026-10-31",
+  "hour_from": 0,
+  "hour_to": 24,
+  "series": "who_owns"
+ },
+ {
+  "date": "2026-11-01",
+  "hour_from": 0,
+  "hour_to": 24,
+  "series": "biggest_companies"
+ },
+ {
+  "date": "2026-11-02",
+  "hour_from": 0,
+  "hour_to": 24,
+  "series": "markets_daily"
+ },
+ {
+  "date": "2026-11-04",
+  "hour_from": 0,
+  "hour_to": 24,
+  "match": "oil|technology|gold",
+  "series": "markets_daily"
+ },
+ {
+  "date": "2026-11-04",
+  "hour_from": 0,
+  "hour_to": 24,
+  "series": "us_vs_uk"
+ },
+ {
+  "date": "2026-11-05",
+  "hour_from": 0,
+  "hour_to": 24,
+  "series": "how_company"
+ },
+ {
+  "date": "2026-11-08",
+  "hour_from": 15,
+  "hour_to": 24,
+  "match": "60/40",
+  "series": "documentary_link"
+ }
+]

@@ -1,0 +1,11 @@
+# The True Economy brain (self-improving analytics)
+Goal: learn from Buffer metrics which series, caption styles and platform pairings work, recommend changes, and only act on big changes after the user approves. Everything is backed by data in this folder.
+
+Files: posts.jsonl (every sent post: id, platform, series, caption features) | metrics.jsonl (append-only metric snapshots) | config.json (thresholds and what needs approval) | scorecard.md (latest analysis) | insights.md (plain-English weekly digest) | guidance.md (soft caption guidance the posting tasks read) | decisions.jsonl (pending / approved / declined big changes) | routing.json (series x platform exclusions, applied by the posting tasks) | series_overrides.json (manual backfill of series for posts before the logs existed).
+Scripts: scripts/brain_ingest.py, brain_analyze.py, brain_decide.py.
+
+Weekly (Sunday evening UK): ingest all sent posts with metrics -> analyse -> rewrite insights.md and the AUTO block of guidance.md -> queue BIG proposals -> message the user. Metrics count only after maturity_days (4).
+Rules: index = value / that platform's own median; a verdict needs n >= 3 matured posts for a series on a platform, 75% of them on the same side of the median and (TikTok) watch time agreeing; a BIG proposal needs n >= 4 and an effect of at least 40%. Caption rules need >= 10 posts on each side. Otherwise: "not enough data".
+Big changes (need user approval, applied only by brain_decide.py approve): dropping/pausing/replacing a series, adding a series or changing rotation, stopping a series on a platform, changing posting times or queue mode, caption rules beyond soft guidance. The brain never touches template, colours, verification standards or hashtag limits.
+New series idea: run `python3 scripts/brain_analyze.py --rank`, pick the weakest eligible series (n >= 3 with a verdict) that shares features with the idea's weakness, propose it as the replacement, and give the evidence. If no series has enough data yet, say so and suggest a 4-post trial in the exploration slot (20% of posts).
+Platform routing: when a series is approved as WEAK on a platform, routing.json lists it and the posting tasks skip that platform for that series, freeing queue slots (Buffer free plan: 10 scheduled posts per channel).

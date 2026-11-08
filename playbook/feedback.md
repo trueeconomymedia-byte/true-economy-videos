@@ -85,3 +85,9 @@
 - The paper surface (te_paper.py) applies to every other card video: video_card.py (Daily Post, Markets Daily non-stock cards) and video_flow.py (How X makes money).
 - Film grain stays retired everywhere (GRAIN default 0); the Stock Market Today card has no grain either.
 - QA for Stock Market Today: expect a clean white card, not paper.
+
+## 2026-11-08 BRAIN (data-driven improvement loop; see playbook/brain/README.md)
+- LOGGING: when you append your line to log.jsonl (Daily Post) or markets_log.jsonl (Markets Daily), add "post_ids": {"<platform>": "<Buffer post id from create_post>", ...} and "caption_style": {"tiktok_hook": "number|question|name|other", "chars": {"tiktok": n, "instagram": n, "facebook": n}} so every post can be tied to its series. (The weekly brain also maps posts without them, but this is more reliable.)
+- CAPTIONS: before writing captions read playbook/brain/guidance.md and apply its AUTO guidance (soft, data-backed). Hard limits in brand.md and feedback.md (hashtag caps, Facebook title/length, no financial advice, accuracy) always win over it.
+- ROUTING: before creating each platform's Buffer post read playbook/brain/routing.json. If the series (Daily Post series id; for Markets Daily "markets_daily" or "stock_market_today") is listed under skip_platforms for that platform, do NOT post it there (the user approved that data-backed change) and say so in the final message. An empty list means post everywhere as normal.
+- The brain never changes template, colours, verification standards or hashtag limits. Series/rotation/platform changes happen only after the user approves them (decisions are appended here as BRAIN DECISION entries).

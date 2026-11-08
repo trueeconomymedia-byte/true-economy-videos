@@ -1,0 +1,31 @@
+{
+ "maturity_days": 4,
+ "primary_metric": {
+  "tiktok": "views",
+  "instagram": "views",
+  "facebook": "impressions"
+ },
+ "min_posts_for_verdict": 3,
+ "min_posts_for_big_change": 4,
+ "min_consistency": 0.75,
+ "strong_index": 1.4,
+ "weak_index": 0.7,
+ "big_change_effect_min": 0.4,
+ "confidence_rules": "A finding needs: n >= min_posts (series x platform) matured posts, at least min_consistency of those posts on the same side of the platform median (index>1 or <1), and, for TikTok, average watch time pointing the same way. Otherwise it is reported as 'not enough data'.",
+ "big_changes_need_user_approval": [
+  "dropping, pausing or replacing a series",
+  "adding a new series or changing the rotation",
+  "stopping a series on a platform (platform routing)",
+  "changing posting times or the queue/instant mode",
+  "any change to caption rules beyond soft style weights",
+  "anything touching template, colours, verification standards or hashtag limits (these are never changed by the brain)"
+ ],
+ "auto_allowed": [
+  "soft guidance on caption hook style per platform (hook type, length range, question/number first) inside brand.md limits",
+  "adding evidence to the scorecard and insights",
+  "flagging a series as 'watch' (no action)"
+ ],
+ "trial_posts_for_new_series": 4,
+ "exploration_share": 0.2,
+ "min_caption_posts_per_side_for_proposal": 10
+}
