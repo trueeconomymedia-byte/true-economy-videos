@@ -156,10 +156,12 @@ def bg_frame(t):
 # ---------------- card (crisp rebuild) ----------------
 card = np.full((H, W, 3), 0, np.uint8)
 x0, y0, x1, y1 = CARD
-paper_card = 250 + rng.normal(0, 1.1, (y1 - y0, x1 - x0, 1)) + 1.2 * np.asarray(
-    Image.fromarray((rng.random((y1 // 60, x1 // 60)) * 255).astype(np.uint8)).resize((x1 - x0, y1 - y0), Image.BICUBIC), dtype=np.float32)[..., None] / 255
-card_full = np.clip(paper_card, 0, 255).astype(np.uint8).repeat(3, axis=2)
-card_full[: BAR_B - y0, :, :] = 0
+import sys as _s, os as _o; _s.path.insert(0, _o.path.dirname(_o.path.abspath(__file__)))   # also works under python3 -I
+from te_paper import Paper                                      # static textured paper surface (user-approved 8 Nov 2026)
+PAP = Paper(x1 - x0, y1 - y0, CH_X - x0, CH_Y - y0)
+card_full = PAP.card_u8()
+card_full[: BAR_B - y0, :, :] = PAP.bar(BAR_B - y0)          # textured soft-black tab
+_bar = card_full[: BAR_B - y0].copy()
 logo = Image.open(io.BytesIO(base64.b64decode(LOGO_B64))).convert("L")
 logo = logo.resize((logo.width * 4, logo.height * 4), Image.LANCZOS)
 la = np.asarray(logo, dtype=np.float32)
@@ -167,6 +169,7 @@ la = np.clip((la - 70) / (185 - 70), 0, 1) * 232                      # firm up 
 lx, ly = 64 * S - x0, 168 * S - y0
 card_full[ly:ly + la.shape[0] // 2, lx:lx + la.shape[1] // 2, :] = np.asarray(
     Image.fromarray(la.astype(np.uint8)).resize((la.shape[1] // 2, la.shape[0] // 2), Image.LANCZOS))[..., None]
+card_full[: BAR_B - y0] = np.maximum(_bar, card_full[: BAR_B - y0])     # logo blends into the tab (no black box)
 chart_bg = card_full[CH_Y - y0:CH_Y - y0 + 2600, CH_X - x0:CH_X - x0 + 1896].astype(np.float32)
 
 # ---------------- chart layers (all static except the money streaks) ----------------
@@ -177,7 +180,7 @@ def render(ids, name):
     body = "".join(f'<g id="{i}">{groups[i]}</g>' for i in ids)
     open(f"/tmp/{name}.svg", "w").write(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 948 1300" width="1896" height="2600">{body}</svg>')
     subprocess.run(["rsvg-convert", "-w", "1896", f"/tmp/{name}.svg", "-o", f"/tmp/{name}.png"], check=True)
-    return Image.open(f"/tmp/{name}.png").convert("RGBA")
+    return PAP.inkify(Image.open(f"/tmp/{name}.png").convert("RGBA"))        # ink printed into the paper
 paper = Image.fromarray(chart_bg.astype(np.uint8)).convert("RGBA")
 paper.alpha_composite(render(["title", "kpis", "segments", "spine", "footer", "source"], "ly_static"))
 chart_static = paper
@@ -228,6 +231,7 @@ if os.environ.get("TESTT"):
         fr = bg_frame(tt); st = chart_state(tt)
         fr[y0:y1, x0:x1] = card_full
         fr[CH_Y:CH_Y + 2600, CH_X:CH_X + 1896] = np.clip(st, 0, 255).astype(np.uint8)
+        fr[y0:y1, x0:x1] = PAP.sharpen(fr[y0:y1, x0:x1], BAR_B - y0)      # whole-card sharpen (static paper, no per-frame grain)
         Image.fromarray(fr).save(f"/tmp/test_{tt}.png")
     sys.exit()
 # ---------------- encode ----------------
@@ -241,6 +245,7 @@ for f in range(n):
     st = chart_state(t)
     fr[y0:y1, x0:x1] = card_full
     fr[CH_Y:CH_Y + 2600, CH_X:CH_X + 1896] = np.clip(st, 0, 255).astype(np.uint8)
+    fr[y0:y1, x0:x1] = PAP.sharpen(fr[y0:y1, x0:x1], BAR_B - y0)      # whole-card sharpen (static paper, no per-frame grain)
     ff.stdin.write(fr.tobytes())
     if f % 30 == 0: print("frame", f, flush=True)
 ff.stdin.close(); ff.wait()

@@ -1,7 +1,7 @@
 # True Economy brand and template rules (the task must follow these on every post)
 
 ## Template (fixed, never changes)
-- The card is the user's Canva card: black bar with the "E" logo on top, white paper area below, over a blurred grey topic background in the video.
+- The card is the user's Canva card: black bar with the "E" logo on top, textured greige paper area below (te_paper.py; was plain white until 8 Nov 2026), over a blurred grey topic background in the video.
 - NEW UNIFORM TEMPLATE (from 6 Nov 2026, same on every platform): the card is plain white and full width (4K x 0-2160, y 296-3360), black bar with the logo on top, background texture only above and below the card. The chart canvas is 948 x 1300 (the platforms' safe zone; 4K x 132-2028, y 620-3220) and the design, headline included, FILLS it edge to edge (headline touches the top edge, source line the bottom edge, content spans the full width, no empty margins). Render previews with rsvg-convert -w 948 (or -w 1896 for 2x, -w 3792 for 4x).
 - Fixed positions (Facebook's feed crops the top and bottom of vertical video): title baseline 1 at y=137 (the headroom above is deliberate), footer takeaway line at y=H-100 (1341), source line at y=H-57 (1384). Left margin x=72, content width 870 (right edge 942). The chart body lives between `Card.top` and `Card.bottom` (H-150).
 - `scripts/te_lib.py` builds all of this: Card.title / subtitle / kpi_row / footer / source. Use it for every new card. make_flow.py is the original reference post ("How Nvidia makes money?") and is still used for the How (company) series.
@@ -52,6 +52,6 @@ Before building, write one line: "the one comparison/idea is ___". Then:
 
 - Gain colour (7 Nov, final): teal-green #249972 (focal, WHITE text) + light teal #B2DCCE (context, ink text). Text on any dark fill is white; ink on light fills. Stock Market Today keeps #6CBF3F.
 
-- Film grain A2 on every card video from video_card.py (default on; not on Stock Market Today). See feedback.md.
+- CARD SURFACE (from 8 Nov 2026, supersedes plain white + film grain): static embossed watercolour-paper texture from scripts/te_paper.py on EVERY card video (video_card, video_flow, video_mkts incl. Stock Market Today): soft warm greige (237,234,227), crisp fine tooth, uniform from a distance, graphics printed into the paper, whole card sharpened, logo tab = soft black (17,17,17) with a hint of tooth. All static (no per-frame grain). See feedback.md 2026-11-08 PAPER.
 
 - Headline accent: short coloured bar beside line 1 (blue default; red only for loss/miss stories; ink if the chart is mostly blue). Chevrons fade near text via Card.arrows(avoid=...).
