@@ -55,7 +55,37 @@ class Paper:
         self.shade = 0.55 + 0.45 * (self.fine[ch_y:ch_y + ch_h, ch_x:ch_x + ch_w] / BASE[None, None, :])
     def bar(self, rows):
         """the logo tab: printed soft black (17,17,17) with a hint of the paper tooth (not flat digital black)"""
-        return np.clip(17 + 0.55 * self.v[:rows, :, None], 0, 255).astype(np.uint8).repeat(3, axis=2)
+        return np.clip(23 + 0.80 * self.v[:rows, :, None] + np.array([1, 0, -1]), 0, 255).astype(np.uint8)   # matches the reference tab black (~23,22,21, warm)
+    def stamp_logo(self, card, paper_src, bar_rows, cx=179, cy_abs=385, y0=296, h=70):
+        """new TE logo (assets/te_E.png) cut from the card's own paper (same colour and tooth), centred on the old logo position"""
+        import os
+        m = Image.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "te_E.png")).convert("L")
+        w = int(round(h * m.width / m.height))
+        m = m.resize((w * 4, h * 4), Image.LANCZOS).resize((w, h), Image.LANCZOS)
+        a = (np.asarray(m, np.float32) / 255)[..., None]
+        ex, ey = cx - w // 2, cy_abs - y0 - h // 2
+        src = paper_src[bar_rows + ey: bar_rows + ey + h, ex:ex + w].astype(np.float32)
+        card[ey:ey + h, ex:ex + w] = (card[ey:ey + h, ex:ex + w] * (1 - a) + src * a).astype(np.uint8)
+    def lit(self, card, bar_rows):
+        """lighting from above (static): soft top-to-bottom gradient, slight side falloff, paper-thickness lip at the bottom edge, bright top edge"""
+        hh, ww = card.shape[:2]
+        t = np.clip((np.arange(hh, dtype=np.float32) - 0) / hh, 0, 1)[:, None]
+        g = 1 + 0.035 * (0.5 - t) * 2
+        xx = np.linspace(-1, 1, ww, dtype=np.float32)[None, :]
+        f = (g * (1 - 0.03 * xx ** 2))[..., None]
+        c = card.astype(np.float32)
+        c[bar_rows:] *= f[bar_rows:]
+        c[-5:] *= np.array([0.80, 0.79, 0.77], np.float32)
+        c[:2] = np.clip(c[:2] + 40, 0, 255)
+        card[:] = np.clip(c, 0, 255).astype(np.uint8)
+    @staticmethod
+    def lit_shadow(W, H, card):
+        """extra light-from-above shadow for the background: longer soft shadow below the card, tight line above"""
+        x0, y0, x1, y1 = card
+        yy = np.arange(H, dtype=np.float32)
+        below = np.where(yy >= y1, np.exp(-3 * np.clip((yy - y1) / 160, 0, 1)), 0)
+        up = np.where(yy < y0, np.exp(-3 * np.clip((y0 - yy) / 50, 0, 1)), 0)
+        return (1 - 0.45 * 0.9 * below - 0.45 * 0.35 * up)[:, None, None].astype(np.float32)
     def card_u8(self):
         return self.bg.astype(np.uint8)
     def inkify(self, img):

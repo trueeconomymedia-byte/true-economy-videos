@@ -91,3 +91,9 @@
 - CAPTIONS: before writing captions read playbook/brain/guidance.md and apply its AUTO guidance (soft, data-backed). Hard limits in brand.md and feedback.md (hashtag caps, Facebook title/length, no financial advice, accuracy) always win over it.
 - ROUTING: before creating each platform's Buffer post read playbook/brain/routing.json. If the series (Daily Post series id; for Markets Daily "markets_daily" or "stock_market_today") is listed under skip_platforms for that platform, do NOT post it there (the user approved that data-backed change) and say so in the final message. An empty list means post everywhere as normal.
 - The brain never changes template, colours, verification standards or hashtag limits. Series/rotation/platform changes happen only after the user approves them (decisions are appended here as BRAIN DECISION entries).
+
+## 2026-11-08 NEW LOGO TAB + LIGHTING (user-approved; overrides older wording)
+- Logo tab for Daily Post, Markets Daily (non-stock cards) and How-X-makes-money: NEW serif "E" logo (scripts/assets/te_E.png), same position/size as the old logo, cut from the card's own paper (same greige colour + tooth) — done by Paper.stamp_logo. Do not paste the old LOGO_B64 logo.
+- Tab black matches the reference (~RGB 23,22,21, slightly warm, paper-tooth grain) — Paper.bar.
+- Light from above (static): soft top-bright gradient, slight side falloff, thin darker lip on card bottom edge, bright top edge (Paper.lit); longer soft shadow below the card and a tight line above (Paper.lit_shadow). All baked in; nothing moves.
+- Stock Market Today is unchanged: plain white card, flat black tab, old logo, original shadow (video_mkts.py not touched).

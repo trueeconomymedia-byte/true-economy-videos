@@ -142,7 +142,9 @@ def _shadow():
     m2 = Image.new("L", (W, H), 0); ImageDraw.Draw(m2).rectangle([0, sy0 + 6, W, sy1 + 10], fill=255)
     m2 = np.asarray(m2.filter(ImageFilter.GaussianBlur(10)), dtype=np.float32) / 255
     return ((1 - 0.62 * m) * (1 - 0.45 * m2))[..., None].astype(np.float32)
-SHADOW = _shadow()
+import sys as _s0, os as _o0; _s0.path.insert(0, _o0.path.dirname(_o0.path.abspath(__file__)))
+from te_paper import Paper
+SHADOW = _shadow() * Paper.lit_shadow(W, H, CARD)   # + light-from-above shadow (paper look)
 
 def bg_frame(t):
     p = (t / DUR) * 2 * math.pi            # every motion repeats exactly once per clip => seamless loop
@@ -160,16 +162,10 @@ import sys as _s, os as _o; _s.path.insert(0, _o.path.dirname(_o.path.abspath(__
 from te_paper import Paper                                      # static textured paper surface (user-approved 8 Nov 2026)
 PAP = Paper(x1 - x0, y1 - y0, CH_X - x0, CH_Y - y0)
 card_full = PAP.card_u8()
-card_full[: BAR_B - y0, :, :] = PAP.bar(BAR_B - y0)          # textured soft-black tab
-_bar = card_full[: BAR_B - y0].copy()
-logo = Image.open(io.BytesIO(base64.b64decode(LOGO_B64))).convert("L")
-logo = logo.resize((logo.width * 4, logo.height * 4), Image.LANCZOS)
-la = np.asarray(logo, dtype=np.float32)
-la = np.clip((la - 70) / (185 - 70), 0, 1) * 232                      # firm up the edges, keep the original soft white
-lx, ly = 64 * S - x0, 168 * S - y0
-card_full[ly:ly + la.shape[0] // 2, lx:lx + la.shape[1] // 2, :] = np.asarray(
-    Image.fromarray(la.astype(np.uint8)).resize((la.shape[1] // 2, la.shape[0] // 2), Image.LANCZOS))[..., None]
-card_full[: BAR_B - y0] = np.maximum(_bar, card_full[: BAR_B - y0])     # logo blends into the tab (no black box)
+_paper_src = card_full.copy()
+card_full[: BAR_B - y0, :, :] = PAP.bar(BAR_B - y0)          # textured soft-black tab (matches reference black)
+PAP.stamp_logo(card_full, _paper_src, BAR_B - y0)             # new E logo cut from the card's own paper
+PAP.lit(card_full, BAR_B - y0)                                # light from above: gradient, bottom lip, top highlight
 chart_bg = card_full[CH_Y - y0:CH_Y - y0 + 2600, CH_X - x0:CH_X - x0 + 1896].astype(np.float32)
 
 # ---------------- chart layers (all static except the money streaks) ----------------
