@@ -196,7 +196,7 @@ parts = []
 for _f in anim.get("flow", []):
     (xs, ys0, ys1, xd, yd0, yd1, col) = _f[:7]; win = _f[7] if len(_f) > 7 else None
     hgt = ((ys1 - ys0) + (yd1 - yd0)) / 2; ln = abs(xd - xs) + abs((yd0 - ys0)) * 0.3
-    if win:                                                  # SEQUENCED DOTS: dots travel along the ribbon only inside window (a,b) of the loop
+    if win:
         n = int(max(6, round(hgt * ln / 48 ** 2)))
         for i in range(n):
             parts.append((xs, ys0, ys1, xd, yd0, yd1, (i + rng.random() * 0.8) / n, rng.random(), 1, PCOL.get(col, (63, 130, 212)), win))
@@ -216,7 +216,7 @@ def bez(p0, p1, p2, p3, t):
 def chart_state(t):
     img = chart_static.copy()
     lay = Image.new("RGBA", (1896, 2600), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
-    for (xs, ys0, ys1, xd, yd0, yd1, ph, u, cyc, rgb, win) in parts:                  # money streaks along ribbons
+    for (xs, ys0, ys1, xd, yd0, yd1, ph, u, cyc, rgb, win) in parts:
         if win:
             loc = (t / DUR - win[0]) / (win[1] - win[0])
             if loc < 0 or loc > 1: continue
@@ -234,7 +234,7 @@ def chart_state(t):
             px_, py_ = pos(q0); al = int(255 * 0.95 * max(edge, 0)); rr_ = 11
             if al > 3: d.ellipse([px_ - rr_, py_ - rr_, px_ + rr_, py_ + rr_], fill=tuple(rgb) + (al,))
         elif al > 2: d.line([pos(q1), pos(q0)], fill=tuple(rgb) + (al,), width=8)
-    for (_pts, _cum, ph, rgb, win) in path_parts:                                   # dots travelling along a station-to-station path, only inside its window
+    for (_pts, _cum, ph, rgb, win) in path_parts:
         loc = (t / DUR - win[0]) / (win[1] - win[0])
         if loc < 0 or loc > 1: continue
         tt = (loc - ph * 0.45) / 0.55
@@ -243,7 +243,7 @@ def chart_state(t):
         f_ = (dist - _cum[k_]) / max(_cum[k_ + 1] - _cum[k_], 1e-6); px_, py_ = (_pts[k_] * (1 - f_) + _pts[k_ + 1] * f_) * 2
         al = int(255 * min(1.0, tt / 0.08, (1 - tt) / 0.08)); rr_ = 12
         if al > 3: d.ellipse([px_ - rr_, py_ - rr_, px_ + rr_, py_ + rr_], fill=tuple(rgb) + (al,), outline=(255, 255, 255, al), width=2)
-    for (px, py, pw, ph_, rgb, cyc, rad, *_w) in anim.get("pulse", []):                # flashing rectangles (tile flash)
+    for (px, py, pw, ph_, rgb, cyc, rad, *_w) in anim.get("pulse", []):
         if _w and _w[0]:
             loc = (t / DUR - _w[0][0]) / (_w[0][1] - _w[0][0])
             k = 0.0 if (loc < 0 or loc > 1) else 0.5 - 0.5 * math.cos(2 * math.pi * 2 * loc)
