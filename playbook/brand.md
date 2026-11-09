@@ -61,3 +61,5 @@ Before building, write one line: "the one comparison/idea is ___". Then:
 - (9 Nov 2026) Headline = Lora Bold, marker band in gold #FACB3A (replaces all yellow), bar beside headline = black short / tall / none only. See feedback.md 2026-11-09.
 
 - (9 Nov 2026) Paper brightness +6%: BASE paper colour is now (251,248,241) = #FBF8F1 (same warm hue, brighter; was #EDEAE3). Set in scripts/te_paper.py.
+
+- (9 Nov 2026) Motion option: STATION-PATH DIAGRAM with sequenced travelling dots (scripts/video_card_seq.py). Only when the topic is a process/journey of 3 to 6 stages and the movement improves clarity; see feedback.md 'OPTION: ANIMATED STATION-PATH DIAGRAM'. Never forced for variety.
