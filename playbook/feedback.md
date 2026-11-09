@@ -134,3 +134,6 @@ The scripts already use these values (te_lib, make_flow, make_mkts, video_card, 
 
 ## 2026-11-09 PAPER BRIGHTNESS +6% (user-approved)
 - Card paper BASE is now (251,248,241) #FBF8F1: same warm greige hue, brighter so the card stands out. Tab black, logo, palette unchanged. The logo E is cut from the paper, so it brightens with it. Applies to Daily Post, Markets Daily and How-X-makes-money (te_paper). Stock Market Today stays plain white.
+
+## 2026-11-09 STOCK MARKET TODAY IS EXCLUDED FROM THE NEW STYLE (user)
+- The Stock Market Today card/video (make_mkts.py, video_mkts.py, fetch_mkts.py) keeps ITS OWN style and none of the 9 Nov changes: plain white card, flat black tab, old logo, Charter headline, its own colours (red #E23B3B, blue #3362CE, green #6CBF3F, yellow marker #EDE22E), original shadow, no paper texture, no lighting. Do not apply the new palette, Lora headline, gold marker, +6% paper, new logo or KPI rules to it.
