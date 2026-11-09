@@ -59,3 +59,5 @@ Before building, write one line: "the one comparison/idea is ___". Then:
 - Logo tab (8 Nov 2026): new "E" logo from scripts/assets/te_E.png, coloured/textured as the card paper; black tab ~RGB(23,22,21) warm with paper grain; light-from-above lighting on the card. Stock Market Today keeps its plain white look.
 
 - (9 Nov 2026) Headline = Lora Bold, marker band in gold #FACB3A (replaces all yellow), bar beside headline = black short / tall / none only. See feedback.md 2026-11-09.
+
+- (9 Nov 2026) Paper brightness +6%: BASE paper colour is now (251,248,241) = #FBF8F1 (same warm hue, brighter; was #EDEAE3). Set in scripts/te_paper.py.

@@ -8,7 +8,7 @@ import os
 import numpy as np, cv2
 from PIL import Image, ImageFilter, ImageDraw
 
-BASE = np.array([237, 234, 227], np.float32)                 # warm light greige, between the reference posts (user-approved 8 Nov 2026)
+BASE = np.array([251, 248, 241], np.float32)     # warm greige, +6% brighter (user 9 Nov): was (237,234,227)
 TINT = np.array([1.0, 0.98, 0.90], np.float32)
 K = float(os.environ.get("PAPER_K", 0.72)); MIX = float(os.environ.get("PAPER_MIX", 0.55)); SHARP = float(os.environ.get("PAPER_SHARP", 1.0))
 

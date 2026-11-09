@@ -131,3 +131,6 @@ The scripts already use these values (te_lib, make_flow, make_mkts, video_card, 
 
 ## 2026-11-09 HEADLINE TOP CLIPPING FIX
 - Lora Bold ascenders (h, l, d, b, i-dot, $ sign) are taller than Charter's were and were clipped at the top edge of the chart canvas. The headline baseline now drops just enough (te_lib/make_flow/make_mkts: b1 = max(66, ceil(size x 0.76) + 3), or x 0.84 when the headline contains "$"). Everything below shifts down by the same few px. Check the top of every headline in the render: no letter may touch or cross the canvas top.
+
+## 2026-11-09 PAPER BRIGHTNESS +6% (user-approved)
+- Card paper BASE is now (251,248,241) #FBF8F1: same warm greige hue, brighter so the card stands out. Tab black, logo, palette unchanged. The logo E is cut from the paper, so it brightens with it. Applies to Daily Post, Markets Daily and How-X-makes-money (te_paper). Stock Market Today stays plain white.
