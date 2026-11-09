@@ -1,4 +1,4 @@
-# TEMPLATE for data_surprise cards. POSITIVE story = teal-green family (te_lib GREEN #249972 focal with WHITE text, GREEN_L #B2DCCE context with ink text). MISS = light blue context + red #E23B3B focal (white text). Neutral = the two blues. See feedback.md.
+# TEMPLATE for data_surprise cards. POSITIVE story = teal-green family (te_lib GREEN #249972 focal with WHITE text, GREEN_L #B2DCCE context with ink text). MISS = light blue context + red #D94437 focal (white text). Neutral = the two blues. See feedback.md.
 import sys; sys.path.insert(0,'/tmp')
 from te_lib import *
 

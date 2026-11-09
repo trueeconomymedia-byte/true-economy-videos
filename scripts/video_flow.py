@@ -183,15 +183,15 @@ chart_static = paper
 L_labels = render(["labels"], "ly_labels")
 ribbons = json.load(open(SVG.replace(".svg", ".ribbons.json")))
 GOLD = "#D9CD00"
-PCOL = {"#3362CE": (51, 98, 206), "#A4BBE8": (51, 98, 206),
-        "#E23B3B": (214, 52, 46), "#FFF205": (217, 205, 0), "#EDE22E": (208, 199, 30), "#FACB3A": (232, 178, 36)}
+PCOL = {"#3F82D4": (63, 130, 212), "#B3CDEC": (63, 130, 212),
+        "#D94437": (217, 68, 55), "#FFF205": (217, 205, 0), "#EDE22E": (208, 199, 30), "#FACB3A": (232, 178, 36)}
 parts = []   # one record per money streak: ribbon geometry, lane, phase, cycles, colour
 for (xs, ys0, ys1, xd, yd0, yd1, col) in ribbons:
     hgt = ((ys1 - ys0) + (yd1 - yd0)) / 2; ln = abs(xd - xs) + abs((yd0 - ys0)) * 0.3
     n = int(max(3, round(hgt * ln / 27 ** 2)))
     cyc = int(min(8, max(1, round(62 * DUR / max(ln, 1)))))
     for i in range(n):
-        parts.append((xs, ys0, ys1, xd, yd0, yd1, (i + rng.random() * 0.8) / n, rng.random(), cyc, PCOL.get(col, (51, 98, 206))))
+        parts.append((xs, ys0, ys1, xd, yd0, yd1, (i + rng.random() * 0.8) / n, rng.random(), cyc, PCOL.get(col, (63, 130, 212))))
 def bez(p0, p1, p2, p3, t):
     u = 1 - t; return u*u*u*p0 + 3*u*u*t*p1 + 3*u*t*t*p2 + t*t*t*p3
 XMIN = min(r[0] for r in ribbons); XMAX = max(r[3] for r in ribbons)

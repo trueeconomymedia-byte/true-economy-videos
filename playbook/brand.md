@@ -9,7 +9,7 @@
 - Title: Charter bold serif, up to 92 px, two lines max, yellow marker (#EDE22E) behind the key word. Subtitle 24 px grey Inter Medium. Footer 30 px Inter Bold, one punchy takeaway sentence. Source line 15 px grey: "Source: <names> · <year/date>" with real middle dots.
 
 ## Colours
-- True Economy red #E23B3B (negative, loss, danger, "the highlight country/company"), blue #3362CE (primary / dark blue), light blue #A4BBE8, yellow #FFF205 (marker, highlights, "net/keeps"), green #1FA35C (gains only), ink #111111, grey #555555, pale box #EEEEEC.
+- True Economy red #D94437 (negative, loss, danger, "the highlight country/company"), blue #3F82D4 (primary), light blue #B3CDEC, gold #FACB3A (marker, highlights, "net/keeps"), green #1FA35C (gains only), ink #111111, grey #5A554B (warm); no pale boxes.
 - Red must be the exact True Economy red, never orange-ish.
 
 ## Style (from the user's stated preferences)

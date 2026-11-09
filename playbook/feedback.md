@@ -112,3 +112,13 @@
 ## 2026-11-09 NO PALE PANELS (user: "none")
 - On the paper cards there are NO pale/grey boxes, panels or rules behind verdicts, notes or KPI figures. Verdict lines (US vs UK), note strips and KPI figures sit straight on the paper. The only filled box is the gold highlighted KPI.
 - Grey text is a warm dark grey #5A554B (te_lib GREY); gridlines are warm #CFC8B8. Never use cool greys (#EEEEEC, #DADAD6, #555555) on the paper cards.
+
+## 2026-11-09 NEW DEFAULT COLOUR PALETTE (user: "that looks great, save as default"). OVERRIDES every older hex in this file (#3362CE, #A4BBE8, #E23B3B, #EDE22E/#FFF205, #2A4FA8)
+- Blue (primary) #3F82D4 | light blue #B3CDEC | deeper blue (small blue text/labels) #2A62AE
+- Red ("True Economy red") #D94437 | light red = red at 45% (te_lib solid)
+- Gold #FACB3A (headline marker, highlighted KPI box, any yellow)
+- Teal-green #249972 (focal gain, white text) | light teal #B2DCCE | Stock Market Today keeps its own green #6CBF3F
+- Ink/text #111111 (headline #1C1A18 printed) | warm grey text #5A554B | gridlines #CFC8B8
+- Paper greige (237,234,227) = #EDEAE3 | tab black ~#171615 (RGB 23,22,21) | logo "E" = paper colour
+- White text on blue/red/green bars. Full strength = winner/focal, light tint = other side.
+The scripts already use these values (te_lib, make_flow, make_mkts, video_card, video_flow). Wherever older entries above quote an old hex, use the value here.

@@ -10,8 +10,8 @@ from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.basePen import NullPen
 
 W, H = 948, 1300
-RED, BLUE, YEL = "#E23B3B", "#3362CE", "#FACB3A"
-BLUE_D, BLUE_L, BLUE_XL = "#3362CE", "#A4BBE8", "#A4BBE8"
+RED, BLUE, YEL = "#D94437", "#3F82D4", "#FACB3A"
+BLUE_D, BLUE_L, BLUE_XL = "#3F82D4", "#B3CDEC", "#B3CDEC"
 INK, GREY = "#111111", "#555555"
 IF = "/usr/share/fonts/opentype/inter/Inter-%s.otf"
 
@@ -98,7 +98,7 @@ for i, (lab, val, yy, col) in enumerate(kp):
     text(bx + bw / 2, ky, lab, 19, INK, "sb", "m")
     if col == YEL: rect(bx, ky + 14, bw, 92, col, 1, 4)     # no pale boxes: only the highlighted KPI gets the gold box (user 9 Nov)
     text(bx + bw / 2, ky + 62, money(val), 34, INK, "b", "m")
-    text(bx + bw / 2, ky + 90, yy, 16, INK if col == YEL else "#2A4FA8", "sb", "m")
+    text(bx + bw / 2, ky + 90, yy, 16, INK if col == YEL else "#2A62AE", "sb", "m")
 out.append('</g>')
 
 # ---- sankey geometry
