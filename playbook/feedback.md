@@ -122,3 +122,9 @@
 - Paper greige (237,234,227) = #EDEAE3 | tab black ~#171615 (RGB 23,22,21) | logo "E" = paper colour
 - White text on blue/red/green bars. Full strength = winner/focal, light tint = other side.
 The scripts already use these values (te_lib, make_flow, make_mkts, video_card, video_flow). Wherever older entries above quote an old hex, use the value here.
+
+## 2026-11-09 MORE CREATIVE, ANIMATED DATA-FLOW (user, on the national debt card; static bar sections felt dull)
+- User: "there must be a more creative eye catching way to portray this data", then named the style: ANIMATED FLOWCHART / PROCESS DIAGRAM, "dots move along the connecting lines and different sections animate in sequence" (motion graphics with animated data flow).
+- For explainers about money moving (debt, deficits, taxes, budgets, supply chains) prefer a flow diagram (Sankey/process ribbons) over stacked bars. Animate with sequenced dots: scripts/video_card_seq.py (use instead of video_card.py). Flow entries get an 8th element [a,b] = window of the loop (fractions) in which dots travel along that ribbon; pulse entries get an 8th element window too (two soft white flashes). Nothing animates at t=0 or at the end, so first frame = last frame. Pass the lists via c.save(path, anim={"flow":[...],"pulse":[...]}) and draw ribbons with c.ribbon(..., animate=False). Reference build: the 9 Nov national-debt-flow post (make_post3 pattern: light-tint ribbons, full-colour node bars, labels in group "toplabels").
+- Sequence order = the story order (sources first, then the combine step, then outputs, then the consequence).
+- Other creative options the user is open to: analogy visuals (household x100 million, credit-card balance), but the animated flow was the one they named.
