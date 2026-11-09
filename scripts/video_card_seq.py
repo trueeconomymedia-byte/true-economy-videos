@@ -205,6 +205,12 @@ for _f in anim.get("flow", []):
     cyc = int(min(8, max(1, round(62 * DUR / max(ln, 1)))))
     for i in range(n):
         parts.append((xs, ys0, ys1, xd, yd0, yd1, (i + rng.random() * 0.8) / n, rng.random(), cyc, PCOL.get(col, (63, 130, 212)), None))
+path_parts = []
+for _p in anim.get("paths", []):
+    _pts = np.array(_p["pts"], dtype=float); _seg = np.hypot(*np.diff(_pts, axis=0).T); _cum = np.concatenate([[0], np.cumsum(_seg)])
+    _n = int(_p.get("n", 12))
+    for i in range(_n):
+        path_parts.append((_pts, _cum, (i + rng.random() * 0.6) / _n, tuple(_p["rgb"]), _p["win"]))
 def bez(p0, p1, p2, p3, t):
     u = 1 - t; return u*u*u*p0 + 3*u*u*t*p1 + 3*u*t*t*p2 + t*t*t*p3
 def chart_state(t):
@@ -228,6 +234,15 @@ def chart_state(t):
             px_, py_ = pos(q0); al = int(255 * 0.95 * max(edge, 0)); rr_ = 11
             if al > 3: d.ellipse([px_ - rr_, py_ - rr_, px_ + rr_, py_ + rr_], fill=tuple(rgb) + (al,))
         elif al > 2: d.line([pos(q1), pos(q0)], fill=tuple(rgb) + (al,), width=8)
+    for (_pts, _cum, ph, rgb, win) in path_parts:                                   # dots travelling along a station-to-station path, only inside its window
+        loc = (t / DUR - win[0]) / (win[1] - win[0])
+        if loc < 0 or loc > 1: continue
+        tt = (loc - ph * 0.45) / 0.55
+        if tt <= 0 or tt >= 1: continue
+        dist = tt * _cum[-1]; k_ = int(np.searchsorted(_cum, dist, side="right") - 1); k_ = min(k_, len(_pts) - 2)
+        f_ = (dist - _cum[k_]) / max(_cum[k_ + 1] - _cum[k_], 1e-6); px_, py_ = (_pts[k_] * (1 - f_) + _pts[k_ + 1] * f_) * 2
+        al = int(255 * min(1.0, tt / 0.08, (1 - tt) / 0.08)); rr_ = 12
+        if al > 3: d.ellipse([px_ - rr_, py_ - rr_, px_ + rr_, py_ + rr_], fill=tuple(rgb) + (al,), outline=(255, 255, 255, al), width=2)
     for (px, py, pw, ph_, rgb, cyc, rad, *_w) in anim.get("pulse", []):                # flashing rectangles (tile flash)
         if _w and _w[0]:
             loc = (t / DUR - _w[0][0]) / (_w[0][1] - _w[0][0])
@@ -261,7 +276,7 @@ def chart_state(t):
         a = int(255 * sw.get("alpha", 0.1))
         bd.polygon([(cx - 120, 0), (cx + 120, 0), (cx + 120 - 700, 2600), (cx - 120 - 700, 2600)], fill=tuple(sw.get("rgb", [63, 130, 212])) + (a,))
         lay = Image.alpha_composite(lay, band.filter(ImageFilter.GaussianBlur(40)))
-    lay = lay.filter(ImageFilter.GaussianBlur(0.9)) if parts else lay
+    lay = lay.filter(ImageFilter.GaussianBlur(0.9)) if (parts or path_parts) else lay
     img.alpha_composite(lay)
     if L_top is not None: img.alpha_composite(L_top)
     return np.asarray(img)[..., :3].astype(np.float32)
