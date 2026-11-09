@@ -183,7 +183,7 @@ chart_static = paper
 L_labels = render(["labels"], "ly_labels")
 ribbons = json.load(open(SVG.replace(".svg", ".ribbons.json")))
 GOLD = "#D9CD00"
-PCOL = {"#3670D0": (54, 112, 208), "#B3CDEC": (54, 112, 208),
+PCOL = {"#3670D0": (54, 112, 208), "#B3C9ED": (54, 112, 208),
         "#D94437": (217, 68, 55), "#FFF205": (217, 205, 0), "#EDE22E": (208, 199, 30), "#FACB3A": (232, 178, 36)}
 parts = []   # one record per money streak: ribbon geometry, lane, phase, cycles, colour
 for (xs, ys0, ys1, xd, yd0, yd1, col) in ribbons:

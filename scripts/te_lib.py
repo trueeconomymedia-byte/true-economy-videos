@@ -25,7 +25,7 @@ from fontTools.pens.basePen import NullPen
 W, H = 948, 1300
 RED, BLUE, YEL = "#D94437", "#3670D0", "#FACB3A"           # True Economy red / blue / yellow (gold #FACB3A from the user's reference, 9 Nov)
 GREEN = "#249972"; GREEN_L = "#B2DCCE"           # teal-green (focal gain, WHITE text on it) + light teal (context, ink text). Stock Market Today keeps its own #6CBF3F
-BLUE_D, BLUE_L, BLUE_XL = "#3670D0", "#B3CDEC", "#B3CDEC"
+BLUE_D, BLUE_L, BLUE_XL = "#3670D0", "#B3C9ED", "#B3C9ED"
 INK, GREY, PALE = "#111111", "#5A554B", "#EEEEEC"      # GREY is a warm dark grey (user 9 Nov); PALE is retired: do not use cool grey fills on the paper cards
 X0, CW = 0, 948                                             # left margin, content width (right edge = 948)
 IF = "/usr/share/fonts/opentype/inter/Inter-%s.otf"

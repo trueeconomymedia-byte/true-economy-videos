@@ -11,7 +11,7 @@ from fontTools.pens.basePen import NullPen
 
 W, H = 948, 1300
 RED, BLUE, YEL = "#D94437", "#3670D0", "#FACB3A"
-BLUE_D, BLUE_L, BLUE_XL = "#3670D0", "#B3CDEC", "#B3CDEC"
+BLUE_D, BLUE_L, BLUE_XL = "#3670D0", "#B3C9ED", "#B3C9ED"
 INK, GREY = "#111111", "#555555"
 IF = "/usr/share/fonts/opentype/inter/Inter-%s.otf"
 

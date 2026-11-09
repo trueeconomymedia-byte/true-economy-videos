@@ -190,7 +190,7 @@ if "flow" not in anim and os.path.exists(SVG.replace(".svg", ".ribbons.json")):
 if not anim and os.environ.get("SWEEP") == "1": anim["sweep"] = {"rgb": [54, 112, 208], "alpha": 0.10}     # default sweep REMOVED (user, 7 Nov): static cards get no animation unless SWEEP=1
 print("animation layers:", list(anim), flush=True)
 
-PCOL = {"#3670D0": (54, 112, 208), "#B3CDEC": (54, 112, 208),
+PCOL = {"#3670D0": (54, 112, 208), "#B3C9ED": (54, 112, 208),
         "#D94437": (217, 68, 55), "#FFF205": (217, 205, 0), "#EDE22E": (208, 199, 30), "#FACB3A": (232, 178, 36)}
 parts = []
 for (xs, ys0, ys1, xd, yd0, yd1, col) in anim.get("flow", []):

@@ -149,3 +149,6 @@ The scripts already use these values (te_lib, make_flow, make_mkts, video_card, 
 ## 2026-11-09 MAIN BLUE CHANGED TO #3670D0 (overrides #3F82D4 everywhere above)
 - The user compared #3F82D4, an in-between #3670D0 and the older #3362CE on the national debt card with the paper texture and chose the in-between: MAIN BLUE IS NOW #3670D0 (RGB 54,112,208). Reason: richer and more premium on the paper, better white-text contrast, balances the red.
 - UNCHANGED: light blue stays #B3CDEC (secondary / context), deep blue #2A62AE for small blue text, red #D94437, gold #FACB3A, teal-green #249972 / #B2DCCE, ink and the black logo tab / black hub circles. Wherever older entries say main blue #3F82D4 (or #3362CE), use #3670D0. Stock Market Today keeps its own colours (#3362CE) and is not changed.
+
+## 2026-11-09 LIGHT BLUE CHANGED TO #B3C9ED (overrides #B3CDEC everywhere above)
+- Secondary / light blue is now #B3C9ED (same lightness as before, hue matched to the new main blue #3670D0; chosen from four options on the textured card). Wherever older entries say light blue #B3CDEC (or #A4BBE8), use #B3C9ED. Main blue #3670D0, deep blue #2A62AE (small text), red, gold and teals unchanged. Stock Market Today unchanged.
