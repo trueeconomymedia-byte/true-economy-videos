@@ -96,9 +96,9 @@ bw, gap = 226.5, 14
 for i, (lab, val, yy, col) in enumerate(kp):
     bx = X0 + i * (bw + gap)
     text(bx + bw / 2, ky, lab, 19, INK, "sb", "m")
-    rect(bx, ky + 14, bw, 92, col, 1, 4)
+    if col == YEL: rect(bx, ky + 14, bw, 92, col, 1, 4)     # no pale boxes: only the highlighted KPI gets the gold box (user 9 Nov)
     text(bx + bw / 2, ky + 62, money(val), 34, INK, "b", "m")
-    text(bx + bw / 2, ky + 90, yy, 16, INK if col == YEL else BLUE_D, "sb", "m")
+    text(bx + bw / 2, ky + 90, yy, 16, INK if col == YEL else "#2A4FA8", "sb", "m")
 out.append('</g>')
 
 # ---- sankey geometry

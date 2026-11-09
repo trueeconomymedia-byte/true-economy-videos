@@ -104,3 +104,7 @@
 - YELLOW IS RETIRED. The one gold is #FACB3A (the user's reference). Use it for the headline marker, the highlighted KPI box and any yellow fill. Old #FFF205 / #EDE22E are no longer used. (Chart-icon stars/diamonds are separate and unchanged.)
 - BAR BESIDE THE HEADLINE: only THREE options, always BLACK (INK): "short" = short one-line bar beside line 1 (default), "tall" = bar spanning both lines, "none" = no bar (headline flush left). No blue/red/ink-coloured bars any more; legacy values map to "short". Card.title(..., accent="short"|"tall"|"none"). Choose per card for the best design and record it in the log "form" field.
 - Stock Market Today keeps its tall black bar (make_mkts) but gets Lora Bold and the gold marker.
+
+## 2026-11-09 KPI BOXES (user-approved)
+- NO pale/grey boxes on the paper cards (they looked cold and washed out). KPI figures sit straight on the paper; ONLY the highlighted KPI keeps a gold (#FACB3A) box with black text. KPI sub-labels use the deeper blue #2A4FA8. Applied in te_lib.kpi_row and make_flow.
+- Same principle for any other pale/grey fill on paper cards (verdict boxes, panels): no cool grey; use no fill, or a warm tone from the paper family, never #EEEEEC.

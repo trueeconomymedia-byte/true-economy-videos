@@ -270,9 +270,10 @@ class Card:
         with s.group("kpis"):
             for i, (lab, val, sub) in enumerate(items):
                 bx = X0 + i * (bw + gap); col = YEL if i == hi else PALE
-                s.text(bx + bw / 2, y, lab, 19, INK, "sb", "m"); s.rect(bx, y + 14, bw, 92, col, 1, 4)
+                s.text(bx + bw / 2, y, lab, 19, INK, "sb", "m")
+                if i == hi: s.rect(bx, y + 14, bw, 92, YEL, 1, 4)        # gold box only on the highlighted figure; the others sit straight on the paper (user 9 Nov)
                 s.text(bx + bw / 2, y + 62, val, fit("b", val, 34, bw - 16), INK, "b", "m")
-                s.text(bx + bw / 2, y + 90, sub, 16, INK if col == YEL else BLUE_D, "sb", "m")
+                s.text(bx + bw / 2, y + 90, sub, 16, INK if col == YEL else "#2A4FA8", "sb", "m")
         return y + 14 + 92
     def svg(s):
         body = ""
