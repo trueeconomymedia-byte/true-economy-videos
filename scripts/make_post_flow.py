@@ -44,9 +44,9 @@ with c.group("toplabels"):
     c.text(543,ymid(t3,oth*k)-6,"Everything else",24,INK,"sb"); c.text(543,ymid(t3,oth*k)+48,"$6.3tn",62,INK,"b")
     c.text(543,ymid(i3,inn*k)+9,"Interest on debt $1.1tn",25,RED,"b")
 # animation, sequenced across the loop
-F=[[X1+NW,a1,a1+tx*k,X2,t2,t2+tx*k,"#3F82D4",[0.03,0.30]],
+F=[[X1+NW,a1,a1+tx*k,X2,t2,t2+tx*k,"#3670D0",[0.03,0.30]],
    [X1+NW,b1,b1+bw_*k,X2,t2+tx*k,t2+sp*k,"#D94437",[0.28,0.48]],
-   [X2+NW,t2,t2+oth*k,X3,t3,t3+oth*k,"#3F82D4",[0.46,0.72]],
+   [X2+NW,t2,t2+oth*k,X3,t3,t3+oth*k,"#3670D0",[0.46,0.72]],
    [X2+NW,t2+oth*k,t2+sp*k,X3,i3,i3+inn*k,"#D94437",[0.55,0.78]]]
 P=[[X1,b1,NW,bw_*k,[255,255,255],None,0,[0.26,0.48]],
    [X2,t2,NW,sp*k,[255,255,255],None,0,[0.44,0.56]],

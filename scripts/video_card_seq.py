@@ -187,10 +187,10 @@ AJ = SVG.replace(".svg", ".anim.json")
 anim = json.load(open(AJ)) if os.path.exists(AJ) else {}
 if "flow" not in anim and os.path.exists(SVG.replace(".svg", ".ribbons.json")):
     anim["flow"] = json.load(open(SVG.replace(".svg", ".ribbons.json")))
-if not anim and os.environ.get("SWEEP") == "1": anim["sweep"] = {"rgb": [63, 130, 212], "alpha": 0.10}     # default sweep REMOVED (user, 7 Nov): static cards get no animation unless SWEEP=1
+if not anim and os.environ.get("SWEEP") == "1": anim["sweep"] = {"rgb": [54, 112, 208], "alpha": 0.10}     # default sweep REMOVED (user, 7 Nov): static cards get no animation unless SWEEP=1
 print("animation layers:", list(anim), flush=True)
 
-PCOL = {"#3F82D4": (63, 130, 212), "#B3CDEC": (63, 130, 212),
+PCOL = {"#3670D0": (54, 112, 208), "#B3CDEC": (54, 112, 208),
         "#D94437": (217, 68, 55), "#FFF205": (217, 205, 0), "#EDE22E": (208, 199, 30), "#FACB3A": (232, 178, 36)}
 parts = []
 for _f in anim.get("flow", []):
@@ -199,12 +199,12 @@ for _f in anim.get("flow", []):
     if win:
         n = int(max(6, round(hgt * ln / 48 ** 2)))
         for i in range(n):
-            parts.append((xs, ys0, ys1, xd, yd0, yd1, (i + rng.random() * 0.8) / n, rng.random(), 1, PCOL.get(col, (63, 130, 212)), win))
+            parts.append((xs, ys0, ys1, xd, yd0, yd1, (i + rng.random() * 0.8) / n, rng.random(), 1, PCOL.get(col, (54, 112, 208)), win))
         continue
     n = int(max(3, round(hgt * ln / 27 ** 2)))
     cyc = int(min(8, max(1, round(62 * DUR / max(ln, 1)))))
     for i in range(n):
-        parts.append((xs, ys0, ys1, xd, yd0, yd1, (i + rng.random() * 0.8) / n, rng.random(), cyc, PCOL.get(col, (63, 130, 212)), None))
+        parts.append((xs, ys0, ys1, xd, yd0, yd1, (i + rng.random() * 0.8) / n, rng.random(), cyc, PCOL.get(col, (54, 112, 208)), None))
 path_parts = []
 for _p in anim.get("paths", []):
     _pts = np.array(_p["pts"], dtype=float); _seg = np.hypot(*np.diff(_pts, axis=0).T); _cum = np.concatenate([[0], np.cumsum(_seg)])
@@ -274,7 +274,7 @@ def chart_state(t):
         sw = anim["sweep"]; u = t / DUR; cx = -300 + (1896 + 600) * u
         band = Image.new("RGBA", (1896, 2600), (0, 0, 0, 0)); bd = ImageDraw.Draw(band)
         a = int(255 * sw.get("alpha", 0.1))
-        bd.polygon([(cx - 120, 0), (cx + 120, 0), (cx + 120 - 700, 2600), (cx - 120 - 700, 2600)], fill=tuple(sw.get("rgb", [63, 130, 212])) + (a,))
+        bd.polygon([(cx - 120, 0), (cx + 120, 0), (cx + 120 - 700, 2600), (cx - 120 - 700, 2600)], fill=tuple(sw.get("rgb", [54, 112, 208])) + (a,))
         lay = Image.alpha_composite(lay, band.filter(ImageFilter.GaussianBlur(40)))
     lay = lay.filter(ImageFilter.GaussianBlur(0.9)) if (parts or path_parts) else lay
     img.alpha_composite(lay)

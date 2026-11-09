@@ -23,9 +23,9 @@ from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.basePen import NullPen
 
 W, H = 948, 1300
-RED, BLUE, YEL = "#D94437", "#3F82D4", "#FACB3A"           # True Economy red / blue / yellow (gold #FACB3A from the user's reference, 9 Nov)
+RED, BLUE, YEL = "#D94437", "#3670D0", "#FACB3A"           # True Economy red / blue / yellow (gold #FACB3A from the user's reference, 9 Nov)
 GREEN = "#249972"; GREEN_L = "#B2DCCE"           # teal-green (focal gain, WHITE text on it) + light teal (context, ink text). Stock Market Today keeps its own #6CBF3F
-BLUE_D, BLUE_L, BLUE_XL = "#3F82D4", "#B3CDEC", "#B3CDEC"
+BLUE_D, BLUE_L, BLUE_XL = "#3670D0", "#B3CDEC", "#B3CDEC"
 INK, GREY, PALE = "#111111", "#5A554B", "#EEEEEC"      # GREY is a warm dark grey (user 9 Nov); PALE is retired: do not use cool grey fills on the paper cards
 X0, CW = 0, 948                                             # left margin, content width (right edge = 948)
 IF = "/usr/share/fonts/opentype/inter/Inter-%s.otf"
@@ -182,7 +182,7 @@ class Card:
     def alluvial(s, cols, series, x_left, x_right, y_top, y_bottom, colors, flags=None, node_w=16, gap=4, fmt=None,
                  label_cols=(0, -1), animate=True, op=0.9, small=14):
         """Wave / bump-ribbon chart: ranked stacks at each time column joined by smooth S-curve ribbons whose width = value.
-        cols = ["1980","2000","2025"]; series = {"US":[2.9,10.3,30.6], ...} (None = absent in that column); colors = {"US": "#3F82D4", ...};
+        cols = ["1980","2000","2025"]; series = {"US":[2.9,10.3,30.6], ...} (None = absent in that column); colors = {"US": "#3670D0", ...};
         flags = {"US":"US"}; fmt = lambda v: f"${v:.1f}T". Stacks are bottom-aligned, largest on top, same scale for every column.
         Draw inside `with c.group("body")`; labels are drawn in the same group. Returns {name:[(x,y0,y1),...]} node geometry."""
         n = len(cols); xs = [x_left + (x_right - x_left - node_w) * i / (n - 1) for i in range(n)]

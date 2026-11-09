@@ -64,7 +64,7 @@ with c.group("toplabels"):
 c.footer("Spend more than you collect, and the gap lands on the debt.")
 c.source("Source: CBO (Oct 2026), US Treasury via American Action Forum · FY2026 · dots illustrative")
 def pp(pts): return [[round(a,1),round(b,1)] for a,b in pts]
-BL=[63,130,212]; RD=[217,68,55]
+BL=[54,112,208]; RD=[217,68,55]
 paths=[{"pts":pp(P1),"rgb":BL,"win":[0.05,0.22],"n":10},
        {"pts":pp(P2),"rgb":RD,"win":[0.20,0.37],"n":8},
        {"pts":pp(P3),"rgb":BL,"win":[0.45,0.62],"n":10},
