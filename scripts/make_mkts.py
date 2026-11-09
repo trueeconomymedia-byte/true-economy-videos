@@ -15,6 +15,11 @@ BLUE_D, BLUE_L, BLUE_XL = "#3F82D4", "#B3CDEC", "#B3CDEC"
 INK, GREY = "#111111", "#555555"
 IF = "/usr/share/fonts/opentype/inter/Inter-%s.otf"
 
+def _assets():
+    import os
+    for d in (os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets"), "/tmp/tev/scripts/assets", "/tmp/assets"):
+        if os.path.isdir(d) and os.path.exists(os.path.join(d, "Lora-Bold.ttf")): return d
+    raise FileNotFoundError("assets folder (Lora fonts, te_E.png) not found: clone trueeconomymedia-byte/true-economy-videos to /tmp/tev")
 class F:
     def __init__(s, path, t1=False):
         s.t1 = t1
@@ -30,7 +35,7 @@ class F:
             g = s.gs[n]; g.draw(NullPen()); return g.width
         return s.f['hmtx'][n][0]
 fonts = {"b": F(IF % "Bold"), "sb": F(IF % "SemiBold"), "m": F(IF % "Medium"), "xb": F(IF % "ExtraBold"),
-         "cb": F(os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "Lora-%s.ttf") % "Bold")}
+         "cb": F(os.path.join(_assets(), "Lora-%s.ttf") % "Bold")}
 def width(fk, t, size):
     f = fonts[fk]; return sum(f.adv(f.name(c)) for c in t) * size / f.upem
 out = []

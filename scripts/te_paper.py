@@ -59,7 +59,8 @@ class Paper:
     def stamp_logo(self, card, paper_src, bar_rows, cx=179, cy_abs=385, y0=296, h=70):
         """new TE logo (assets/te_E.png) cut from the card's own paper (same colour and tooth), centred on the old logo position"""
         import os
-        m = Image.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "te_E.png")).convert("L")
+        ad = next(d for d in (os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets"), "/tmp/tev/scripts/assets", "/tmp/assets") if os.path.exists(os.path.join(d, "te_E.png")))
+        m = Image.open(os.path.join(ad, "te_E.png")).convert("L")
         w = int(round(h * m.width / m.height))
         m = m.resize((w * 4, h * 4), Image.LANCZOS).resize((w, h), Image.LANCZOS)
         a = (np.asarray(m, np.float32) / 255)[..., None]

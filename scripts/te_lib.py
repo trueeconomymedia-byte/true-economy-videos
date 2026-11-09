@@ -30,6 +30,11 @@ INK, GREY, PALE = "#111111", "#5A554B", "#EEEEEC"      # GREY is a warm dark gre
 X0, CW = 0, 948                                             # left margin, content width (right edge = 948)
 IF = "/usr/share/fonts/opentype/inter/Inter-%s.otf"
 
+def _assets():
+    import os
+    for d in (os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets"), "/tmp/tev/scripts/assets", "/tmp/assets"):
+        if os.path.isdir(d) and os.path.exists(os.path.join(d, "Lora-Bold.ttf")): return d
+    raise FileNotFoundError("assets folder (Lora fonts, te_E.png) not found: clone trueeconomymedia-byte/true-economy-videos to /tmp/tev")
 class _F:
     def __init__(s, path, t1=False):
         s.t1 = t1
@@ -44,8 +49,8 @@ class _F:
             g = s.gs[n]; g.draw(NullPen()); return g.width
         return s.f['hmtx'][n][0]
 fonts = {"b": _F(IF % "Bold"), "sb": _F(IF % "SemiBold"), "m": _F(IF % "Medium"), "xb": _F(IF % "ExtraBold"),
-         "cb": _F(os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "Lora-%s.ttf") % "Bold"),
-         "ci": _F(os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "Lora-%s.ttf") % "Italic")}     # cb = Lora Bold (serif titles, user 9 Nov), ci = Lora Italic regular weight (highlighted numbers)
+         "cb": _F(os.path.join(_assets(), "Lora-%s.ttf") % "Bold"),
+         "ci": _F(os.path.join(_assets(), "Lora-%s.ttf") % "Italic")}     # cb = Lora Bold (serif titles, user 9 Nov), ci = Lora Italic regular weight (highlighted numbers)
 def width(fk, t, size):
     f = fonts[fk]; return sum(f.adv(f.name(c)) for c in t) * size / f.upem
 def fit(fk, t, size, maxw):
