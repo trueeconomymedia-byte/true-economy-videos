@@ -68,7 +68,7 @@ def money(v):
 d = json.load(open(sys.argv[1]))
 X0=0; CW=948
 l1="Stock market"
-TX=38; size=min(92.0, (948-TX)/width("cb",l1,1)); b1=66; pitch=size*0.93
+TX=38; size=min(92.0, (948-TX)/width("cb",l1,1)); b1=max(66, __import__("math").ceil(size*0.76)+3); pitch=size*0.93
 out.append('<g id="title">')
 wt=width("cb","today.",size)
 rect(X0, b1-size*0.70, 12, size*0.70+pitch, INK)

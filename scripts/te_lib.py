@@ -241,7 +241,8 @@ class Card:
         if accent not in ("short", "tall", "none"): accent = "short"     # only 3 options (user 9 Nov): short one-line black bar, tall two-line black bar, none
         TX = 0 if accent == "none" else 38        # "none" = no bar, headline flush left on the chart edge
         size = min(92.0, (948 - TX) / width("cb", line1, 1), (948 - TX) / width("cb", line2, 1))
-        b1 = 66; pitch = size * 0.93
+        asc = 0.84 if "$" in (line1 + line2) else 0.76           # tallest Lora Bold glyph (ascender / $ sign) in em
+        b1 = max(66, math.ceil(size * asc) + 3); pitch = size * 0.93   # baseline low enough that nothing is cut off at the top of the canvas (fixed 9 Nov)
         with s.group("title"):
             if accent == "short": s.rect(X0, b1 - size * 0.70, 12, size * 0.70, INK)                 # short black bar beside line 1 only
             elif accent == "tall": s.rect(X0, b1 - size * 0.70, 12, size * 0.70 + pitch, INK)         # black bar spanning both lines

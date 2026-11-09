@@ -77,7 +77,7 @@ X0 = 0
 line1 = f"How {co} makes"
 TX = 38
 size = min(92.0, (948 - TX) / width("cb", line1, 1))
-b1 = 66; pitch = size * 0.93
+b1 = max(66, __import__("math").ceil(size * 0.76) + 3); pitch = size * 0.93   # keep ascenders inside the canvas
 out.append('<g id="title">')
 wp = width("cb", "How ", size); wn = width("cb", co, size)
 rect(X0, b1 - size * 0.70, 12, size * 0.70, INK)   # short black bar beside line 1 (3 options: short / tall / none; user 9 Nov)
