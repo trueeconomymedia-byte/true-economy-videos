@@ -9,7 +9,7 @@ base=1000; k=640/165.0; bw=300; gap=24
 cols=[(0,48,"48,000","1. The usual pace","Average jobs added a month,","over the past 12 months"),
       (1,65,"about 65,000","2. What economists expected","Forecasts ranged from","59,000 to 70,000"),
       (2,165,"165,000","3. What actually happened","US employers added 165,000","jobs in October")]
-GRID="#DADAD6"
+GRID="#CFC8B8"
 with c.group("grid"):                    # Y axis: faint gridlines + small labels, drawn BEHIND the columns
     for v in (50,100,150):
         yy=base-v*k
@@ -33,7 +33,7 @@ with c.group("toplabels"):      # drawn ABOVE the pulse layer so the text stays 
     c.text(x+bw/2,base-165*k+(100*k)/2-2,"+100,000",42,"#FFFFFF","b","m")
     c.text(x+bw/2,base-165*k+(100*k)/2+34,"above the forecast",23,"#FFFFFF","sb","m")
 with c.group("note"):
-    c.rect(0,1125,948,84,PALE,1,6)
+    # note sits straight on the paper: no pale panel (user 9 Nov)
     t="Unemployment 4.1% (from 4.2%)  ·  Pay +0.4% in the month  ·  Aug–Sep revised up 84,000"
     c.text(474,1175,t,fit("sb",t,22,900),INK,"sb","m")
 c.arrows(2*(bw+gap),base-165*k,bw,100*k,(255,255,255),n=28,alpha=0.6,size=13,shape="chevron",avoid=[(2*(bw+gap)+20,base-165*k+(100*k)/2-48,bw-40,92)])   # small chevrons flow constantly UPWARD through the focal green block (replaces the flash)

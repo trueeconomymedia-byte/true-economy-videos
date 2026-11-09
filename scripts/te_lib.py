@@ -26,7 +26,7 @@ W, H = 948, 1300
 RED, BLUE, YEL = "#E23B3B", "#3362CE", "#FACB3A"           # True Economy red / blue / yellow (gold #FACB3A from the user's reference, 9 Nov)
 GREEN = "#249972"; GREEN_L = "#B2DCCE"           # teal-green (focal gain, WHITE text on it) + light teal (context, ink text). Stock Market Today keeps its own #6CBF3F
 BLUE_D, BLUE_L, BLUE_XL = "#3362CE", "#A4BBE8", "#A4BBE8"
-INK, GREY, PALE = "#111111", "#555555", "#EEEEEC"
+INK, GREY, PALE = "#111111", "#5A554B", "#EEEEEC"      # GREY is a warm dark grey (user 9 Nov); PALE is retired: do not use cool grey fills on the paper cards
 X0, CW = 0, 948                                             # left margin, content width (right edge = 948)
 IF = "/usr/share/fonts/opentype/inter/Inter-%s.otf"
 

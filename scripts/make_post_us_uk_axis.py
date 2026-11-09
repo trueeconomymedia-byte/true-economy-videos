@@ -27,7 +27,7 @@ with c.group("body"):
         c.rect(AX-2,by-10,4,BH+20,INK)
         vals.append((AX-uw-14,by+BH/2+16,ust,"r")); vals.append((AX+kw+14,by+BH/2+16,ukt,"l"))
         vy=by+BH+14
-        c.rect(AX-260,vy,520,48,PALE,1,6)
+        # verdict sits straight on the paper: no box, no rule (user 9 Nov)
         c.text(AX,vy+33,verd,fit("b",verd,25,490),INK,"b","m")
 with c.group("toplabels"):
     for i,(hd,sub,us,uk,ust,ukt,uss,uks,verd) in enumerate(rows):

@@ -108,3 +108,7 @@
 ## 2026-11-09 KPI BOXES (user-approved)
 - NO pale/grey boxes on the paper cards (they looked cold and washed out). KPI figures sit straight on the paper; ONLY the highlighted KPI keeps a gold (#FACB3A) box with black text. KPI sub-labels use the deeper blue #2A4FA8. Applied in te_lib.kpi_row and make_flow.
 - Same principle for any other pale/grey fill on paper cards (verdict boxes, panels): no cool grey; use no fill, or a warm tone from the paper family, never #EEEEEC.
+
+## 2026-11-09 NO PALE PANELS (user: "none")
+- On the paper cards there are NO pale/grey boxes, panels or rules behind verdicts, notes or KPI figures. Verdict lines (US vs UK), note strips and KPI figures sit straight on the paper. The only filled box is the gold highlighted KPI.
+- Grey text is a warm dark grey #5A554B (te_lib GREY); gridlines are warm #CFC8B8. Never use cool greys (#EEEEEC, #DADAD6, #555555) on the paper cards.
