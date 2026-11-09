@@ -97,3 +97,10 @@
 - Tab black matches the reference (~RGB 23,22,21, slightly warm, paper-tooth grain) — Paper.bar.
 - Light from above (static): soft top-bright gradient, slight side falloff, thin darker lip on card bottom edge, bright top edge (Paper.lit); longer soft shadow below the card and a tight line above (Paper.lit_shadow). All baked in; nothing moves.
 - Stock Market Today is unchanged: plain white card, flat black tab, old logo, original shadow (video_mkts.py not touched).
+
+## 2026-11-09 HEADLINE FONT, MARKER, BAR OPTIONS, GOLD (user-approved; overrides older wording about blue/red/ink accent bars, Charter and yellow)
+- Headline font is now LORA BOLD (scripts/assets/Lora-Bold.ttf; highlighted numbers use Lora Italic regular weight). Applied in te_lib, make_flow, make_mkts.
+- Highlight is a MARKER BAND across the lower part of the word (about 40% of the line height, starting a quarter of the font size above the baseline), behind the text, 6 px wider each side, small rounded corners; not a full box.
+- YELLOW IS RETIRED. The one gold is #FACB3A (the user's reference). Use it for the headline marker, the highlighted KPI box and any yellow fill. Old #FFF205 / #EDE22E are no longer used. (Chart-icon stars/diamonds are separate and unchanged.)
+- BAR BESIDE THE HEADLINE: only THREE options, always BLACK (INK): "short" = short one-line bar beside line 1 (default), "tall" = bar spanning both lines, "none" = no bar (headline flush left). No blue/red/ink-coloured bars any more; legacy values map to "short". Card.title(..., accent="short"|"tall"|"none"). Choose per card for the best design and record it in the log "form" field.
+- Stock Market Today keeps its tall black bar (make_mkts) but gets Lora Bold and the gold marker.

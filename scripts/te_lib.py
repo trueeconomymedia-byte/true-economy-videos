@@ -14,7 +14,7 @@ Canvas 948x1300 = the safe zone (fills edge to edge) of the white card (title in
     c.footer("62¢ of every $1 of revenue became profit"); c.source("Source: ...")
     c.save("/mnt/user-data/outputs/<slug>.svg", anim={...})        # writes <slug>.svg (+ .anim.json for the video script)
 Rules: keep b1=66 (headline touches the top), source line at H-4, footer at H-40 (Facebook feed crops top and bottom). Groups must be flat (no nested <g>)."""
-import json, re, math
+import json, re, math, os
 from fontTools.ttLib import TTFont
 from fontTools.t1Lib import T1Font
 from fontTools.agl import UV2AGL
@@ -23,7 +23,7 @@ from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.basePen import NullPen
 
 W, H = 948, 1300
-RED, BLUE, YEL = "#E23B3B", "#3362CE", "#EDE22E"           # True Economy red / blue / yellow (yellow back to #EDE22E, user 7 Nov)
+RED, BLUE, YEL = "#E23B3B", "#3362CE", "#FACB3A"           # True Economy red / blue / yellow (gold #FACB3A from the user's reference, 9 Nov)
 GREEN = "#249972"; GREEN_L = "#B2DCCE"           # teal-green (focal gain, WHITE text on it) + light teal (context, ink text). Stock Market Today keeps its own #6CBF3F
 BLUE_D, BLUE_L, BLUE_XL = "#3362CE", "#A4BBE8", "#A4BBE8"
 INK, GREY, PALE = "#111111", "#555555", "#EEEEEC"
@@ -44,8 +44,8 @@ class _F:
             g = s.gs[n]; g.draw(NullPen()); return g.width
         return s.f['hmtx'][n][0]
 fonts = {"b": _F(IF % "Bold"), "sb": _F(IF % "SemiBold"), "m": _F(IF % "Medium"), "xb": _F(IF % "ExtraBold"),
-         "cb": _F("/usr/share/fonts/X11/Type1/c0632bt_.pfb", True),
-         "ci": _F("/usr/share/fonts/X11/Type1/c0649bt_.pfb", True)}     # cb = Charter bold (serif titles)
+         "cb": _F(os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "Lora-%s.ttf") % "Bold"),
+         "ci": _F(os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "Lora-%s.ttf") % "Italic")}     # cb = Lora Bold (serif titles, user 9 Nov), ci = Lora Italic regular weight (highlighted numbers)
 def width(fk, t, size):
     f = fonts[fk]; return sum(f.adv(f.name(c)) for c in t) * size / f.upem
 def fit(fk, t, size, maxw):
@@ -227,7 +227,7 @@ class Card:
         return geo
 
     # --- template pieces (fixed positions: do not move)
-    def title(s, line1, line2=None, mark=None, accent="blue"):
+    def title(s, line1, line2=None, mark=None, accent="short"):
         """Serif title ALWAYS on two lines, with the black bar on its left (new template). `mark` = substring that gets the yellow marker. `accent` = colour of the short bar beside the FIRST line: "blue" (default), "red" (only for a loss/miss/problem story) or "ink" (when the chart is mostly blue) or "none" (no bar, headline flush left, slightly larger).
         If only line1 is given it is split into two balanced lines automatically. Choose wording so both lines are of similar length. b1=66 is fixed."""
         if not line2:
@@ -238,16 +238,18 @@ class Card:
             assert best, "title needs at least two words (or give line1 and line2)"
             _, line1, line2 = best
         num = bool(mark and re.fullmatch(r"[£$€+\-−–]?\d[\d,.]*\s?(%|bn|tn|m|k|x)?", mark.strip()))   # highlighted number -> italic, not bold
+        if accent not in ("short", "tall", "none"): accent = "short"     # only 3 options (user 9 Nov): short one-line black bar, tall two-line black bar, none
         TX = 0 if accent == "none" else 38        # "none" = no bar, headline flush left on the chart edge
         size = min(92.0, (948 - TX) / width("cb", line1, 1), (948 - TX) / width("cb", line2, 1))
         b1 = 66; pitch = size * 0.93
         with s.group("title"):
-            if accent != "none": s.rect(X0, b1 - size * 0.70, 12, size * 0.70, {"blue": BLUE, "red": RED, "ink": INK}[accent])   # short accent bar beside line 1 only (user choice, 7 Nov)
+            if accent == "short": s.rect(X0, b1 - size * 0.70, 12, size * 0.70, INK)                 # short black bar beside line 1 only
+            elif accent == "tall": s.rect(X0, b1 - size * 0.70, 12, size * 0.70 + pitch, INK)         # black bar spanning both lines
             if mark:
                 for ln, by in ((line1, b1), (line2, b1 + pitch)):
                     if ln and mark in ln:
                         i = ln.index(mark); wp = width("cb", ln[:i], size); mk = "ci" if num else "cb"; wn = width(mk, mark, size)
-                        s.rect(X0 + TX + wp - 6, by - size * 0.76, wn + 12, size * 0.93, YEL)
+                        s.rect(X0 + TX + wp - 6, by - size * 0.25, wn + 12, size * 0.40, YEL, 1, 3)   # marker band across the lower part of the word (user 9 Nov)
             for ln, by in ((line1, b1), (line2, b1 + pitch)):
                 if num and mark and mark in ln:      # highlighted NUMBER: regular-weight italic (user rule, 7 Nov)
                     i = ln.index(mark); wp = width("cb", ln[:i], size); wn = width("ci", mark, size)

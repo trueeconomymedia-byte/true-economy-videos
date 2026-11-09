@@ -57,3 +57,5 @@ Before building, write one line: "the one comparison/idea is ___". Then:
 - Headline accent: short coloured bar beside line 1 (blue default; red only for loss/miss stories; ink if the chart is mostly blue). Chevrons fade near text via Card.arrows(avoid=...).
 
 - Logo tab (8 Nov 2026): new "E" logo from scripts/assets/te_E.png, coloured/textured as the card paper; black tab ~RGB(23,22,21) warm with paper grain; light-from-above lighting on the card. Stock Market Today keeps its plain white look.
+
+- (9 Nov 2026) Headline = Lora Bold, marker band in gold #FACB3A (replaces all yellow), bar beside headline = black short / tall / none only. See feedback.md 2026-11-09.

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """True Economy 'How X makes money?' money-flow chart. Usage: python3 make_flow.py data.json
 Canvas 948x1300 = the safe zone of the white card (fills edge to edge). Transparent SVG, text outlined."""
-import json, sys, re
+import json, sys, re, os
 from fontTools.ttLib import TTFont
 from fontTools.t1Lib import T1Font
 from fontTools.agl import UV2AGL
@@ -10,7 +10,7 @@ from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.basePen import NullPen
 
 W, H = 948, 1300
-RED, BLUE, YEL = "#E23B3B", "#3362CE", "#EDE22E"
+RED, BLUE, YEL = "#E23B3B", "#3362CE", "#FACB3A"
 BLUE_D, BLUE_L, BLUE_XL = "#3362CE", "#A4BBE8", "#A4BBE8"
 INK, GREY = "#111111", "#555555"
 IF = "/usr/share/fonts/opentype/inter/Inter-%s.otf"
@@ -30,7 +30,7 @@ class F:
             g = s.gs[n]; g.draw(NullPen()); return g.width
         return s.f['hmtx'][n][0]
 fonts = {"b": F(IF % "Bold"), "sb": F(IF % "SemiBold"), "m": F(IF % "Medium"), "xb": F(IF % "ExtraBold"),
-         "cb": F("/usr/share/fonts/X11/Type1/c0632bt_.pfb", True)}
+         "cb": F(os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "Lora-%s.ttf") % "Bold")}
 def width(fk, t, size):
     f = fonts[fk]; return sum(f.adv(f.name(c)) for c in t) * size / f.upem
 out = []
@@ -80,8 +80,8 @@ size = min(92.0, (948 - TX) / width("cb", line1, 1))
 b1 = 66; pitch = size * 0.93
 out.append('<g id="title">')
 wp = width("cb", "How ", size); wn = width("cb", co, size)
-rect(X0, b1 - size * 0.70, 12, size * 0.70, BLUE_D)   # short accent bar beside line 1 (user choice, 7 Nov)
-rect(X0 + TX + wp - 6, b1 - size * 0.76, wn + 12, size * 0.93, YEL)
+rect(X0, b1 - size * 0.70, 12, size * 0.70, INK)   # short black bar beside line 1 (3 options: short / tall / none; user 9 Nov)
+rect(X0 + TX + wp - 6, b1 - size * 0.25, wn + 12, size * 0.40, YEL, 1, 3)
 text(X0 + TX, b1, line1, size, INK, "cb")
 text(X0 + TX, b1 + pitch, "money?", size, INK, "cb")
 text(X0, b1 + pitch + 52, f"Where each quarter’s revenue goes · {d['period']}", 24, GREY, "m")
