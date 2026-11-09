@@ -32,7 +32,12 @@ for name, sym, code, country in [("Nasdaq", "%5EIXIC", "US", "United States"), (
         rows = [(t, c) for t, c in zip(r["timestamp"], r["indicators"]["quote"][0]["close"]) if c is not None]
         idx = [i for i, (t, _) in enumerate(rows) if local_date(t, mm["gmtoffset"]) == sess]
         if not idx or idx[-1] == 0:
-            print("SKIP (no session on", sess, "):", name); continue
+            # daily bar for today can be missing (None): fall back to meta price vs previous close
+            r5 = get(sym, "5m", "1d"); m5 = r5["meta"]
+            if local_date(m5["regularMarketTime"], m5["gmtoffset"]) != sess or not m5.get("previousClose"):
+                print("SKIP (no session on", sess, "):", name); continue
+            c_a, c_b = m5["previousClose"], m5["regularMarketPrice"]
+            world.append([name, round((c_b / c_a - 1) * 100, 2), code, country]); print(name, world[-1][1], "(5m fallback)"); continue
         (t_a, c_a), (t_b, c_b) = rows[idx[-1] - 1], rows[idx[-1]]
         world.append([name, round((c_b / c_a - 1) * 100, 2), code, country]); print(name, world[-1][1])
     except Exception as e:

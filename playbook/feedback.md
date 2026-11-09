@@ -152,3 +152,7 @@ The scripts already use these values (te_lib, make_flow, make_mkts, video_card, 
 
 ## 2026-11-09 LIGHT BLUE CHANGED TO #B3C9ED (overrides #B3CDEC everywhere above)
 - Secondary / light blue is now #B3C9ED (same lightness as before, hue matched to the new main blue #3670D0; chosen from four options on the textured card). Wherever older entries say light blue #B3CDEC (or #A4BBE8), use #B3C9ED. Main blue #3670D0, deep blue #2A62AE (small text), red, gold and teals unchanged. Stock Market Today unchanged.
+
+## 2026-11-09 STOCK MARKET TODAY: BIG NUMBER = MONEY, AND SIX MARKETS (user, after the 9 Nov post)
+- The big headline number on the Stock Market Today card must be the DOLLAR amount the S&P 500 gained or lost that day, like the 5 Nov card ("-$2.9 trillion wiped off the S&P 500 in a single day"), never points. Compute it as S&P 500 total market cap x the day's % move (cap e.g. stockanalysis.com/list/sp-500-stocks/, Total Market Cap, ~$67T on 9 Nov) and prefer a published figure (MarketWatch, Reuters, Bloomberg) when one exists; round to 0.1 trillion, write "about"/"estimated" in the source line when it is derived.
+- The "Around the world" grid must show SIX markets (Nasdaq, Dow, FTSE 100, Nikkei 225, Kospi, Hang Seng) as on the 5 Nov card. fetch_mkts.py was fixed on 9 Nov: Yahoo's daily bar for Asia can be None on the day, so it now falls back to the 5-minute meta price vs previousClose. If a market truly had no session (holiday) leave it out; never ship fewer than 5 tiles because of a fetch glitch: check the 5m fallback first.
