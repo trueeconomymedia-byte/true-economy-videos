@@ -155,6 +155,9 @@ def bg_frame(t):
     arr = np.asarray(im, dtype=np.float32) * SHADOW + grain_bank[int(t * FPS) % 6]
     return np.clip(arr, 0, 255).astype(np.uint8)
 
+import te_frame as TF                                          # approved 10 Nov 2026: static full-bleed paper frame (printed banner, torn rim, deckle bottom) replaces the moving background; NOT used by Stock Market Today
+def bg_frame(t): return TF.bg_frame(t)
+
 # ---------------- card (crisp rebuild) ----------------
 card = np.full((H, W, 3), 0, np.uint8)
 x0, y0, x1, y1 = CARD
@@ -282,6 +285,7 @@ for f in range(n):
     fr[y0:y1, x0:x1] = card_full
     fr[CH_Y:CH_Y + 2600, CH_X:CH_X + 1896] = np.clip(st, 0, 255).astype(np.uint8)
     fr[y0:y1, x0:x1] = PAP.sharpen(fr[y0:y1, x0:x1], BAR_B - y0)      # whole-card sharpen (static paper, no per-frame grain)
+    TF.finish(fr)
     if GRAIN:                                                 # grain refreshes 15x/s (every 2nd frame) like real film
         reg = fr[GR_Y0:y1, x0:x1].astype(np.float32) + GRAIN_BANK[(f // 2) % 4]
         fr[GR_Y0:y1, x0:x1] = np.clip(reg, 0, 255).astype(np.uint8)
