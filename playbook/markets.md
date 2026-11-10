@@ -14,7 +14,7 @@
 Choose the strongest as story #1 (instant). Story #2 only if it also passes its gate.
 
 ## Second story = scheduled
-- Post it next day at 12:00 New York time (= 17:00 UK most of the year; recompute the offset: EST -05:00, EDT -04:00) with mode customScheduled and dueAt. Only if it is still relevant a day later: central_bank and data_surprise yes; markets_move and stock_market only if it is a milestone/record; otherwise drop and log as skipped.
+- Post it next day at 20:00 UK time (Europe/London; GMT +00:00, BST +01:00) with mode customScheduled and dueAt. (Changed 10 Nov 2026 by the user: 17:00 UK now belongs to the Animated Shorts task, and Markets Daily makes way.) Only if it is still relevant a day later: central_bank and data_surprise yes; markets_move and stock_market only if it is a milestone/record; otherwise drop and log as skipped.
 - Rewrite the wording as "yesterday". Check the weekly cap and that the scheduled-post limit (about 10 per channel) is not full.
 
 ## Card design (same template and rules as the daily post)

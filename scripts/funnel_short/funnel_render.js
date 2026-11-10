@@ -11,15 +11,10 @@ const D=JSON.parse(fs.readFileSync(dataPath,'utf8'));
 const b64=(p,mime)=>`data:${mime};base64,`+fs.readFileSync(p).toString('base64');
 (async()=>{
  const b=await chromium.launch();const p=await b.newPage({viewport:{width:1080,height:1920}});
- // paper textures (same recipe as the approved test)
- await p.setContent(`<body style="margin:0"><svg id="a" width="1080" height="1920" style="display:block;background:#fff"><defs>
-<filter id="paper" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="4" result="n"/><feDiffuseLighting in="n" lighting-color="#fff" surfaceScale="1.4"><feDistantLight azimuth="235" elevation="58"/></feDiffuseLighting><feColorMatrix type="matrix" values="0 0 0 0 0.45  0 0 0 0 0.42  0 0 0 0 0.38  -1 0 0 0 1"/></filter>
-<filter id="speck"><feTurbulence type="fractalNoise" baseFrequency="1.6" numOctaves="2" seed="9"/><feColorMatrix type="matrix" values="0 0 0 0 0.95 0 0 0 0 0.94 0 0 0 0 0.91 0 0 0 -2.2 1.25"/></filter></defs>
-<rect width="1080" height="1920" filter="url(#paper)"/></svg><svg id="b" width="1080" height="1920" style="display:block"><rect width="1080" height="1920" filter="url(#speck)"/></svg></body>`);
- const tex1='data:image/png;base64,'+(await (await p.$('#a')).screenshot()).toString('base64');
- const tex2='data:image/png;base64,'+(await (await p.$('#b')).screenshot({omitBackground:true})).toString('base64');
+ // the shared Animated Shorts background (identical for every series)
+ const {tex1,tex2}=await require('../anim_shared/background.js').textures(p);
  // optional logo: data.logo path, else scripts/assets/logos/<company-slug>.(png|svg)
- let logo=null;const cs=D.company.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+ let logo=null;const cs=String(D.logo_key||'none').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
  for(const c of [D.logo,path.join(ASSETS,'logos',cs+'.png'),path.join(ASSETS,'logos',cs+'.svg')]){
   if(c&&fs.existsSync(c)){logo=b64(c,c.endsWith('.svg')?'image/svg+xml':'image/png');break}}
  const url='file://'+path.join(HERE,'funnel.html');

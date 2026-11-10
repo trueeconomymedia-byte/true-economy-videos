@@ -15,7 +15,7 @@
 
 ## When to post (UK time; dueAt in Europe/London with correct offset)
 - Default windows (UK): 11:30, 13:30, 15:00, 20:45. Add small random jitter of +-0..12 minutes so it does not look mechanical.
-- Exclude any window within 2 hours of anything already in Buffer (list_posts scheduled/sent, all channels) including the daily card queue slots (e.g. 18:30), Markets Daily (23:03 UK) and its scheduled second story (17:00 UK next day).
+- Exclude any window within 2 hours of anything already in Buffer (list_posts scheduled/sent, all channels) including the daily card queue slots (e.g. 18:30), Markets Daily (23:03 UK) its scheduled second story (20:00 UK next day) and the Animated Shorts post (17:00 UK, set in the morning).
 - Learning: read clips_log.jsonl and pull results for past clip posts (mcp__Buffer__list_posts includeMetrics true, or get_aggregated_post_metrics). Normalise per platform (a post's views vs that platform's median clip views). Require at least 12 clip posts overall and at least 3 in a window before trusting it. If reliable: ~80% choose among the best windows (and best weekdays), ~20% explore another window. If two windows are statistically similar treat as equal. If metrics are unavailable (e.g. plan limits), keep defaults and say so once in the final message. Per-platform differences are allowed (separate times are NOT needed: post to all platforms at the same time unless the data clearly separates them).
 - Never schedule in the past; dueAt must be at least 30 minutes after now. If today's remaining windows are all excluded, post nothing today.
 

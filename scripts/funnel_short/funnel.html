@@ -1,6 +1,6 @@
 <!doctype html><html><head><meta charset="utf-8">
-<!-- True Economy "How X makes money?" FUNNEL SHORT (approved 10 Nov 2026). Driven by funnel_render.js; do not open by hand.
-     Data (window.DATA) uses the make_flow.py data.json keys, values in $ billions. -->
+<!-- True Economy FUNNEL animation style (approved 10 Nov 2026). Driven by funnel_render.js; do not open by hand.
+     Data = the generic funnel format written by funnel_short.py (see its docstring). -->
 <style>
 @font-face{font-family:'Lora';font-weight:700;src:url('../assets/Lora-Bold.ttf')}
 html,body{margin:0;background:#F2EFE8;overflow:hidden}
@@ -36,36 +36,28 @@ const eio=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
 const eo=x=>{x=clamp(x);return 1-Math.pow(1-x,3)};
 const eq=x=>{x=clamp(x);return x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2};
 const prog=(t,a,b)=>clamp((t-a)/(b-a));
-const money=v=>{const a=Math.abs(v);return a>=1?'$'+a.toFixed(1)+'B':'$'+Math.round(a*1000)+'M'};
-const cents=v=>Math.round(v/D.rev*100)+'¢ per $1';
-
-// ---------- the money model ----------
-// reported totals win over arithmetic on rounded parts (optional keys gp, op, pbt, ni in data.json)
-const rev=D.rev,gp=D.gp??(rev-D.cogs),op=D.op??(gp-D.opex),pbt=D.pbt??(op+(D.other||0)),ni=D.ni??(pbt-D.tax);
-const smallOther=Math.abs(D.other||0)<0.015*rev;
-// steps: each turns the running amount into the next stage. kind cost = red peel to the right, gain = teal inflow from the right
-const steps=[{kind:'cost',amt:D.cogs,name:D.cogs_name||'Cost of revenue',stage:'Gross profit',val:gp}];
-if(smallOther){
- steps.push({kind:'cost',amt:D.opex,name:D.opex_name||'R&D, sales & admin',stage:'Profit before tax',val:pbt,
-  note:(D.other?((D.other>0?'+':'−')+money(D.other)+' '+(D.other>0?(D.other_label||'other income'):'other costs')):null),widthAmt:gp-pbt});
-}else{
- steps.push({kind:'cost',amt:D.opex,name:D.opex_name||'R&D, sales & admin',stage:'Operating profit',val:op});
- if(D.other>0) steps.push({kind:'gain',amt:D.other,name:D.other_label||'Other income',stage:'Profit before tax',val:pbt});
- else steps.push({kind:'cost',amt:-D.other,name:D.other_label||'Other costs',stage:'Profit before tax',val:pbt});
-}
-if(D.tax>=0) steps.push({kind:'cost',amt:D.tax,name:D.tax_name||'Tax',stage:'Net income',val:ni,final:true});
-else steps.push({kind:'gain',amt:-D.tax,name:D.tax_name||'Tax benefit',stage:'Net income',val:ni,final:true});
+// ---------- generic model (funnel_short.py turns company data into this) ----------
+// D.fmt {prefix,suffix,decimals,small}: "$"+"B" -> $92.3B (under 1 -> $380M); "£","",0 -> £35,000; "£","",2 -> £1.38
+const F=Object.assign({prefix:'$',suffix:'B',decimals:1,small:'M'},D.fmt||{});
+const money=v=>{const a=Math.abs(v);
+ if(F.suffix==='B'&&a<1&&F.small==='M')return F.prefix+Math.round(a*1000)+'M';
+ return F.prefix+a.toLocaleString('en-GB',{minimumFractionDigits:F.decimals,maximumFractionDigits:F.decimals})+F.suffix};
+const rev=D.start.value, ni=D.steps[D.steps.length-1].val;
+const share=v=>{const sh=D.share;if(!sh)return null;
+ if(sh.style==='per')return Math.round(v/rev*100)+sh.sym+' per '+sh.of;
+ if(sh.style==='pct')return Math.round(v/rev*100)+'% of '+sh.of;return null};
+const steps=D.steps.map((s,i)=>Object.assign({},s,{final:i===D.steps.length-1,widthAmt:s.width_amt}));
 window.NSTEPS=steps.length;
 
 // ---------- geometry ----------
-const WMAX=425,k=WMAX/rev,L=255,BAR=16,Yt=-40,Y0=520,DY=440,D_=360,RX=715,LX=235;
+const VMAX=Math.max(rev,...steps.map(s=>s.val)),WMAX=425*rev/VMAX,k=425/VMAX,L=255,BAR=16,Yt=-40,Y0=520,DY=440,D_=360,RX=715,LX=235;
 const Ys=[Y0];steps.forEach((s,i)=>Ys.push(Y0+DY*(i+1)));
 const width=v=>v*k;
-const HO=D.logo?112:0;               // header offset when a logo sits above the title
+const HO=0;   // the title NEVER moves (user rule: same place every episode, max 2 lines); a logo sits beside the counter
 
 // ---------- timeline ----------
 const COLD=D.cold?1.6:0;
-const STEP0=5.0,SP=6.0;
+const STEP0=5.0,SP=steps.length<=4?6.0:5.0;
 steps.forEach((s,j)=>{s.a=STEP0+SP*j;s.b=s.a+2.5});
 const last=steps[steps.length-1];
 const KT=last.b+1.3, PULL0=KT+3.2, PULL1=KT+5.9, END=KT+9.2;
@@ -87,7 +79,7 @@ function ribbon(a0,a1,ya,b0,b1,yb,fill,dcol,n,seed,ta,tb){
 }
 const nd=w=>Math.max(3,Math.round(w/18));
 // funnel mouth: segments spread over the full width
-let segs=(D.segments&&D.segments.length)?D.segments.map(s=>({lines:s.lines,value:s.value})):[{lines:['Revenue'],value:rev}];
+let segs=(D.segments&&D.segments.length)?D.segments.map(s=>({lines:s.lines,value:s.value})):[{lines:[D.start.label],value:rev}];
 // at most 3 bands across the mouth: the two largest segments plus 'Other' (keeps every label readable on a phone)
 if(segs.length>3){const srt=[...segs].sort((x,y)=>y.value-x.value),keep=srt.slice(0,2),rest=srt.slice(2);
  segs=segs.filter(s=>keep.includes(s));segs.push({lines:['Other'],value:rest.reduce((a,s)=>a+s.value,0)})}
@@ -131,21 +123,22 @@ lab(null,g=>segs.forEach((s,i)=>{const [a,b]=segX[i],w=b-a,big=w>300?54:w>170?42
  if(v.getComputedTextLength()>w-30){v.remove();return}          // too narrow for a label: leave the band clean
  (s.lines||[]).forEach((ln,li)=>{const n=T(g,x,Yt+80+(big*.62)+sm*(1.1*li+.35),ln,sm,C.ink,anc,600);if(n.getComputedTextLength()>w-24)n.remove()});}));
 const stage=(t,y,big,a,b,c,col)=>lab(t,g=>{T(g,LX,y+20,big,54,col||C.blue,'end');T(g,LX,y+58,a,28,C.ink,'end',600);if(b)T(g,LX,y+92,b,26,C.ink,'end',500);if(c)T(g,LX,y+124,c,20,C.blue,'end',600)});
-bar(L,L+WMAX,Y0,C.blue,REVBAR);stage(REVBAR+.3,Y0,money(rev),'Revenue');
+bar(L,L+WMAX,Y0,C.blue,REVBAR);stage(REVBAR+.3,Y0,money(rev),D.start.label);
 steps.forEach((s,j)=>{
  const y1=Ys[j+1];
  if(s.kind==='cost'){bar(...s.end.x,s.end.y,C.red,s.b-.15);
   lab(s.b+.05,g=>{T(g,RX,s.end.y+64,'−'+money(s.amt),50,C.red,'start');T(g,RX,s.end.y+96,s.name,24,C.ink,'start',600)});}
  else{bar(...s.start.x,s.start.y,C.teal,s.a-.2);
   lab(s.a-.1,g=>{T(g,RX,s.start.y-52,'+'+money(s.amt),50,C.teal,'start');T(g,RX,s.start.y-20,s.name,24,C.ink,'start',600)});}
- if(!s.final){bar(L,L+width(s.val),y1,C.blue,s.b-.05);stage(s.b+.45,y1,money(s.val),s.stage,cents(s.val),s.note);}
+ if(!s.final){bar(L,L+width(s.val),y1,C.blue,s.b-.05);stage(s.b+.45,y1,money(s.val),s.stage,share(s.val),s.note);}
  else bar(L,L+width(s.val),y1,C.dgold,s.b-.05);
 });
 const YN=Ys[Ys.length-1];
 const keptRect=el(W,'rect',{x:L-10,y:YN+44,width:0,height:100,fill:C.gold,rx:4});
-const keptTxt=T(W,L+240,YN+116,money(ni)+' kept',66,C.ink);
-const keptSub=T(W,L+240,YN+196,Math.round(ni/rev*100)+'¢ of every $1 became profit',34,C.ink,'middle',700);
+const keptTxt=T(W,L+240,YN+116,D.final.text,66,C.ink);
+const keptSub=T(W,L+240,YN+196,D.final.sub,34,C.ink,'middle',700);
 const KEPT=[keptTxt.textContent,keptSub.textContent];
+const KW=Math.max(500,keptTxt.getComputedTextLength()+60);keptRect.setAttribute('x',L+240-KW/2);
 
 // ---------- header ----------
 const HS0=86;
@@ -160,12 +153,12 @@ function headline(g,l1,l2,mark){
  const xs=tx.getStartPositionOfChar(i0).x,xe=tx.getEndPositionOfChar(i0+mark.length-1).x;
  mk.setAttribute('x',xs-6);mk.setAttribute('width',xe-xs+12);mk.setAttribute('y',(inL1?205:300)+HO-Math.round(hs*.4));mk.setAttribute('height',Math.round(hs*.47));
 }
-const REV=money(rev),CENT=Math.round(ni/rev*100)+'¢';
-headline($('hq'),`${D.company} made ${REV}.`,'How much did it keep?',REV);
-headline($('ha'),`${D.company} kept ${CENT}`,'of every $1 it made',CENT);
-if(D.logo){el($('logo'),'image',{href:D.logo,x:340,y:52,width:400,height:100,preserveAspectRatio:'xMidYMid meet'})}
-el($('pill'),'rect',{x:380,y:345+HO,width:320,height:72,rx:8,fill:'#1b1b1b'});
-const pillT=el($('pill'),'text',{x:540,y:394+HO,'text-anchor':'middle','font-family':'Inter','font-weight':800,'font-size':38,fill:C.paper,style:'font-variant-numeric:tabular-nums'},'');
+headline($('hq'),...D.headline_q);
+headline($('ha'),...D.headline_a);
+const PX=D.logo?490:380;   // with a logo: [logo 200x72][20 gap][counter 320] centred as one row under the title
+if(D.logo){el($('logo'),'image',{href:D.logo,x:270,y:345,width:200,height:72,preserveAspectRatio:'xMidYMid meet'})}
+el($('pill'),'rect',{x:PX,y:345+HO,width:320,height:72,rx:8,fill:'#1b1b1b'});
+const pillT=el($('pill'),'text',{x:PX+160,y:394+HO,'text-anchor':'middle','font-family':'Inter','font-weight':800,'font-size':38,fill:C.paper,style:'font-variant-numeric:tabular-nums'},'');
 el($('src'),'text',{x:540,y:1712,'text-anchor':'middle','font-family':'Inter','font-weight':500,'font-size':22,fill:'#444'},D.source);
 
 // ---------- camera ----------
@@ -202,20 +195,21 @@ function draw(t,o){o=o||{};
   if(a.kind==='bar'){const p=eo(prog(t,a.t,a.t+.4));a.e.setAttribute('width',a.w*p)}
   else{const p=eo(prog(t,a.t,a.t+.45));a.e.setAttribute('opacity',p);a.e.setAttribute('transform',`translate(0 ${14*(1-p)})`)}
  }
- keptRect.setAttribute('width',500*eo(prog(t,KT,KT+.4)));
+ keptRect.setAttribute('width',KW*eo(prog(t,KT,KT+.4)));
  {const p=eo(prog(t,KT+.2,KT+.6));keptTxt.setAttribute('opacity',p);keptTxt.setAttribute('transform',`translate(${-18*(1-p)} 0)`)}
  {const p=eo(prog(t,KT+.9,KT+1.4));keptSub.setAttribute('opacity',p);keptSub.setAttribute('transform',`translate(0 ${12*(1-p)})`)}
- keptTxt.textContent=o.tease?'$?? kept':KEPT[0];keptSub.textContent=o.tease?'How much of every $1 became profit?':KEPT[1];
+ keptTxt.textContent=o.tease?D.final.tease:KEPT[0];keptSub.textContent=o.tease?D.final.tease_sub:KEPT[1];
  const [cy,s,sy]=o.cam||cam(t);W.setAttribute('transform',`translate(${540-540*s} ${sy-cy*s}) scale(${s})`);
  const wide=o.wide!=null?o.wide:prog(t,PULL0+.7,PULL0+1.9);
  const qa=o.tease?0:eo(prog(t,PULL0+.9,PULL0+1.4)), aa=o.tease?0:eo(prog(t,PULL0+1.3,PULL0+1.9));
  $('hq').setAttribute('opacity',1-qa);
  $('ha').setAttribute('opacity',aa);$('ha').setAttribute('transform',`translate(0 ${10*(1-aa)})`);
  $('pill').setAttribute('opacity',o.pill!=null?o.pill:1-eo(prog(t,PULL0+.5,PULL0+1.1)));
+ $('logo').setAttribute('opacity',$('pill').getAttribute('opacity'));
  $('bf').setAttribute('opacity',1-wide);
  $('tf').setAttribute('height',470+HO-70*eio(wide));
  $('src').setAttribute('opacity',o.src!=null?o.src:eo(prog(t,PULL1-.1,PULL1+.5)));
- pillT.textContent=money(counter(t))+' '+(t<steps[0].b+.05?'in':'left');
+ pillT.textContent=money(counter(t))+' '+(t<steps[0].b+.05?(D.pill&&D.pill.in||'in'):(D.pill&&D.pill.left||'left'));
 }
 const TOTAL=END+COLD, F1=TOTAL-0.7, F2=TOTAL-0.35;
 function frameAt(T){ // T = output time

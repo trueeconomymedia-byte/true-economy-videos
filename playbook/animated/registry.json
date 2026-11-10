@@ -1,0 +1,78 @@
+{
+ "_about": "The MENU for the Animated Shorts task. Each entry under `series` is one animation style (a series). Add a new style by adding an entry here plus its renderer folder and its rules file; the task needs no other change. status: active | trial | paused.",
+ "limits": {
+  "max_posts_per_day": 1,
+  "per_series_max_in_7_days": 3,
+  "per_series_no_consecutive_days": true,
+  "window_days": 7,
+  "post_time_uk": "17:00",
+  "min_score_to_post": 60,
+  "trial_weeks": 4
+ },
+ "series": {
+  "funnel": {
+   "name": "Funnel: where the money goes",
+   "status": "active",
+   "since": "2026-11-11",
+   "rules": "playbook/animated/funnel.md",
+   "title_zone": "2 centred lines, Lora Bold 86 px (auto-shrinks only if a line is too long), baselines y=205 and y=300; counter (and logo, if any) on the row below at y=345-417",
+   "render": "python3 scripts/funnel_short/funnel_short.py {data} {outdir} {slug}",
+   "outputs": {
+    "buffer": "{slug}-auto.mp4",
+    "youtube": "{slug}-youtube.mp4",
+    "thumb": "{slug}-thumb-tease.png",
+    "thumb_answer": "{slug}-thumb-answer.png",
+    "qa": [
+     "{slug}-qa-auto.jpg",
+     "{slug}-qa-youtube.jpg"
+    ]
+   },
+   "unsupported_exit": 3,
+   "episodes": {
+    "earnings": {
+     "name": "How much did [Company] keep?",
+     "gap_days": 3,
+     "max_in_7_days": 2,
+     "repeat_key": "company + quarter (never twice)",
+     "priority": 55
+    },
+    "salary": {
+     "name": "Where your salary goes",
+     "gap_days": 14,
+     "max_in_7_days": 1,
+     "repeat_key": "country + salary level",
+     "priority": 50
+    },
+    "government": {
+     "name": "Where the government's money went",
+     "gap_days": 21,
+     "max_in_7_days": 1,
+     "repeat_key": "country + month",
+     "priority": 50
+    },
+    "price": {
+     "name": "What's really in the price",
+     "gap_days": 14,
+     "max_in_7_days": 1,
+     "repeat_key": "item + country + date of data",
+     "priority": 45
+    },
+    "household": {
+     "name": "Where the average household's money goes",
+     "gap_days": 21,
+     "max_in_7_days": 1,
+     "repeat_key": "country + income group + survey year",
+     "priority": 45
+    },
+    "news": {
+     "name": "Bonus: a money story in today's news",
+     "gap_days": 7,
+     "max_in_7_days": 1,
+     "repeat_key": "story",
+     "priority": 40,
+     "min_score": 75
+    }
+   }
+  }
+ }
+}
