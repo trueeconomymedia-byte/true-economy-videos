@@ -12,8 +12,12 @@ img.tex{width:1080px;height:1920px;pointer-events:none}
  <defs id="defs">
   <linearGradient id="topfade" x1="0" y1="0" x2="0" y2="1"><stop offset=".72" stop-color="#F2EFE8"/><stop offset="1" stop-color="#F2EFE8" stop-opacity="0"/></linearGradient>
   <linearGradient id="botfade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F2EFE8" stop-opacity="0"/><stop offset=".6" stop-color="#F2EFE8"/></linearGradient>
+ <linearGradient id="mg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1920">
+   <stop id="m0" offset="0" stop-color="#000"/><stop id="m1" offset=".18" stop-color="#000"/><stop id="m2" offset=".245" stop-color="#fff"/>
+   <stop id="m3" offset=".854" stop-color="#fff"/><stop id="m4" offset=".93" stop-color="#000"/><stop id="m5" offset="1" stop-color="#000"/></linearGradient>
+  <mask id="wmask" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920"><rect width="1080" height="1920" fill="url(#mg)"/></mask>
  </defs>
- <g id="content"><g id="world"></g>
+ <g id="content"><g mask="url(#wmask)"><g id="world"></g></g>
   <rect id="tf" x="0" y="0" width="1080" height="470" fill="url(#topfade)"/>
   <rect id="bf" x="0" y="1640" width="1080" height="280" fill="url(#botfade)"/>
   <g id="logo"></g><g id="hq"></g><g id="ha"></g><g id="pill"></g><g id="src"></g>
@@ -27,7 +31,10 @@ function BUILD(D){
 const NS='http://www.w3.org/2000/svg';
 function el(p,t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;p.appendChild(e);return e}
 const $=id=>document.getElementById(id);
-$('tex1').src=D.tex1;$('tex2').src=D.tex2;
+if(D.bg_image){document.getElementById('stage').style.background=`url(${D.bg_image}) center/1080px 1920px no-repeat`;
+ $('tex1').style.display='none';$('tex2').style.display='none';}
+else{$('tex1').src=D.tex1;$('tex2').src=D.tex2;}
+const MASKFADE=!!D.bg_image;   // textured paper image: fade the chart itself (no flat colour bands over the texture)
 const C={blue:'#3670D0',lblue:'#B3C9ED',red:'#D94437',lred:'#F2C4BC',gold:'#FACB3A',lgold:'#FBE3A0',dgold:'#E0A800',
  teal:'#249972',lteal:'#B2DCCE',ink:'#161616',paper:'#F2EFE8'};
 const W=$('world'),DEFS=$('defs');
@@ -206,8 +213,14 @@ function draw(t,o){o=o||{};
  $('ha').setAttribute('opacity',aa);$('ha').setAttribute('transform',`translate(0 ${10*(1-aa)})`);
  $('pill').setAttribute('opacity',o.pill!=null?o.pill:1-eo(prog(t,PULL0+.5,PULL0+1.1)));
  $('logo').setAttribute('opacity',$('pill').getAttribute('opacity'));
- $('bf').setAttribute('opacity',1-wide);
- $('tf').setAttribute('height',470+HO-70*eio(wide));
+ const tfh=470+HO-70*eio(wide);
+ if(MASKFADE){$('tf').setAttribute('opacity',0);$('bf').setAttribute('opacity',0);
+  document.getElementById('m1').setAttribute('offset',(tfh*.72/1920).toFixed(4));document.getElementById('m2').setAttribute('offset',(tfh/1920).toFixed(4));
+  const bo=1-wide;document.getElementById('m3').setAttribute('offset',((1640+(280*.0)*bo+280*wide)/1920).toFixed(4));
+  document.getElementById('m4').setAttribute('offset',Math.min(1,(1640+168+280*wide)/1920).toFixed(4));}
+ else{document.getElementById('m1').setAttribute('offset',0);document.getElementById('m2').setAttribute('offset',0);
+  document.getElementById('m3').setAttribute('offset',1);document.getElementById('m4').setAttribute('offset',1);
+  $('bf').setAttribute('opacity',1-wide);$('tf').setAttribute('height',tfh);}
  $('src').setAttribute('opacity',o.src!=null?o.src:eo(prog(t,PULL1-.1,PULL1+.5)));
  pillT.textContent=money(counter(t))+' '+(t<steps[0].b+.05?(D.pill&&D.pill.in||'in'):(D.pill&&D.pill.left||'left'));
 }
