@@ -1,0 +1,243 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- True Economy "How X makes money?" FUNNEL SHORT (approved 10 Nov 2026). Driven by funnel_render.js; do not open by hand.
+     Data (window.DATA) uses the make_flow.py data.json keys, values in $ billions. -->
+<style>
+@font-face{font-family:'Lora';font-weight:700;src:url('../assets/Lora-Bold.ttf')}
+html,body{margin:0;background:#F2EFE8;overflow:hidden}
+#stage{width:1080px;height:1920px;position:relative;overflow:hidden;background:#F2EFE8}
+svg,img.tex{position:absolute;left:0;top:0}
+img.tex{width:1080px;height:1920px;pointer-events:none}
+</style></head><body><div id="stage">
+<svg id="sv" width="1080" height="1920" xmlns="http://www.w3.org/2000/svg">
+ <defs id="defs">
+  <linearGradient id="topfade" x1="0" y1="0" x2="0" y2="1"><stop offset=".72" stop-color="#F2EFE8"/><stop offset="1" stop-color="#F2EFE8" stop-opacity="0"/></linearGradient>
+  <linearGradient id="botfade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F2EFE8" stop-opacity="0"/><stop offset=".6" stop-color="#F2EFE8"/></linearGradient>
+ </defs>
+ <g id="content"><g id="world"></g>
+  <rect id="tf" x="0" y="0" width="1080" height="470" fill="url(#topfade)"/>
+  <rect id="bf" x="0" y="1640" width="1080" height="280" fill="url(#botfade)"/>
+  <g id="logo"></g><g id="hq"></g><g id="ha"></g><g id="pill"></g><g id="src"></g>
+ </g>
+</svg>
+<img class="tex" id="tex1" style="mix-blend-mode:multiply;opacity:.55">
+<img class="tex" id="tex2" style="opacity:.35">
+</div>
+<script>
+function BUILD(D){
+const NS='http://www.w3.org/2000/svg';
+function el(p,t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;p.appendChild(e);return e}
+const $=id=>document.getElementById(id);
+$('tex1').src=D.tex1;$('tex2').src=D.tex2;
+const C={blue:'#3670D0',lblue:'#B3C9ED',red:'#D94437',lred:'#F2C4BC',gold:'#FACB3A',lgold:'#FBE3A0',dgold:'#E0A800',
+ teal:'#249972',lteal:'#B2DCCE',ink:'#161616',paper:'#F2EFE8'};
+const W=$('world'),DEFS=$('defs');
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const eio=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const eo=x=>{x=clamp(x);return 1-Math.pow(1-x,3)};
+const eq=x=>{x=clamp(x);return x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2};
+const prog=(t,a,b)=>clamp((t-a)/(b-a));
+const money=v=>{const a=Math.abs(v);return a>=1?'$'+a.toFixed(1)+'B':'$'+Math.round(a*1000)+'M'};
+const cents=v=>Math.round(v/D.rev*100)+'¢ per $1';
+
+// ---------- the money model ----------
+// reported totals win over arithmetic on rounded parts (optional keys gp, op, pbt, ni in data.json)
+const rev=D.rev,gp=D.gp??(rev-D.cogs),op=D.op??(gp-D.opex),pbt=D.pbt??(op+(D.other||0)),ni=D.ni??(pbt-D.tax);
+const smallOther=Math.abs(D.other||0)<0.015*rev;
+// steps: each turns the running amount into the next stage. kind cost = red peel to the right, gain = teal inflow from the right
+const steps=[{kind:'cost',amt:D.cogs,name:D.cogs_name||'Cost of revenue',stage:'Gross profit',val:gp}];
+if(smallOther){
+ steps.push({kind:'cost',amt:D.opex,name:D.opex_name||'R&D, sales & admin',stage:'Profit before tax',val:pbt,
+  note:(D.other?((D.other>0?'+':'−')+money(D.other)+' '+(D.other>0?(D.other_label||'other income'):'other costs')):null),widthAmt:gp-pbt});
+}else{
+ steps.push({kind:'cost',amt:D.opex,name:D.opex_name||'R&D, sales & admin',stage:'Operating profit',val:op});
+ if(D.other>0) steps.push({kind:'gain',amt:D.other,name:D.other_label||'Other income',stage:'Profit before tax',val:pbt});
+ else steps.push({kind:'cost',amt:-D.other,name:D.other_label||'Other costs',stage:'Profit before tax',val:pbt});
+}
+if(D.tax>=0) steps.push({kind:'cost',amt:D.tax,name:D.tax_name||'Tax',stage:'Net income',val:ni,final:true});
+else steps.push({kind:'gain',amt:-D.tax,name:D.tax_name||'Tax benefit',stage:'Net income',val:ni,final:true});
+window.NSTEPS=steps.length;
+
+// ---------- geometry ----------
+const WMAX=425,k=WMAX/rev,L=255,BAR=16,Yt=-40,Y0=520,DY=440,D_=360,RX=715,LX=235;
+const Ys=[Y0];steps.forEach((s,i)=>Ys.push(Y0+DY*(i+1)));
+const width=v=>v*k;
+const HO=D.logo?112:0;               // header offset when a logo sits above the title
+
+// ---------- timeline ----------
+const COLD=D.cold?1.6:0;
+const STEP0=5.0,SP=6.0;
+steps.forEach((s,j)=>{s.a=STEP0+SP*j;s.b=s.a+2.5});
+const last=steps[steps.length-1];
+const KT=last.b+1.3, PULL0=KT+3.2, PULL1=KT+5.9, END=KT+9.2;
+const POUR0=[-2.5,3.5], REVBAR=3.45;
+
+// ---------- ribbons ----------
+const ribbons=[];let rid=0;
+function ribbon(a0,a1,ya,b0,b1,yb,fill,dcol,n,seed,ta,tb){
+ const ym=(ya+yb)/2,id='r'+(rid++);
+ const g=el(DEFS,'linearGradient',{id:'g'+id,gradientUnits:'userSpaceOnUse',x1:0,x2:0,y1:ya-60,y2:ya});
+ el(g,'stop',{offset:0,'stop-color':'#fff'});el(g,'stop',{offset:1,'stop-color':'#000'});
+ const m=el(DEFS,'mask',{id:'m'+id,maskUnits:'userSpaceOnUse',x:-400,y:-600,width:1900,height:5000});
+ el(m,'rect',{x:-400,y:-600,width:1900,height:5000,fill:`url(#g${id})`});
+ const grp=el(W,'g',{mask:`url(#m${id})`});
+ el(grp,'path',{d:`M${a0} ${ya} C${a0} ${ym} ${b0} ${ym} ${b0} ${yb} L${b1} ${yb} C${b1} ${ym} ${a1} ${ym} ${a1} ${ya}Z`,fill});
+ let s=seed;const R=()=>{s=(s*9301+49297)%233280;return s/233280};
+ const ds=[];for(let i=0;i<n;i++){ds.push({u:.1+.8*R(),ph:R(),e:el(grp,'line',{stroke:dcol,'stroke-width':5,'stroke-linecap':'round'})})}
+ ribbons.push({a0,a1,ya,b0,b1,yb,ym,g,ds,ta,tb});
+}
+const nd=w=>Math.max(3,Math.round(w/18));
+// funnel mouth: segments spread over the full width
+let segs=(D.segments&&D.segments.length)?D.segments.map(s=>({lines:s.lines,value:s.value})):[{lines:['Revenue'],value:rev}];
+// at most 3 bands across the mouth: the two largest segments plus 'Other' (keeps every label readable on a phone)
+if(segs.length>3){const srt=[...segs].sort((x,y)=>y.value-x.value),keep=srt.slice(0,2),rest=srt.slice(2);
+ segs=segs.filter(s=>keep.includes(s));segs.push({lines:['Other'],value:rest.reduce((a,s)=>a+s.value,0)})}
+const segTot=segs.reduce((a,s)=>a+s.value,0);
+let xt=0,xb=L;const segX=[];
+segs.forEach((s,i)=>{const wt=1080*s.value/segTot,wb=WMAX*s.value/segTot,g1=i>0?3:0,g2=i<segs.length-1?3:0;
+ ribbon(xt+g1,xt+wt-g2,Yt+BAR,xb+g1/2,xb+wb-g2/2,Y0,C.lblue,C.blue,nd(wt),23+i*6,...POUR0);
+ segX.push([xt+g1,xt+wt-g2]);xt+=wt;xb+=wb;});
+let cur=[L,L+WMAX];   // running column
+const peels=[];
+steps.forEach((s,j)=>{
+ const y0=Ys[j],y1=Ys[j+1],last=!!s.final;
+ const mainFill=last?C.lgold:C.lblue,mainDash=last?'#C89B12':C.blue;
+ if(s.kind==='cost'){
+  const w=width(s.widthAmt!=null?s.widthAmt:s.amt);
+  const next=[L,cur[1]-w];
+  ribbon(cur[0],next[1],y0+BAR,L,L+width(s.val),y1,mainFill,mainDash,nd(next[1]-cur[0]),3+j*8,s.a,s.b);
+  const E=[RX,RX+width(s.amt)];
+  ribbon(next[1],cur[1],y0+BAR,E[0],E[1],y0+D_,C.lred,C.red,nd(w)+2,7+j*8,s.a,s.b-.15);
+  s.end={x:E,y:y0+D_,col:C.red};
+  cur=[L,L+width(s.val)];
+ }else{
+  const w=width(s.amt);
+  ribbon(cur[0],cur[1],y0+BAR,L,cur[1]-cur[0]+L,y1,mainFill,mainDash,nd(cur[1]-cur[0]),3+j*8,s.a,s.b);
+  const S=[RX,RX+w],sy=y0+130;
+  ribbon(S[0],S[1],sy+BAR,L+cur[1]-cur[0],L+cur[1]-cur[0]+w,y1,C.lteal,C.teal,nd(w)+2,7+j*8,s.a-.2,s.b-.1);
+  s.start={x:S,y:sy,col:C.teal};
+  cur=[L,L+width(s.val)];
+ }
+});
+
+// ---------- bars & labels ----------
+const anims=[];
+function bar(x0,x1,y,f,t){const e=el(W,'rect',{x:x0,y,width:x1-x0,height:BAR,fill:f});if(t!=null)anims.push({e,t,kind:'bar',w:x1-x0});return e}
+function lab(t,build){const g=el(W,'g',{});build(g);if(t!=null)anims.push({e:g,t,kind:'fade'});return g}
+const T=(p,x,y,s,size,fill,anchor,w)=>el(p,'text',{x,y,'font-family':'Inter','font-weight':w||800,'font-size':size,fill,'text-anchor':anchor||'middle'},s);
+segX.forEach(([a,b],i)=>bar(a,b,Yt,C.blue));
+lab(null,g=>segs.forEach((s,i)=>{const [a,b]=segX[i],w=b-a,big=w>300?54:w>170?42:34,sm=w>300?28:w>170?24:21;
+ const right=(i===segs.length-1&&segs.length>1&&w<260),x=right?1062:a+(i===0?40:22),anc=right?'end':'start';
+ const v=T(g,x,Yt+80,money(s.value),big,C.blue,anc);
+ if(v.getComputedTextLength()>w-30){v.remove();return}          // too narrow for a label: leave the band clean
+ (s.lines||[]).forEach((ln,li)=>{const n=T(g,x,Yt+80+(big*.62)+sm*(1.1*li+.35),ln,sm,C.ink,anc,600);if(n.getComputedTextLength()>w-24)n.remove()});}));
+const stage=(t,y,big,a,b,c,col)=>lab(t,g=>{T(g,LX,y+20,big,54,col||C.blue,'end');T(g,LX,y+58,a,28,C.ink,'end',600);if(b)T(g,LX,y+92,b,26,C.ink,'end',500);if(c)T(g,LX,y+124,c,20,C.blue,'end',600)});
+bar(L,L+WMAX,Y0,C.blue,REVBAR);stage(REVBAR+.3,Y0,money(rev),'Revenue');
+steps.forEach((s,j)=>{
+ const y1=Ys[j+1];
+ if(s.kind==='cost'){bar(...s.end.x,s.end.y,C.red,s.b-.15);
+  lab(s.b+.05,g=>{T(g,RX,s.end.y+64,'−'+money(s.amt),50,C.red,'start');T(g,RX,s.end.y+96,s.name,24,C.ink,'start',600)});}
+ else{bar(...s.start.x,s.start.y,C.teal,s.a-.2);
+  lab(s.a-.1,g=>{T(g,RX,s.start.y-52,'+'+money(s.amt),50,C.teal,'start');T(g,RX,s.start.y-20,s.name,24,C.ink,'start',600)});}
+ if(!s.final){bar(L,L+width(s.val),y1,C.blue,s.b-.05);stage(s.b+.45,y1,money(s.val),s.stage,cents(s.val),s.note);}
+ else bar(L,L+width(s.val),y1,C.dgold,s.b-.05);
+});
+const YN=Ys[Ys.length-1];
+const keptRect=el(W,'rect',{x:L-10,y:YN+44,width:0,height:100,fill:C.gold,rx:4});
+const keptTxt=T(W,L+240,YN+116,money(ni)+' kept',66,C.ink);
+const keptSub=T(W,L+240,YN+196,Math.round(ni/rev*100)+'¢ of every $1 became profit',34,C.ink,'middle',700);
+const KEPT=[keptTxt.textContent,keptSub.textContent];
+
+// ---------- header ----------
+const HS0=86;
+function headline(g,l1,l2,mark){
+ let hs=HS0;
+ const mk=el(g,'rect',{y:0,height:40,fill:C.gold});
+ const t1=el(g,'text',{x:540,y:205+HO,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l1);
+ const t2=el(g,'text',{x:540,y:300+HO,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l2);
+ const wmax=Math.max(t1.getComputedTextLength(),t2.getComputedTextLength());
+ if(wmax>1000){hs=Math.floor(hs*1000/wmax);t1.setAttribute('font-size',hs);t2.setAttribute('font-size',hs)}
+ const inL1=l1.includes(mark),tx=inL1?t1:t2,line=inL1?l1:l2,i0=line.indexOf(mark);
+ const xs=tx.getStartPositionOfChar(i0).x,xe=tx.getEndPositionOfChar(i0+mark.length-1).x;
+ mk.setAttribute('x',xs-6);mk.setAttribute('width',xe-xs+12);mk.setAttribute('y',(inL1?205:300)+HO-Math.round(hs*.4));mk.setAttribute('height',Math.round(hs*.47));
+}
+const REV=money(rev),CENT=Math.round(ni/rev*100)+'¢';
+headline($('hq'),`${D.company} made ${REV}.`,'How much did it keep?',REV);
+headline($('ha'),`${D.company} kept ${CENT}`,'of every $1 it made',CENT);
+if(D.logo){el($('logo'),'image',{href:D.logo,x:340,y:52,width:400,height:100,preserveAspectRatio:'xMidYMid meet'})}
+el($('pill'),'rect',{x:380,y:345+HO,width:320,height:72,rx:8,fill:'#1b1b1b'});
+const pillT=el($('pill'),'text',{x:540,y:394+HO,'text-anchor':'middle','font-family':'Inter','font-weight':800,'font-size':38,fill:C.paper,style:'font-variant-numeric:tabular-nums'},'');
+el($('src'),'text',{x:540,y:1712,'text-anchor':'middle','font-family':'Inter','font-weight':500,'font-size':22,fill:'#444'},D.source);
+
+// ---------- camera ----------
+const SY=1080+HO*.6;
+const view=j=>(Ys[j]+Ys[j+1])/2+40;
+// wide shot: fit the whole world between the header and the caption-safe line
+const top=Yt-10, bot=YN+215, availTop=430+HO, availBot=1690;
+const WS=Math.min(.75,(availBot-availTop)/(bot-top)), WCY=(top+bot)/2, WSY=(availTop+availBot)/2;
+const CAM=[[0,540,1,SY],[.8,540,1,SY],[4.3,view(0)-12,1,SY]];
+steps.forEach((s,j)=>{CAM.push([s.b+1.8,view(j),1,SY]);if(j<steps.length-1)CAM.push([s.b+4.0,view(j+1)-12,1,SY])});
+CAM.push([PULL0,view(steps.length-1),1,SY]);
+CAM.push([PULL1,WCY,WS,WSY],[END,WCY,WS*1.007,WSY]);
+// fix: holds must start where the previous move ended
+for(let i=1;i<CAM.length;i++){if(CAM[i][0]<=CAM[i-1][0])CAM[i][0]=CAM[i-1][0]+.01}
+function cam(t){let i=0;while(i<CAM.length-2&&t>=CAM[i+1][0])i++;const a=CAM[i],b=CAM[i+1],p=eio(prog(t,a[0],b[0]));
+ return [a[1]+(b[1]-a[1])*p,a[2]+(b[2]-a[2])*p,a[3]+(b[3]-a[3])*p]}
+const ROLL=[[0,rev]];steps.forEach(s=>{ROLL.push([s.b+.05,ROLL[ROLL.length-1][1]],[s.b+1.05,s.val])});ROLL.push([999,ni]);
+function counter(t){let i=0;while(i<ROLL.length-2&&t>=ROLL[i+1][0])i++;const a=ROLL[i],b=ROLL[i+1];return a[1]+(b[1]-a[1])*eq(prog(t,a[0],b[0]))}
+
+function draw(t,o){o=o||{};
+ for(const r of ribbons){
+  const p=o.retract!=null?eq(prog(t,r.ta,r.tb))*(1-o.retract)+0*(o.retract):eq(prog(t,r.ta,r.tb));
+  const front=r.ya+(r.yb+62-r.ya)*p;
+  r.g.setAttribute('y1',front-60);r.g.setAttribute('y2',front);
+  for(const d of r.ds){
+   const tt=((d.ph+(o.tt!=null?o.tt:t)*0.22)%1+1)%1*0.94;
+   const xa=r.a0+d.u*(r.a1-r.a0),xb=r.b0+d.u*(r.b1-r.b0);
+   const bx=q=>{const m=1-q;return m*m*m*xa+3*m*m*q*xa+3*m*q*q*xb+q*q*q*xb};
+   const by=q=>{const m=1-q;return m*m*m*r.ya+3*m*m*q*r.ym+3*m*q*q*r.ym+q*q*q*r.yb};
+   const op=Math.min(1,tt/.08,(.94-tt)/.08)*.6;
+   d.e.setAttribute('x1',bx(tt));d.e.setAttribute('y1',by(tt));d.e.setAttribute('x2',bx(tt+.04));d.e.setAttribute('y2',by(tt+.04));d.e.setAttribute('opacity',op.toFixed(3));
+  }}
+ for(const a of anims){
+  if(a.kind==='bar'){const p=eo(prog(t,a.t,a.t+.4));a.e.setAttribute('width',a.w*p)}
+  else{const p=eo(prog(t,a.t,a.t+.45));a.e.setAttribute('opacity',p);a.e.setAttribute('transform',`translate(0 ${14*(1-p)})`)}
+ }
+ keptRect.setAttribute('width',500*eo(prog(t,KT,KT+.4)));
+ {const p=eo(prog(t,KT+.2,KT+.6));keptTxt.setAttribute('opacity',p);keptTxt.setAttribute('transform',`translate(${-18*(1-p)} 0)`)}
+ {const p=eo(prog(t,KT+.9,KT+1.4));keptSub.setAttribute('opacity',p);keptSub.setAttribute('transform',`translate(0 ${12*(1-p)})`)}
+ keptTxt.textContent=o.tease?'$?? kept':KEPT[0];keptSub.textContent=o.tease?'How much of every $1 became profit?':KEPT[1];
+ const [cy,s,sy]=o.cam||cam(t);W.setAttribute('transform',`translate(${540-540*s} ${sy-cy*s}) scale(${s})`);
+ const wide=o.wide!=null?o.wide:prog(t,PULL0+.7,PULL0+1.9);
+ const qa=o.tease?0:eo(prog(t,PULL0+.9,PULL0+1.4)), aa=o.tease?0:eo(prog(t,PULL0+1.3,PULL0+1.9));
+ $('hq').setAttribute('opacity',1-qa);
+ $('ha').setAttribute('opacity',aa);$('ha').setAttribute('transform',`translate(0 ${10*(1-aa)})`);
+ $('pill').setAttribute('opacity',o.pill!=null?o.pill:1-eo(prog(t,PULL0+.5,PULL0+1.1)));
+ $('bf').setAttribute('opacity',1-wide);
+ $('tf').setAttribute('height',470+HO-70*eio(wide));
+ $('src').setAttribute('opacity',o.src!=null?o.src:eo(prog(t,PULL1-.1,PULL1+.5)));
+ pillT.textContent=money(counter(t))+' '+(t<steps[0].b+.05?'in':'left');
+}
+const TOTAL=END+COLD, F1=TOTAL-0.7, F2=TOTAL-0.35;
+function frameAt(T){ // T = output time
+ if(COLD&&T<COLD){
+  const r=eio(prog(T,.55,COLD));
+  const tv=END*(1-r);                       // content rewinds from the finished chart back to the start
+  const wc=[WCY,WS,WSY],oc=[540,1,SY],c=[wc[0]+(oc[0]-wc[0])*r,wc[1]+(oc[1]-wc[1])*r,wc[2]+(oc[2]-wc[2])*r];
+  draw(tv,{cam:c,tease:true,wide:1-r,pill:prog(T,COLD-.35,COLD),src:1-prog(T,.55,.9),tt:T});
+  return;}
+ draw(T-COLD);
+}
+window.setTime=function(T){
+ let alpha=1;
+ if(T>=F2){alpha=eq((T-F2)/(TOTAL-F2));frameAt(0);}
+ else{frameAt(T);if(T>F1)alpha=1-eq((T-F1)/(F2-F1));}
+ $('content').setAttribute('opacity',alpha);
+};
+window.tease=()=>{draw(END,{tease:true});$('content').setAttribute('opacity',1)};
+window.answer=()=>{draw(END);$('content').setAttribute('opacity',1)};
+window.BEATS={total:TOTAL,cold:COLD,revbar:REVBAR+COLD,kt:KT+COLD,pull0:PULL0+COLD,pull1:PULL1+COLD,
+ glides:steps.slice(0,-1).map(s=>s.b+1.8+COLD),
+ steps:steps.map(s=>({a:s.a+COLD,b:s.b+COLD,kind:s.kind}))};
+setTime(0);
+}
+</script></body></html>
