@@ -170,3 +170,5 @@ The scripts already use these values (te_lib, make_flow, make_mkts, video_card, 
 - Labels for the long company names: the net-income label reads "Profit kept" when the company name is 9+ characters (it otherwise touches the gold bar).
 - Already built into scripts/make_flow.py (changed 10 Nov). Never reintroduce the old left label column. Use scripts/video_flow.py for the video (reads <svg>.ribbons.json written next to the SVG).
 - Source line wording: use the real basis (e.g. "Source: Microsoft Q1 FY2027 earnings release, 28 Oct 2026 · GAAP"); do not write "SEC filing basis" unless the numbers were read from the filing.
+
+- 10 Nov 2026 CLIP SCHEDULER: landscape clips (wider than tall, any kind of video) are turned into 9:16 Shorts with scripts/landscape_to_short.py (unchanged, approved look) before scheduling; vertical clips are scheduled as they are. See playbook/clips.md.
