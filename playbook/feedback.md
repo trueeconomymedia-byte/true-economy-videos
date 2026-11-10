@@ -173,3 +173,5 @@ The scripts already use these values (te_lib, make_flow, make_mkts, video_card, 
 
 - 10 Nov 2026 CLIP SCHEDULER: landscape clips (wider than tall, any kind of video) are turned into 9:16 Shorts with scripts/landscape_to_short.py (unchanged, approved look) before scheduling; vertical clips are scheduled as they are. See playbook/clips.md.
 - 10 Nov 2026 CLIP SCHEDULER: every posted clip gets the best frame of the whole video laid over its first 0.2 s (scripts/cover_frame.py) so it becomes the thumbnail; same slot, no size/position change, title stays as the hook. See playbook/clips.md.
+
+- 10 Nov 2026 SHORTS FRAME TOP EDGE (user-approved, now the default for Daily Post, Markets Daily and every new-style card; NOT Stock Market Today): the black banner's TOP edge is a clean printed ink edge identical to its bottom edge. The white torn rim and the shadow halo above the banner are removed; the faded back paper above the banner stays exactly as before. Implemented in scripts/te_frame.py (no change to banner/card positions, E, paper or bottom edge). Stock Market Today keeps its own plain white style (make_mkts.py / video_mkts.py never import te_frame).

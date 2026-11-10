@@ -5,7 +5,7 @@ What it draws (all STATIC, identical every frame):
   * darker, slightly faded back paper above the banner and below the card (same paper family, neutral greige, no colour tint)
   * the black banner PRINTED on the paper: ink lets the paper tooth and tiny specks show through, slightly uneven top and bottom edges,
     ink pooling just inside the edge, the E knocked out of the ink (shows paper), E sits 5 px right of the old logo position
-  * the banner's top edge is the top edge of the sheet: a very small bright torn-paper rim, with a tight soft shadow falling on the back paper above it
+  * the banner's top edge is a clean printed ink edge, identical to its bottom edge (user, 10 Nov: no white torn rim, no shadow halo); the faded back paper above stays
   * the card's bottom edge: a straight sheet edge with a fine, smooth deckle (NOT fibery), a hairline light fringe and a soft shadow on the back paper below
   * card + banner positions never move (banner top y=296, bottom 474, card bottom 3360)
 usage (in video_card.py / video_flow.py / video_card_seq.py):
@@ -78,13 +78,13 @@ def build():
     t0, t1 = Y0 - 80, Y0 + 40
     ysr = ys[t0:t1]
     d = np.clip(edge_t[:, :] - wrim - ysr, 0, None)
-    base_sh = bt_rows(P3, TT, t0, t1, ys) * (1 - (0.30 * np.exp(-d / 9.0) + 0.12 * np.exp(-d / 2.5)) * (ysr < edge_t))[..., None]
+    base_sh = bt_rows(P3, TT, t0, t1, ys)   # 10 Nov (user): no shadow halo above the banner; the back-paper fade stays
     mt = np.clip(ysr - edge_t + 0.5, 0, 1)
     gs = np.where((ysr >= r0)[..., None], bar[t0:t1], P[t0:t1])
     topc = base_sh * (1 - mt[..., None]) + gs * mt[..., None]
     rim_m = np.clip(ysr - (edge_t - wrim) + 0.5, 0, 1) * np.clip(edge_t - ysr + 0.5, 0, 1)
     rim_a = (rim_m * np.clip(0.95 - 0.45 * spk[t0:t1] - 0.25 * tooth[t0:t1], 0, 1))[..., None]
-    topc = topc * (1 - rim_a) + (P[t0:t1] * 1.03) * rim_a
+    # 10 Nov (user): NO white torn rim; the banner's top edge is a clean printed ink edge, identical to its bottom edge
     fr[t0:t1] = topc
     fr[t1:BAR_B + 12] = np.where((ys[t1:BAR_B + 12] >= r0)[..., None], bar[t1:BAR_B + 12], P[t1:BAR_B + 12])
     fr[BAR_B + 12:Y1 - 10] = P[BAR_B + 12:Y1 - 10]          # placeholder; the card is drawn over these rows
