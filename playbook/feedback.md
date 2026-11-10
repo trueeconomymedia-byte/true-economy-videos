@@ -172,3 +172,4 @@ The scripts already use these values (te_lib, make_flow, make_mkts, video_card, 
 - Source line wording: use the real basis (e.g. "Source: Microsoft Q1 FY2027 earnings release, 28 Oct 2026 · GAAP"); do not write "SEC filing basis" unless the numbers were read from the filing.
 
 - 10 Nov 2026 CLIP SCHEDULER: landscape clips (wider than tall, any kind of video) are turned into 9:16 Shorts with scripts/landscape_to_short.py (unchanged, approved look) before scheduling; vertical clips are scheduled as they are. See playbook/clips.md.
+- 10 Nov 2026 CLIP SCHEDULER: every posted clip gets the best frame of the whole video laid over its first 0.2 s (scripts/cover_frame.py) so it becomes the thumbnail; same slot, no size/position change, title stays as the hook. See playbook/clips.md.

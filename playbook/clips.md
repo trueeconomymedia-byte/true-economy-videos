@@ -37,3 +37,12 @@
   - Save the Short as clips/ready/<original-stem>-short.mp4 and post THAT file (host URL, verify 200, Buffer). Keep the original landscape file in clips/ready/ renamed nothing, but record in clips_index.json: {"short_file": ..., "short_title": [line1, line2, marked]}. Move both to posted/ together once sent. Do not schedule the original landscape file and do not schedule both.
   - Duration limits: YouTube Shorts must stay under 3 minutes; the Facebook/Instagram rules above still apply to the Short.
   - If the script fails twice, log the reason, try the next clip, and tell the user in the final message.
+
+## Thumbnail cover frame (added 10 Nov 2026; runs on EVERY clip that gets posted, after the Short step)
+- Goal: the best visual frame of the whole video shows for the first 0.2 s so it becomes the cover/thumbnail. Nothing changes size or position: the frame sits in the video's own slot, the title (the hook) stays as it is, audio and sync are untouched.
+- Run `python3 /tmp/tev/scripts/cover_frame.py SRC TARGET OUT.mp4 [SLOT_Y SLOT_H]` (scripts/cover_frame.py; do not change it).
+  - Landscape clip: SRC = original landscape clip, TARGET = the Short from landscape_to_short.py, SLOT_H = round(1080*height/width) rounded down to even, SLOT_Y = (1920-SLOT_H)//2 (the same numbers the Short script uses). Example for 1920x1080: `... 656 608`.
+  - Vertical clip: SRC = TARGET = the clip, no slot arguments (the frame covers the whole picture).
+- The script scores one frame per second (sharpness, contrast, colour; skips near-black/blown-out/flat frames) and writes the top 5 as OUT.cand1..5.jpg. LOOK at them (Read) and, if the top pick is poor (blurry, mid-transition, text cut off, nothing readable), re-run with `--at <seconds>` using the best candidate time. Hold is 0.2 s (`--hold`, do not change unless the user asks).
+- Replace the clip/Short with the covered version (same file name in clips/ready/ as before, e.g. <stem>-short.mp4 for a landscape clip; for a vertical clip save as <stem>-cover.mp4 and post that, keep the original), look at a frame at 0.05 s and at 0.5 s (cover frame vs normal start, layout identical), then host and post it. Record "cover_at" (seconds) in clips_index.json.
+- YouTube Shorts may not use the first frame as its thumbnail; mention it once in the final message only if a YouTube channel is connected.
