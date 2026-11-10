@@ -107,7 +107,7 @@
     "Nvidia",
     "Lululemon"
    ],
-   "note": "Charted so far: Nvidia (Q2 FY27), Apple (Q4 FY26). Earnings seasons: mid-Jan to Feb, mid-Apr to May, mid-Jul to Aug, mid-Oct to Nov; off-cycle reporters fill gaps."
+   "note": "Charted so far: Nvidia (Q2 FY27), Apple (Q4 FY26), Microsoft (Q1 FY27). Layout from 10 Nov: full-width Sankey with segment labels inside the chart (see feedback.md 2026-11-10). Earnings seasons: mid-Jan to Feb, mid-Apr to May, mid-Jul to Aug, mid-Oct to Nov; off-cycle reporters fill gaps."
   },
   "country_vs_country": {
    "name": "Country vs country",

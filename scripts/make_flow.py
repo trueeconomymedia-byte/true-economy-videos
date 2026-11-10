@@ -109,7 +109,8 @@ out.append('</g>')
 # ---- sankey geometry
 NW = 14
 _s = 934/840
-XA, XR, XG, XO, XP, XF = [X0 + v*_s for v in (175, 300, 435, 570, 705, 840)]
+_x0, _x1 = 0, 840*_s
+XA, XR, XG, XO, XP, XF = [X0 + _x0 + (_x1-_x0)*i/5 for i in range(6)]   # centred: segment labels start at the left margin, columns evenly spaced
 segs = d["segments"]; nseg = len(segs)
 TOP = ky + 14 + 92 + 70       # top of the sankey block
 BOT = H - 90                 # lowest point allowed
@@ -127,14 +128,11 @@ for i, s in enumerate(segs):
     h = s["value"] * k; col = cols[i % 4]
     ribbon(XA + NW, ya, ya + h, XR, yr, yr + h, col, 0.28)
     rect(XA, ya, NW, h, col)
-    cy = max(ya + h / 2, lastcy + 50); lastcy = cy
-    lines = s["lines"]; xr_ = XA - 12
-    vcol = BLUE_D if col in (BLUE_L, BLUE_XL) else col
-    if len(lines) == 1:
-        text(xr_, cy - 3, money(s["value"]), 22, vcol, "b", "r"); text(xr_, cy + 17, lines[0], 15, INK, "sb", "r")
-    else:
-        text(xr_, cy - 14, money(s["value"]), 22, vcol, "b", "r")
-        for j, ln in enumerate(lines): text(xr_, cy + 6 + j * 17, ln, 15, INK, "sb", "r")
+    cy = ya + h / 2; xl = XA + NW + 16   # labels sit INSIDE the chart, on the first ribbon (user 10 Nov)
+    lines = s["lines"]; vcol = "#2A62AE"
+    n = len(lines); top = cy - (30 + 18 * n) / 2
+    text(xl, top + 24, money(s["value"]), 24, vcol, "b")
+    for j, ln in enumerate(lines): text(xl, top + 24 + 22 + j * 18, ln, 16, INK, "sb")
     ya += h + 14; yr += h
 out.append('</g>')
 
@@ -162,7 +160,7 @@ stage(XG + NW + 12, yT + 32, "Gross profit", gp); text(XG + NW + 12, yT + 96, c(
 text(XO + NW + 12, yT + 32, "Operating", 17, INK, "sb"); text(XO + NW + 12, yT + 52, "profit", 17, INK, "sb")
 text(XO + NW + 12, yT + 82, money(op), 26, BLUE_D, "b"); text(XO + NW + 12, yT + 106, c(op), 15, GREY, "sb")
 stage(XP + NW + 12, yT + 32, "Pre-tax profit", pbt)
-stage(XP + NW + 12, yN + 150, "Nvidia keeps".replace("Nvidia", co) if len(co) < 12 else "Company keeps", ni, INK)
+stage(XP + NW + 12, yN + 150, "Nvidia keeps".replace("Nvidia", co) if len(co) < 9 else "Profit kept", ni, INK)
 text(XP + NW + 12, yN + 214, f"{round(ni / rev * 100)}¢ per $1", 15, INK, "sb")
 if oth > 0: text(XO + NW + 10, y_pbt - 10, f"+{money(oth)} {d['other_label']}", 16, BLUE_D, "b")
 def term(y, h, val, name):

@@ -163,3 +163,10 @@ The scripts already use these values (te_lib, make_flow, make_mkts, video_card, 
 - The card, banner and chart geometry NEVER move (banner 296-474, card bottom 3360). Do not change te_frame.py constants, and do not call the rough/printed edges a defect in QA: they are intentional.
 - Stock Market Today (make_mkts.py / video_mkts.py) is EXCLUDED: it keeps its own plain white card, flat black tab and soft shadow. te_frame.py is never imported by those two files.
 - QA: after rendering, look at the frame: banner top edge with its tiny white rim, E knocked out inside the banner, straight deckled bottom edge with shadow, no moving background.
+
+## 2026-11-10 HOW (COMPANY) MAKES MONEY: LAYOUT UPDATE (user: "Perfect", on the Microsoft card; applies to every future how_company post)
+- The Sankey SPANS THE FULL CARD WIDTH: first column starts flush at the left margin (x=0, in line with the headline, subtitle, footer and source), the six columns are evenly spaced out to the right edge. No empty strip on the left.
+- The SEGMENT LABELS (value + name, e.g. "$76.8B Agents and Infra") sit INSIDE the chart, left-aligned on their own first-column ribbon (value in deep blue #2A62AE 24 px bold, name ink 16 px semibold), not to the left of the bars. Keep segment names short (max about 2 lines, e.g. "Devices and / Consumer") so they fit the ribbon; a very thin segment (under ~70 px tall at k=6.2) needs a one-line label or merging into "Other".
+- Labels for the long company names: the net-income label reads "Profit kept" when the company name is 9+ characters (it otherwise touches the gold bar).
+- Already built into scripts/make_flow.py (changed 10 Nov). Never reintroduce the old left label column. Use scripts/video_flow.py for the video (reads <svg>.ribbons.json written next to the SVG).
+- Source line wording: use the real basis (e.g. "Source: Microsoft Q1 FY2027 earnings release, 28 Oct 2026 · GAAP"); do not write "SEC filing basis" unless the numbers were read from the filing.
