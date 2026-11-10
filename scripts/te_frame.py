@@ -1,4 +1,4 @@
-"""True Economy Shorts FRAME (user-approved 10 Nov 2026, "mine" version): the full-bleed paper layout around the card.
+"""True Economy Shorts FRAME (user-approved 10 Nov 2026, the user's own pick (version A)): the full-bleed paper layout around the card.
 Applies to every scheduled card Short EXCEPT Stock Market Today (that series keeps its own old plain-white style: make_mkts.py / video_mkts.py never import this).
 
 What it draws (all STATIC, identical every frame):
@@ -66,10 +66,10 @@ def build():
     bar = bar * (1 - aE * mb[..., None]) + P * (aE * mb[..., None])
     del ink, ink0, eb, al
     edge_b = Y1 + _jit(rng, 18, 1.2) + _jit(rng, 3.0, 1.3)
-    wrim = np.clip(3.2 + _jit(rng, 2.0, 1.3) + _jit(rng, 7, 1.0), 0.4, 6.0)
+    wrim = np.clip(2.6 + _jit(rng, 2.0, 1.3) + _jit(rng, 7, 1.0), 0.4, 6.0)
     # ---- back paper (neutral greige, 6% darker than the card; fade toward the frame edges) ----
-    TN = 0.94; TT = np.array([TN, TN * 0.995, TN * 0.985], np.float32)
-    FADE = 0.10
+    TN = 0.925; TT = np.array([TN, TN * 0.995, TN * 0.985], np.float32)
+    FADE = 0.12
     fr = np.zeros((H, W, 3), np.float32)
     # top back paper
     bt = P3[:Y0] * TT * (1 - FADE * np.clip((Y0 - ys[:Y0]) / (H - Y1), 0, 1) ** 1.4)[..., None]
@@ -78,13 +78,13 @@ def build():
     t0, t1 = Y0 - 80, Y0 + 40
     ysr = ys[t0:t1]
     d = np.clip(edge_t[:, :] - wrim - ysr, 0, None)
-    base_sh = bt_rows(P3, TT, t0, t1, ys) * (1 - (0.34 * np.exp(-d / 9.0) + 0.14 * np.exp(-d / 2.5)) * (ysr < edge_t))[..., None]
+    base_sh = bt_rows(P3, TT, t0, t1, ys) * (1 - (0.30 * np.exp(-d / 9.0) + 0.12 * np.exp(-d / 2.5)) * (ysr < edge_t))[..., None]
     mt = np.clip(ysr - edge_t + 0.5, 0, 1)
     gs = np.where((ysr >= r0)[..., None], bar[t0:t1], P[t0:t1])
     topc = base_sh * (1 - mt[..., None]) + gs * mt[..., None]
     rim_m = np.clip(ysr - (edge_t - wrim) + 0.5, 0, 1) * np.clip(edge_t - ysr + 0.5, 0, 1)
-    rim_a = (rim_m * np.clip(1.0 - 0.45 * spk[t0:t1] - 0.25 * tooth[t0:t1], 0, 1))[..., None]
-    topc = topc * (1 - rim_a) + (P[t0:t1] * 1.04) * rim_a
+    rim_a = (rim_m * np.clip(0.95 - 0.45 * spk[t0:t1] - 0.25 * tooth[t0:t1], 0, 1))[..., None]
+    topc = topc * (1 - rim_a) + (P[t0:t1] * 1.03) * rim_a
     fr[t0:t1] = topc
     fr[t1:BAR_B + 12] = np.where((ys[t1:BAR_B + 12] >= r0)[..., None], bar[t1:BAR_B + 12], P[t1:BAR_B + 12])
     fr[BAR_B + 12:Y1 - 10] = P[BAR_B + 12:Y1 - 10]          # placeholder; the card is drawn over these rows
@@ -106,7 +106,7 @@ def build():
     return np.clip(fr, 0, 255).astype(np.uint8)
 
 def bt_rows(P3, TT, t0, t1, ys):
-    return P3[t0:t1] * TT * (1 - 0.10 * np.clip((Y0 - ys[t0:t1]) / (H - Y1), 0, 1) ** 1.4)[..., None]
+    return P3[t0:t1] * TT * (1 - 0.12 * np.clip((Y0 - ys[t0:t1]) / (H - Y1), 0, 1) ** 1.4)[..., None]
 
 FRAME = build()
 
