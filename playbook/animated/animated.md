@@ -65,6 +65,10 @@ loosen sourcing). If nothing qualifies: post nothing today and log a "skipped" l
 
 ## 5. Adding a new animation series later
 1. Design and approve it in a chat (the user approves the look).
-2. Add its renderer folder under scripts/ with the shared contract and outputs (using scripts/anim_shared/background.js),
-   its rules file here, and an entry in registry.json with status "trial" and its fixed `title_zone`.
+2. Add its renderer folder under scripts/ with the shared contract and outputs, its rules file here, and an entry in
+   registry.json with status "trial" and its fixed `title_zone`. CONSTANT ACROSS EVERY SERIES (user rule, 11 Nov 2026):
+   the same card-paper background with the printed-ink finish (transparent frames through scripts/anim_shared/ink_pipe.py,
+   never a different background) and the same SAFE ZONES from section 0 (x 60-1020, title inside the 4:5 feed crop and
+   below y 340, nothing important below y 1600 or in the right 120 px of the lower half). Only the title POSITION within
+   the safe zone may differ between series.
 3. After `trial_weeks` the analytics decide; making it "active", pausing it or dropping it needs the user's approval.
