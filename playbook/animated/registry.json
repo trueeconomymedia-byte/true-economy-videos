@@ -132,6 +132,73 @@
      "min_score": 75
     }
    }
+  },
+  "thennow": {
+   "name": "Then vs now (the line rides through time)",
+   "status": "trial",
+   "since": "2026-11-11",
+   "rules": "playbook/animated/thennow.md",
+   "idea_bank": "playbook/animated/thennow_bank.jsonl",
+   "data_library": "playbook/animated/data/",
+   "events": "playbook/animated/events.json",
+   "title_zone": "same SAFE title zone as funnel/howbig: 2 centred lines, Lora Bold 86 px (auto-shrinks), baselines y=395 and y=490; year counter at y=525; all content inside x 60-1020",
+   "render": "python3 scripts/thennow_short/thennow_short.py {data} {outdir} {slug}",
+   "outputs": {
+    "buffer": "{slug}-auto.mp4",
+    "youtube": "{slug}-youtube.mp4",
+    "thumb": "{slug}-thumb-tease.png",
+    "thumb_answer": "{slug}-thumb-answer.png",
+    "qa": [
+     "{slug}-qa-youtube.jpg"
+    ],
+    "thumbnail_offset_ms": "thumb_ms in {slug}-build.json (the whole climb with the answer hidden); no cold open"
+   },
+   "unsupported_exit": 3,
+   "episodes": {
+    "housing": {
+     "name": "Homes or rent then vs now",
+     "gap_days": 7,
+     "max_in_7_days": 1,
+     "repeat_key": "series id + years",
+     "priority": 55
+    },
+    "cost_of_living": {
+     "name": "An everyday price then vs now",
+     "gap_days": 5,
+     "max_in_7_days": 1,
+     "repeat_key": "series id + years",
+     "priority": 50
+    },
+    "pay_jobs": {
+     "name": "Pay, pensions or jobs then vs now",
+     "gap_days": 7,
+     "max_in_7_days": 1,
+     "repeat_key": "series id + years",
+     "priority": 45
+    },
+    "money_markets": {
+     "name": "Rates, inflation, currencies, markets or debt then vs now",
+     "gap_days": 7,
+     "max_in_7_days": 1,
+     "repeat_key": "series id + years",
+     "priority": 45
+    },
+    "company": {
+     "name": "A company then vs now",
+     "gap_days": 7,
+     "max_in_7_days": 1,
+     "repeat_key": "company + measure",
+     "priority": 45
+    },
+    "news": {
+     "name": "Bonus: the long-term series behind today's headline",
+     "gap_days": 7,
+     "max_in_7_days": 1,
+     "repeat_key": "story",
+     "priority": 40,
+     "min_score": 75
+    }
+   }
   }
  }
 }

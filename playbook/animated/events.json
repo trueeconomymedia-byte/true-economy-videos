@@ -1,0 +1,10 @@
+{"_about":"Verified dated events for the Then vs now series (two sources each before adding). label <= ~18 chars. region: UK, US, global.",
+ "events":[
+  {"year":2001,"label":"Dot-com crash","region":["US","global"],"note":"Nasdaq collapse 2000-2002"},
+  {"year":2008,"label":"Financial crisis","region":["US","UK","global"],"note":"Lehman Brothers collapse Sept 2008"},
+  {"year":2016,"label":"Brexit vote","region":["UK"],"note":"EU referendum 23 June 2016"},
+  {"year":2020,"label":"Covid","region":["US","UK","global"],"note":"pandemic lockdowns from March 2020"},
+  {"year":2022,"label":"Fed hikes rates","region":["US"],"note":"Federal Reserve rate rises from March 2022"},
+  {"year":2022,"label":"Rates jump","region":["UK"],"note":"Bank of England rate rises; Sept 2022 mini-budget"},
+  {"year":2022,"label":"Energy crisis","region":["UK","global"],"note":"energy price cap rises 2022"}
+ ]}

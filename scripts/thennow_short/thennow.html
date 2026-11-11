@@ -1,0 +1,112 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- True Economy "THEN VS NOW" animation style (approved by the user 11 Nov 2026). Driven by thennow_render.js; do not open
+     by hand. The camera rides the tip of a line forward through time, events drop in as it passes them, then it pulls
+     back to the whole climb and the answer lands in gold. Data = the build written by thennow_short.py (see its docstring).
+     Transparent page: the card paper + printed-ink finish is added by scripts/anim_shared/ink_pipe.py. -->
+<style>
+@font-face{font-family:'Lora';font-weight:700;src:url('../assets/Lora-Bold.ttf')}
+html,body{margin:0;background:transparent;overflow:hidden}
+#stage{width:1080px;height:1920px;position:relative}
+svg{position:absolute;left:0;top:0}
+</style></head><body><div id="stage"><svg id="sv" width="1080" height="1920" xmlns="http://www.w3.org/2000/svg"></svg></div>
+<script>
+const PAL={blue:'#3670D0',red:'#D94437',teal:'#249972'};
+const C={lred:'#F2C4BC',lteal:'#B2DCCE',gold:'#FACB3A',ink:'#111111',paper:'#FBF8F1',grey:'#5A554B'};
+const NS='http://www.w3.org/2000/svg';
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const eio=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const eo=x=>{x=clamp(x);return 1-Math.pow(1-x,3)};
+const prog=(t,a,b)=>clamp((t-a)/(b-a));
+function el(p,t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;p.appendChild(e);return e}
+function T(p,x,y,s,size,fill,anchor,w){return el(p,'text',{x,y,'font-family':'Inter','font-weight':w||800,'font-size':size,fill,'text-anchor':anchor||'middle'},s)}
+// shared SAFE title zone (same as every Animated Shorts series): baselines 395/490, counter row at 525, content x 60-1020
+const T1=395,T2=490,PY=525;
+function headline(g,l1,l2,mark){
+ const hs=86, mk=el(g,'rect',{fill:C.gold});
+ const t1=el(g,'text',{x:540,y:T1,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l1);
+ const t2=el(g,'text',{x:540,y:T2,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l2);
+ const w=Math.max(t1.getComputedTextLength(),t2.getComputedTextLength());
+ if(w>900){const f=Math.floor(hs*900/w);t1.setAttribute('font-size',f);t2.setAttribute('font-size',f)}
+ const in1=l1.includes(mark),tx=in1?t1:t2,line=in1?l1:l2,i0=line.indexOf(mark),fs=+tx.getAttribute('font-size');
+ const xs=tx.getStartPositionOfChar(i0).x,xe=tx.getEndPositionOfChar(i0+mark.length-1).x;
+ Object.entries({x:xs-6,width:xe-xs+12,y:(in1?T1:T2)-Math.round(fs*.4),height:Math.round(fs*.47)}).forEach(([k,v])=>mk.setAttribute(k,v));
+}
+// value format: identical rules to thennow_short.py fmt()
+function fmt(v,cur,suf){const a=Math.abs(v);let s;
+ if(a>=1e9)s=(a/1e9).toFixed(a>=1e10?1:2)+'bn';else if(a>=1e6)s=(a/1e6).toFixed(1)+'m';
+ else if(a>=1e5)s=(Math.round(a/1000)*1000).toLocaleString('en-GB');else if(a>=1e4)s=(Math.round(a/10)*10).toLocaleString('en-GB');
+ else if(a>=100)s=Math.round(a).toLocaleString('en-GB');else s=a.toFixed(2);
+ return (v<0?'−':'')+cur+s+(suf||'')}
+function axis(v,cur,suf){const a=Math.abs(v);let s;if(a>=1e9)s=+(a/1e9).toFixed(1)+'bn';else if(a>=1e6)s=+(a/1e6).toFixed(1)+'m';else if(a>=1e3)s=+(a/1e3).toFixed(0)+'k';else s=String(+a.toFixed(2));return cur+s+(suf||'')}
+let D,TL,KEYS,FULLV,STEP,COL,N;
+function BUILD(d){
+ D=d;N=D.years.length-1;COL=PAL[D.colour]||PAL.blue;
+ const pace=clamp(18/N,0.45,0.8);
+ KEYS=[[0,0],[1.0,0]];let t=1.0;const evIdx=D.events.map(e=>e[0]-D.years[0]);
+ for(let i=1;i<=N;i++){t+=pace;KEYS.push([t,i]);if(evIdx.includes(i)){t+=0.95;KEYS.push([t,i])}}
+ TL={rideEnd:t,pull:[t+0.3,t+2.8],hold:t+2.9,ans:t+3.9,end:t+9.0};
+ const all=D.main.concat(D.compare||[]);FULLV=Math.max(...all)*1.22;
+ const raw=FULLV/5,mag=Math.pow(10,Math.floor(Math.log10(raw)));STEP=[1,2,2.5,5,10].map(m=>m*mag).find(s=>s>=raw);
+ const ticks=[];for(let k=1;k<KEYS.length;k++){if(KEYS[k-1][1]!==KEYS[k][1])ticks.push(KEYS[k][0])}
+ window.BEATS={total:TL.end,cold:0,ticks,patter:[],rolls:[],glides:[[TL.pull[0],TL.pull[1]-TL.pull[0]]],swells:[[TL.pull[1],1.6]],lands:[[TL.pull[1],1.0]],notes:[],hold:TL.hold,reveal:TL.ans,
+  qa:[0.05,3,7,11,15,TL.rideEnd-1,TL.pull[1]+0.3,TL.ans+1.5],thumb_ms:Math.round((TL.hold+0.6)*1000)};
+ D.events.forEach(e=>{const i=e[0]-D.years[0];BEATS.lands.push([evT(i),0.5]);BEATS.notes.push([evT(i)+0.05,76+(i%3)*3])});
+}
+function evT(i){const k=KEYS.find(k=>k[1]===i);return k?k[0]:0}
+function nowAt(t){let i=0;while(i<KEYS.length-2&&t>=KEYS[i+1][0])i++;const a=KEYS[i],b=KEYS[i+1];return a[1]+(b[1]-a[1])*prog(t,a[0],b[0])}
+const val=(arr,f)=>{const i=Math.floor(f),u=f-i;return i+1<arr.length?arr[i]+(arr[i+1]-arr[i])*u:arr[i]};
+function setTime(t){
+ const now=nowAt(Math.min(t,TL.rideEnd));
+ const rideWin=[now-5.2,now+1.8],full=[-0.4,N+0.6];
+ const lo=Math.max(0,Math.floor(now-5.2));const vis=[];for(let i=lo;i<=now;i++){vis.push(D.main[i]);if(D.compare)vis.push(D.compare[i])}
+ const rideV=Math.max(val(D.main,now),...(D.compare?[val(D.compare,now)]:[]),...vis)*1.3;
+ const p=eio(prog(t,TL.pull[0],TL.pull[1]));
+ const win=[rideWin[0]+(full[0]-rideWin[0])*p,rideWin[1]+(full[1]-rideWin[1])*p],vmax=rideV+(FULLV-rideV)*p;
+ FRAME({now,win,vmax,t});
+}
+function tease(){setTime(TL.hold+0.6)}
+function answer(){setTime(TL.end-0.05)}
+function FRAME(o){
+ const sv=document.getElementById('sv');sv.innerHTML='';const g=el(sv,'g',{});
+ const answerOn=o.t>=TL.ans,reveal=prog(o.t,TL.ans,TL.ans+0.4),hold=prog(o.t,TL.hold,TL.hold+0.4);
+ const hq=el(g,'g',{opacity:1-prog(o.t,TL.ans,TL.ans+0.4)});headline(hq,...D.headline_q);
+ const ha=el(g,'g',{opacity:prog(o.t,TL.ans+0.1,TL.ans+0.5)});headline(ha,...D.headline_a);
+ const Y=D.years,now=o.now;
+ {const t=T(g,540,PY+49,String(Math.floor(Y[0]+now+1e-6)),38,C.paper);const w=Math.max(260,t.getComputedTextLength()+70);g.insertBefore(el(g,'rect',{x:540-w/2,y:PY,width:w,height:72,rx:8,fill:'#1b1b1b'}),t)}
+ const [ya,yb]=o.win,BX=[110,960],BY=[745,1385],vmax=o.vmax;
+ const X=i=>BX[0]+(i-ya)/(yb-ya)*(BX[1]-BX[0]),V=v=>BY[1]-v/vmax*(BY[1]-BY[0]);
+ const gap=STEP/vmax*(BY[1]-BY[0]);
+ for(let v=STEP;v<vmax;v+=STEP){const lab=gap>70||Math.round(v/STEP)%2===0;el(g,'line',{x1:BX[0],x2:BX[1],y1:V(v),y2:V(v),stroke:'#D8D2C4','stroke-width':2,opacity:lab?1:0.5});if(lab)T(g,BX[0]+4,V(v)-10,axis(v,D.currency,D.suffix),22,C.grey,'start',600)}
+ el(g,'line',{x1:BX[0],x2:BX[1],y1:BY[1],y2:BY[1],stroke:C.ink,'stroke-width':3});
+ const ystep=(yb-ya)>14?(N>30?5:4):(yb-ya)>8?2:1;
+ for(let i=Math.max(0,Math.ceil(ya));i<=Math.min(N,yb);i++){if((Y[0]+i)%ystep)continue;T(g,X(i),BY[1]+40,String(Y[0]+i),24,C.grey,'middle',600)}
+ const pts=arr=>{const a=[];for(let i=Math.max(0,Math.floor(ya)-1);i<=Math.floor(now);i++)a.push([X(i),V(arr[i])]);a.push([X(now),V(val(arr,now))]);return a};
+ const cp=el(g,'clipPath',{id:'cc'});el(cp,'rect',{x:BX[0],y:0,width:BX[1]-BX[0]+60,height:1920});const cg=el(g,'g',{'clip-path':'url(#cc)'});
+ const pp=pts(D.main),path=a=>'M'+a.map(p=>p.join(' ')).join(' L');
+ if(D.compare){const pe=pts(D.compare);
+  el(cg,'path',{d:path(pp)+' L'+pe.slice().reverse().map(p=>p.join(' ')).join(' L')+'Z',fill:D.gap_colour==='teal'?C.lteal:C.lred,opacity:.75});
+  el(cg,'path',{d:path(pe),fill:'none',stroke:PAL.teal,'stroke-width':7,'stroke-linejoin':'round'})}
+ el(cg,'path',{d:path(pp),fill:'none',stroke:COL,'stroke-width':9,'stroke-linejoin':'round'});
+ // events: a dotted marker drops in when the tip reaches it; labels alternate height when close
+ let lastx=-999,row=0;
+ for(const ev of D.events){const i=ev[0]-Y[0];if(i>now+1e-6||X(i)<BX[0]-5)continue;const x=X(i);row=(x-lastx<170)?1-row:0;lastx=x;const ly=BY[0]-50-row*62;
+  const k=eo(clamp((o.t-evT(i))*2.5));const eg=el(g,'g',{opacity:k});
+  el(eg,'line',{x1:x,x2:x,y1:BY[0]-10,y2:BY[0]-10+(BY[1]-BY[0]+10)*k,stroke:C.ink,'stroke-width':2,'stroke-dasharray':'6 8',opacity:.55});
+  const lt=T(eg,x,ly,ev[1],26,C.ink,'middle',800),hw=lt.getComputedTextLength()/2,lx=Math.max(60+hw,Math.min(1020-hw,x));lt.setAttribute('x',lx);T(eg,lx,ly+28,String(ev[0]),22,C.grey,'middle',600)}
+ // tip labels
+ const tx=X(now),pv=val(D.main,now);
+ el(g,'circle',{cx:tx,cy:V(pv),r:12,fill:COL});
+ const right=tx<760,anc=right?'start':'end',dx=right?24:-20,py=right?V(pv)-6:V(pv)-58;
+ T(g,tx+dx,py,fmt(pv,D.currency,D.suffix),40,COL,anc);T(g,tx+dx,py+30,D.main_label,22,C.ink,anc,700);
+ if(D.compare){const ev_=val(D.compare,now);el(g,'circle',{cx:tx,cy:V(ev_),r:10,fill:PAL.teal});
+  const ey=right?V(ev_)+10:V(ev_)-46;T(g,tx+dx,ey,fmt(ev_,D.currency,D.suffix),32,PAL.teal,anc);T(g,tx+dx,ey+28,D.compare_label,22,C.ink,anc,700)}
+ // live chip -> hidden total -> gold reveal
+ if(answerOn){const s_=1+0.06*Math.sin(Math.PI*clamp(reveal));const bg=el(g,'g',{transform:`translate(540,1500) scale(${s_}) translate(-540,-1500)`});
+  el(bg,'rect',{x:110,y:1458,width:860,height:84,fill:C.gold});fitT(T(bg,540,1513,D.final,40,C.ink),820)}
+ else if(hold>0){const bg=el(g,'g',{opacity:hold});el(bg,'rect',{x:110,y:1458,width:860,height:84,fill:C.gold});fitT(T(bg,540,1513,D.tease,40,C.ink),820)}
+ else{const txt=D.compare?'= '+(val(D.main,now)/val(D.compare,now)).toFixed(1)+' '+D.ratio_label:(val(D.main,now)>=D.main[0]?'+':'−')+Math.abs(Math.round((val(D.main,now)/D.main[0]-1)*100))+'% since '+Y[0];
+  const t2=T(g,540,1510,txt,36,C.paper);const cw=t2.getComputedTextLength()+60;g.insertBefore(el(g,'rect',{x:540-cw/2,y:1462,width:cw,height:70,fill:C.ink}),t2)}
+ fitT(T(g,540,1598,D.source,22,'#444','middle',500),900);
+}
+function fitT(e,w){const l=e.getComputedTextLength();if(l>w)e.setAttribute('font-size',(+e.getAttribute('font-size')*w/l).toFixed(1));return e}
+</script></body></html>

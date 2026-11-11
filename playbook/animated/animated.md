@@ -45,6 +45,9 @@ Post the best candidate only if its score is at least its `min_score` (60 by def
 If the best candidate fails verification or the renderer exits 3/4, try the next one (same standard; never
 loosen sourcing). If nothing qualifies: post nothing today and log a "skipped" line with the reasons.
 
+CROSS-SERIES RULE (11 Nov 2026): the same SUBJECT (e.g. UK house prices, debt interest, one company) is never posted by
+two different animation series within 14 days; also check the Daily Post log (playbook/log.jsonl) as before.
+
 ## 3. Timing and posting
 - Post time: 17:00 Europe/London today, Buffer mode `customScheduled`, schedulingType `automatic`.
   The run finishes by early afternoon; if 17:00 is less than 30 minutes away, skip the day.
