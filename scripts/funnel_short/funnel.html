@@ -185,7 +185,7 @@ const view=j=>(Ys[j]+Ys[j+1])/2+40;
 // wide shot: fit the whole world between the header and the caption-safe line
 const top=Yt-10, bot=YN+215, availTop=(SAFE?635:430)+HO, availBot=SAFE?1560:1690;
 const WS=Math.min(.75,(availBot-availTop)/(bot-top)), WCY=(top+bot)/2, WSY=(availTop+availBot)/2;
-const CAM=D.title_mode==='fade'?[[0,455,1,SY],[1.2,485,1,SY],[4.0,view(0)-12,1,SY]]:[[0,540,1,SY],[.8,540,1,SY],[4.3,view(0)-12,1,SY]];
+const CAM=D.title_mode==='fade'?[[0,530,1,SY],[1.2,560,1,SY],[4.0,view(0)-12,1,SY]]:[[0,540,1,SY],[.8,540,1,SY],[4.3,view(0)-12,1,SY]];
 // fade mode: after the zoom-in the camera drifts slowly over the top of the funnel for 1.5 s (segment labels readable,
 // never still), then the main move down to revenue; the title fade and money bar follow that main move
 steps.forEach((s,j)=>{CAM.push([s.b+1.8,view(j),1,SY]);if(j<steps.length-1)CAM.push([s.b+4.0,view(j+1)-12,1,SY])});
@@ -242,7 +242,8 @@ function draw(t,o){o=o||{};
  $('logo').setAttribute('opacity',$('pill').getAttribute('opacity'));
  const tfh=TOPF+HO-CDY-70*eio(wide);
  if(MASKFADE){$('tf').setAttribute('opacity',0);$('bf').setAttribute('opacity',0);
-  const hid=(PY+HO+72-CDY+(FADE?80*up:0))*(1-wide)+(tfh*.72)*wide,vis=Math.max(hid+100*(1-wide)+40*wide,tfh-CDY*0.4);   // chart hidden above the money bar, then fades in
+  const hid=(FADE?(PY+HO-72)*(1-up)+(PY+HO+72-200+80)*up:PY+HO+72-CDY)*(1-wide)+(tfh*.72)*wide,   // fade mode: the funnel tip sits close under the title (user 11 Nov 2026)
+  vis=FADE?hid+(40+60*up)*(1-wide)+40*wide:Math.max(hid+100*(1-wide)+40*wide,tfh-CDY*0.4);   // chart hidden above the money bar, then fades in
   document.getElementById('m1').setAttribute('offset',(hid/1920).toFixed(4));document.getElementById('m2').setAttribute('offset',(vis/1920).toFixed(4));
   const bo=1-wide;document.getElementById('m3').setAttribute('offset',((BOTF+(1920-BOTF)*wide)/1920).toFixed(4));
   document.getElementById('m4').setAttribute('offset',Math.min(1,(BOTF+168+(1920-BOTF)*wide)/1920).toFixed(4));}
