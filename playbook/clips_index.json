@@ -11,19 +11,19 @@
         "date": "2026-11-11",
         "time_utc": "13:37",
         "platforms": {
-          "tiktok": "6af43fbdf41d6d2bbb6324c2",
-          "facebook": "6af43fbedb6e84f20bed7c8e",
-          "instagram": "6af43fc8f41d6d2bbb632bd3"
+          "tiktok": "6af45cede0bb54c4a7eeb6f7"
         },
         "status": "scheduled"
       }
     ],
-    "short_file": "Documentary-full-v7-short.mp4",
+    "short_file": "Documentary-full-v7-short-cap.mp4",
     "short_title": [
       "Why bonds rise when",
       "stocks fall?",
-      "stocks fall"
+      ""
     ],
-    "cover_at": 19.0
+    "cover_at": 19.0,
+    "captions": true,
+    "uncaptioned_file": "Documentary-full-v7-short.mp4"
   }
 ]
