@@ -86,10 +86,10 @@ function ribbon(a0,a1,ya,b0,b1,yb,fill,dcol,n,seed,ta,tb){
  const grp=el(W,'g',{mask:`url(#m${id})`});
  el(grp,'path',{d:`M${a0} ${ya} C${a0} ${ym} ${b0} ${ym} ${b0} ${yb} L${b1} ${yb} C${b1} ${ym} ${a1} ${ym} ${a1} ${ya}Z`,fill});
  let s=seed;const R=()=>{s=(s*9301+49297)%233280;return s/233280};
- const ds=[];for(let i=0;i<n;i++){ds.push({u:.1+.8*R(),ph:R(),e:el(grp,'line',{stroke:dcol,'stroke-width':5,'stroke-linecap':'round'})})}
+ const ds=[];for(let i=0;i<n;i++){ds.push({u:.1+.8*R(),ph:R(),sp:D.dash_vary?.85+.3*R():1,ln:D.dash_vary?.025+.03*R():.04,e:el(grp,'line',{stroke:dcol,'stroke-width':5,'stroke-linecap':'round'})})}
  ribbons.push({a0,a1,ya,b0,b1,yb,ym,g,ds,ta,tb});
 }
-const nd=w=>Math.max(3,Math.round(w/18));
+const nd=w=>Math.max(3,Math.round(w/18*(D.dash_density||1)));
 // funnel mouth: segments spread over the full width
 let segs=(D.segments&&D.segments.length)?D.segments.map(s=>({lines:s.lines,value:s.value})):[{lines:[D.start.label],value:rev}];
 // at most 3 bands across the mouth: the two largest segments plus 'Other' (keeps every label readable on a phone)
@@ -213,13 +213,13 @@ function draw(t,o){o=o||{};
   r.g.setAttribute('y1',front-60);r.g.setAttribute('y2',front);
   for(const d of r.ds){
    // particles are released from the TOP of each stream when it opens and swarm down, then keep flowing (user 11 Nov 2026)
-   const q=(t-Math.max(r.ta,0))*0.3-d.ph;if(q<0){d.e.setAttribute('opacity',0);continue}
+   const q=(t-Math.max(r.ta,0))*0.3*d.sp-d.ph;if(q<0){d.e.setAttribute('opacity',0);continue}
    const tt=(q%1)*0.94;
    const xa=r.a0+d.u*(r.a1-r.a0),xb=r.b0+d.u*(r.b1-r.b0);
    const bx=q=>{const m=1-q;return m*m*m*xa+3*m*m*q*xa+3*m*q*q*xb+q*q*q*xb};
    const by=q=>{const m=1-q;return m*m*m*r.ya+3*m*m*q*r.ym+3*m*q*q*r.ym+q*q*q*r.yb};
    const op=Math.min(1,tt/.08,(.94-tt)/.08)*.6;
-   d.e.setAttribute('x1',bx(tt));d.e.setAttribute('y1',by(tt));d.e.setAttribute('x2',bx(tt+.04));d.e.setAttribute('y2',by(tt+.04));d.e.setAttribute('opacity',op.toFixed(3));
+   d.e.setAttribute('x1',bx(tt));d.e.setAttribute('y1',by(tt));d.e.setAttribute('x2',bx(tt+d.ln));d.e.setAttribute('y2',by(tt+d.ln));d.e.setAttribute('opacity',op.toFixed(3));
   }}
  for(const a of anims){
   if(a.kind==='bar'){const p=eo(prog(t,a.t,a.t+.4));a.e.setAttribute('width',a.w*p)}
