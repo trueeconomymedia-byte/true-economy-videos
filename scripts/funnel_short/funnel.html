@@ -222,7 +222,7 @@ function draw(t,o){o=o||{};
  const [cy,s,sy]=o.cam||cam(t);W.setAttribute('transform',`translate(${540-540*s} ${sy-cy*s}) scale(${s})`);
  const wide=o.wide!=null?o.wide:prog(t,PULL0+.7,PULL0+1.9);
  const qa=o.tease?0:eo(prog(t,PULL0+.9,PULL0+1.4)), aa=o.tease?0:eo(prog(t,PULL0+1.3,PULL0+1.9));
- const FADE=D.title_mode==='fade';   // 'fade' (test): the title is pushed up and fades out, the money bar takes its place
+ const FADE=D.title_mode==='fade';   // 'fade' (DEFAULT, user 11 Nov 2026; set by funnel_short.py): the title is pushed up and fades out, the money bar takes its place
  const up=o.up!=null?o.up:eio(prog(t,CAM[1][0],CAM[2][0])),TDY=FADE?150:112,TSC=1,CDY=(FADE?200:84)*up,BDY=FADE?200:CDY;   // moves WITH the first camera move (the chart shifting up under the title)
  const ht=`translate(0 ${-TDY*up}) translate(540 ${T1+HO}) scale(${TSC}) translate(-540 ${-(T1+HO)})`;
  $('hq').setAttribute('transform',ht);
@@ -253,7 +253,7 @@ function frameAt(T){ // T = output time
   const r=D.title_mode==='fade'?(u=>.5*u+.5*eo(u))(prog(T,0,COLD)):eio(prog(T,.55,COLD));   // fade mode: zooming from the very first frame (user 11 Nov 2026: no still moment)
   const tv=END*(1-r);                       // content rewinds from the finished chart back to the start
   const wc=[WCY,WS,WSY],oc=[CAM[0][1],1,SY],c=[wc[0]+(oc[0]-wc[0])*r,wc[1]+(oc[1]-wc[1])*r,wc[2]+(oc[2]-wc[2])*r];
-  draw(tv,{cam:c,tease:true,wide:1-r,pill:prog(T,COLD-.35,COLD),src:1-prog(T,.55,.9),tt:T,...(D.title_mode==='fade'?{up:0}:{})});   // fade mode: the hook title stays put through the zoom-in
+  draw(tv,{cam:c,tease:true,wide:1-r,pill:prog(T,COLD-.35,COLD),src:D.title_mode==='fade'?1-prog(T,.03,.2):1-prog(T,.55,.9),tt:T,...(D.title_mode==='fade'?{up:0}:{})});   // fade mode: the hook title stays put through the zoom-in
   return;}
  draw(T-COLD);
 }

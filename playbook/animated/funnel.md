@@ -7,6 +7,14 @@ whole chart. Calm news-style sound (quiet swooshes, clear counter ticks, warm pi
 Renderer: `python3 scripts/funnel_short/funnel_short.py data.json OUTDIR SLUG` (read its docstring for the data
 format). Never change the look, timing or sound inside the renderer; only the data changes.
 
+OPENING AND MONEY BAR (user default 11 Nov 2026, renderer default; never override): ONE video for every platform. It
+opens fully zoomed out (the whole chart, answer hidden, under the hook title) and zooms in from the very first frame
+(no still moment), lands just above the funnel mouth so the top segment labels are readable, drifts slowly over them
+(~1.5 s), then moves down to the first stage. As it moves, the hook title is pushed up and fades out, and the MONEY BAR
+takes its place: the running amount ("$92.3B in", "$62.6B left") in big ink type over a short thick bar that starts
+all gold and turns dark red from the right as each cost is taken. A band of clear paper separates the bar from the
+chart. No black pill. At the end it pulls back to the whole chart and the answer title. Buffer cover = thumbnailOffset 33.
+
 ## Writing the data (all episodes)
 - The story is always: a starting amount -> pieces taken off (or added) -> what is left, which is the payoff.
 - 1-5 steps. Merge small items into one step called "Everything else" or "Other costs"; 3-4 steps is best.

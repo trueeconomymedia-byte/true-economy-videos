@@ -26,7 +26,7 @@
      "{slug}-qa-auto.jpg",
      "{slug}-qa-youtube.jpg"
     ],
-    "thumbnail_offset_ms": 200
+    "thumbnail_offset_ms": 33
    },
    "unsupported_exit": 3,
    "episodes": {

@@ -56,8 +56,8 @@ two different animation series within 14 days; also check the Daily Post log (pl
   and mention it in the final message.
 - Channels: every connected Buffer channel that takes video EXCEPT YouTube (the user posts YouTube by hand), and
   never a platform that playbook/brain/routing.json excludes for this series id.
-- Video: the renderer's `buffer` output (cold-open version: the full chart is the first frame). Add
-  `"metadata": {"thumbnailOffset": 200}` to the video asset so the cover is that first frame.
+- Video: the renderer's `auto` output (the full chart is the first frame and it zooms in at once). Add
+  `"metadata": {"thumbnailOffset": 33}` to the video asset so the cover is that first frame.
 - YouTube: SendUserFile the `youtube` output and the `thumb` image, plus a suggested YouTube title (under 70
   characters, ending #Shorts) and a 2-sentence description with 3 hashtags.
 

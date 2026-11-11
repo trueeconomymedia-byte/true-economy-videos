@@ -5,8 +5,10 @@ animation style in playbook/animated/registry.json:
     python3 funnel_short.py data.json OUTDIR SLUG
 
 Writes to OUTDIR:
-  SLUG-auto.mp4          cold open (full chart, answer hidden, rewinds into the funnel) -> posted through Buffer
-  SLUG-youtube.mp4       starts straight on the hook -> sent to the user, who posts YouTube by hand
+  SLUG-auto.mp4          opens fully zoomed out (full chart, answer hidden) and zooms straight in, no still moment; the hook
+                         title fades as the chart moves up and the money bar (amount + gold/dark-red bar) takes its place
+                         (user default 11 Nov 2026) -> Buffer, thumbnailOffset 33 (first frame)
+  SLUG-youtube.mp4       the SAME video -> sent to the user, who posts YouTube by hand
   SLUG-thumb-tease.png   full chart with the answer hidden -> YouTube custom thumbnail
   SLUG-thumb-answer.png  full chart with the answer
   SLUG-qa-auto.jpg, SLUG-qa-youtube.jpg  contact sheets of key frames: LOOK at them
@@ -31,7 +33,7 @@ OR the generic format (salary, government, prices, household, news):
   logo_key (optional)                             looks for scripts/assets/logos/<logo_key>.png|svg
 Needs: node + playwright (pre-installed), ffmpeg, numpy, scipy. Fonts: Lora (scripts/assets) and Inter (system).
 """
-import json, os, subprocess, sys
+import json, os, shutil, subprocess, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 def fmt_money(v, fmt):
@@ -88,9 +90,12 @@ def main():
     g = from_company(d) if "rev" in d and "steps" not in d else d
     check(g)
     g.setdefault("ink", True)          # printed-ink finish on the card paper is the default (user-approved 11 Nov 2026)
+    g.setdefault("title_mode", "fade") # user default 11 Nov 2026: hook title fades as the chart moves up, the money bar takes its place
+    g.setdefault("bar_red", "dark")    # user default 11 Nov 2026: money bar = gold left, dark red taken
     gpath = os.path.join(outdir, f"{slug}-funnel-data.json"); json.dump(g, open(gpath, "w"), ensure_ascii=False, indent=1)
-    subprocess.run(["node", os.path.join(HERE, "funnel_render.js"), gpath, outdir, slug], check=True)
-    for v in ("auto", "youtube"):
+    # ONE video for every platform (user default 11 Nov 2026): opens fully zoomed out and zooms in at once; YouTube gets the same file
+    subprocess.run(["node", os.path.join(HERE, "funnel_render.js"), gpath, outdir, slug], check=True, env={**os.environ, "FUNNEL_VARIANTS": "auto"})
+    for v in ("auto",):
         beats = os.path.join(outdir, f"{slug}-beats-{v}.json")
         wav = os.path.join(outdir, f"{slug}-{v}.wav")
         subprocess.run([sys.executable, os.path.join(HERE, "funnel_audio.py"), beats, wav], check=True)
@@ -105,6 +110,8 @@ def main():
         subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", final, "-vf", f"select='{sel}',scale=360:-1,tile={len(ts)}x1",
                         "-frames:v", "1", "-vsync", "0", os.path.join(outdir, f"{slug}-qa-{v}.jpg")], check=True)
         print(f"done {v}: {final} ({b['total']:.1f}s)")
+    for a, b_ in ((f"{slug}-auto.mp4", f"{slug}-youtube.mp4"), (f"{slug}-qa-auto.jpg", f"{slug}-qa-youtube.jpg")):
+        shutil.copyfile(os.path.join(outdir, a), os.path.join(outdir, b_))
     print("thumbnails:", os.path.join(outdir, f"{slug}-thumb-tease.png"), os.path.join(outdir, f"{slug}-thumb-answer.png"))
 
 if __name__ == "__main__":
