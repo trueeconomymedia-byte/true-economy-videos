@@ -104,7 +104,7 @@ function FRAME(o){
  if(answerOn){const s_=1+0.06*Math.sin(Math.PI*clamp(reveal));const bg=el(g,'g',{transform:`translate(540,1500) scale(${s_}) translate(-540,-1500)`});
   el(bg,'rect',{x:110,y:1458,width:860,height:84,fill:C.gold});fitT(T(bg,540,1513,D.final,40,C.ink),820)}
  else if(hold>0){const bg=el(g,'g',{opacity:hold});el(bg,'rect',{x:110,y:1458,width:860,height:84,fill:C.gold});fitT(T(bg,540,1513,D.tease,40,C.ink),820)}
- else{const txt=D.compare?'= '+(val(D.main,now)/val(D.compare,now)).toFixed(1)+' '+D.ratio_label:(val(D.main,now)>=D.main[0]?'+':'−')+Math.abs(Math.round((val(D.main,now)/D.main[0]-1)*100))+'% since '+Y[0];
+ else{const txt=D.compare?'= '+(val(D.main,now)/val(D.compare,now)).toFixed(1)+(D.ratio_style==='years'?' ':'x ')+D.ratio_label:(val(D.main,now)>=D.main[0]?'+':'−')+Math.abs(Math.round((val(D.main,now)/D.main[0]-1)*100))+'% since '+Y[0];
   const t2=T(g,540,1510,txt,36,C.paper);const cw=t2.getComputedTextLength()+60;g.insertBefore(el(g,'rect',{x:540-cw/2,y:1462,width:cw,height:70,fill:C.ink}),t2)}
  fitT(T(g,540,1598,D.source,22,'#444','middle',500),900);
 }

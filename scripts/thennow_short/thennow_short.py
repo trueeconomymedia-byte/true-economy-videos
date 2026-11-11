@@ -25,12 +25,15 @@ data.json:
   start_year, end_year   optional: trim the library series (10-40 years)
   currency   "$" | "£" | "€" | "" ; suffix optional, e.g. "%" for rates
   main_label     short label at the tip, e.g. "typical new home"
-  compare_label  optional, e.g. "median household income"; ratio_label e.g. "years of income" (main ÷ compare)
+  compare_label  optional, e.g. "median income"; ratio_style "times" (default, user rule 11 Nov 2026: chip "= 3.9x median income",
+             answer "1995: 3.9x → 2025: 4.7x median income") | "years" ("= 3.9 years of income"); ratio_label the words
+             after the ratio, default "median income" (times) / "years of income" (years). Say "median" when the data is a
+             median (never call a median "average")
   colour     main line: "blue" (default) | "red" | "teal"; gap_colour "red" (main outruns compare, default) | "teal"
   events     [[year, "label"], ...] at most 5, each verified (playbook/animated/events.json), inside the years
   headline_q [line1, line2, words to mark gold]  e.g. ["In {y0}, a new US home", "cost {start}.", "{start}"]
-  headline_a [line1, line2, words to mark gold]  e.g. ["Now it costs {end}:", "{ratio_end} years of income.", "{ratio_end} years"]
-  final, tease  optional; defaults: "{y0}: {ratio_start} years → {y1}: {ratio_end} years" / "... → {y1}: ?? years"
+  headline_a [line1, line2, words to mark gold]  e.g. ["Now it costs {end}:", "{ratio_end}x median income.", "{ratio_end}x"]
+  final, tease  optional; defaults (times): "{y0}: {ratio_start}x → {y1}: {ratio_end}x median income" / "... → {y1}: ??x median income"
              (without a compare line: "{y0}: {start} → {y1}: {end}" / "... → {y1}: {cur}??")
   source     e.g. "Source: U.S. Census Bureau & HUD via FRED (MSPUS, MEHOINUSA646N)"
   Placeholders: {y0} {y1} {start} {end} {cstart} {cend} {ratio_start} {ratio_end} {pct} {times} {cur}
@@ -92,14 +95,20 @@ def main():
         if h[2] not in h[0] and h[2] not in h[1]: fail(4, f"CHECK: marker '{h[2]}' is not in the headline {h[:2]}")
         for line in h[:2]:
             if len(line) > MAXLINE: fail(4, f"CHECK: headline line '{line}' is {len(line)} characters (max {MAXLINE}); shorten it")
-    rl = d.get("ratio_label", "years of income")
+    rs = d.get("ratio_style", "times")      # user rule 11 Nov 2026: "3.9x median income" is how people talk about it
+    if rs not in ("times", "years"): fail(4, f"CHECK: ratio_style must be 'times' or 'years', not {rs!r}")
+    rl = d.get("ratio_label", "median income" if rs == "times" else "years of income")
     if comp:
-        final = X(d.get("final", "{y0}: {ratio_start} years  →  {y1}: {ratio_end} years"))
-        tease = X(d.get("tease", "{y0}: {ratio_start} years  →  {y1}: ?? years"))
+        if rs == "times":
+            final = X(d.get("final", "{y0}: {ratio_start}x  →  {y1}: {ratio_end}x " + rl))
+            tease = X(d.get("tease", "{y0}: {ratio_start}x  →  {y1}: ??x " + rl))
+        else:
+            final = X(d.get("final", "{y0}: {ratio_start} years  →  {y1}: {ratio_end} years"))
+            tease = X(d.get("tease", "{y0}: {ratio_start} years  →  {y1}: ?? years"))
     else:
         final = X(d.get("final", "{y0}: {start}  →  {y1}: {end}")); tease = X(d.get("tease", "{y0}: {start}  →  {y1}: {cur}??"))
     g = {"years": years, "main": main_v, "compare": comp, "currency": cur, "suffix": suf, "main_label": d["main_label"],
-         "compare_label": d.get("compare_label", ""), "ratio_label": rl, "colour": d.get("colour", "blue"),
+         "compare_label": d.get("compare_label", ""), "ratio_label": rl, "ratio_style": rs, "colour": d.get("colour", "blue"),
          "gap_colour": d.get("gap_colour", "red"), "events": ev, "headline_q": hq, "headline_a": ha, "final": final,
          "tease": tease, "source": d["source"], "numbers": fill}
     gpath = os.path.join(outdir, f"{slug}-build.json"); json.dump(g, open(gpath, "w"), ensure_ascii=False, indent=1)

@@ -5,7 +5,7 @@ IN THE PAST on one value (the hook: "In 1995, a new US home cost $133,000."), th
 forward year by year (a tick per year, year counter in the pill), dotted event markers drop in as the line passes them
 (soft hit + piano note), an optional comparison line (income, wages, inflation) runs underneath with the gap shaded, a
 live chip shows "= X years of income" (or "+X% since 1995"), then the camera pulls back to the whole climb, the answer
-is hidden ("2025: ?? years") and revealed in gold. ~31 s. Same video for YouTube and Buffer; Buffer cover =
+is hidden ("2025: ??x median income") and revealed in gold. ~31 s. Same video for YouTube and Buffer; Buffer cover =
 thumbnailOffset `thumb_ms` from SLUG-build.json (the whole climb with the answer hidden).
 Renderer: `python3 scripts/thennow_short/thennow_short.py data.json OUTDIR SLUG` (read its docstring). Never change the
 look, timing or sound inside the renderer; only the data changes.
@@ -21,6 +21,13 @@ look, timing or sound inside the renderer; only the data changes.
   light red when the main line outruns the comparison (gap_colour "teal" if the comparison pulls ahead: good news).
 - Inflation: when comparing a price with itself over decades, prefer a comparison line (wages, income) over raw prices;
   if no comparison exists, say "not adjusted for inflation" in the caption, or use a real (inflation-adjusted) series.
+
+- RATIO WORDING (user rule, 11 Nov 2026): a price compared with income is shown as "N x income", the way people talk
+  about it: chip "= 3.9x median income", answer box "1995: 3.9x → 2025: 4.7x median income", headline_a e.g.
+  ["Now it costs {end}:", "{ratio_end}x median income.", "{ratio_end}x"] (ratio_style "times", the renderer default).
+  Never "years of income". Label the comparison line by what the data is: a median is "median income" (never
+  "average income", which is the mean and a different, higher number); a true mean may be called "average income".
+  Captions use the same "3.9x" wording.
 
 ## 2. The data library (no downloads needed)
 - Every verified series lives in `playbook/animated/data/<id>.json`: {"id", "years", "main": {"label", "values",
