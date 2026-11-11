@@ -57,3 +57,7 @@
 - 4) `python3 scripts/captions.py clips/ready/<stem>-short.mp4 /tmp/captions.json /tmp/<stem>-cap.mp4 SLOT_Y SLOT_H` (same slot numbers as the cover frame), then replace clips/ready/<stem>-short.mp4 with it. LOOK at 3 frames (start, middle, a marked phrase): one line, centred, below the video, marker on the right words. Save the reviewed captions to clips/captions/<stem>.json and record "captions": true in clips_index.json.
 - 5) Then run the cover frame step with TARGET = the captioned Short.
 - Vertical clips already have burned-in captions: skip this step.
+
+## Platforms (user, 11 Nov 2026; overrides older wording about posting to every channel)
+- Clip Shorts are scheduled in Buffer to TikTok ONLY. Do not post clips to Facebook or Instagram (or any other Buffer channel).
+- YouTube: the user uploads by hand. Each run sends the user (SendUserFile, display "attach") the exact posted file plus a thumbnail JPG (the cover frame: a full 1080x1920 frame at 0.05 s of the posted file), then a SendUserMessage with a ready-to-paste YouTube title (under 70 characters, ending #Shorts), a 2-sentence description and 3 hashtags. YouTube may not use the first frame as the thumbnail, hence the separate JPG.

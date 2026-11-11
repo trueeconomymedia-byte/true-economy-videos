@@ -191,3 +191,6 @@ The scripts already use these values (te_lib, make_flow, make_mkts, video_card, 
 ## 2026-11-11 CLIP SHORTS: SPOKEN CAPTIONS (user chose style B)
 - Landscape -> Short titles have NO gold marker any more (pass "" as the gold-words argument). Gold appears only in the spoken captions under the video, on one key word/number per phrase.
 - Captions: Inter Bold, ink, one centred line just below the video, short 2-5 word phrases synced to the voice (scripts/transcribe.py + scripts/captions.py; rules in clips.md "Spoken captions under the video"). Must stay inside every platform's safe zone.
+
+## 2026-11-11 CLIP SHORTS: TIKTOK ONLY + YOUTUBE COPY FOR THE USER
+- Clip Shorts go to TikTok only via Buffer (no Facebook, no Instagram). The run sends the user the posted video file and a thumbnail JPG with a ready-to-paste YouTube title, description and hashtags to upload by hand (see clips.md "Platforms").
