@@ -57,7 +57,12 @@ const steps=D.steps.map((s,i)=>Object.assign({},s,{final:i===D.steps.length-1,wi
 window.NSTEPS=steps.length;
 
 // ---------- geometry ----------
-const VMAX=Math.max(rev,...steps.map(s=>s.val)),WMAX=425*rev/VMAX,k=425/VMAX,L=255,BAR=16,Yt=-40,Y0=520,DY=440,D_=360,RX=715,LX=235;
+// SAFE layout (user, 11 Nov 2026): everything inside x 60-1020 (their width guide; Shorts zoom in), title inside the 4:5
+// feed crop (y 285-1635) and below every app's top bar, nothing important below y 1600 (captions/UI) or in the right 120 px
+// of the lower half (like/comment buttons). D.safe=false gives the original layout.
+const SAFE=D.safe!==false, CW=SAFE?380:425;
+const VMAX=Math.max(rev,...steps.map(s=>s.val)),WMAX=CW*rev/VMAX,k=CW/VMAX,L=SAFE?310:255,BAR=16,Yt=-40,Y0=520,DY=SAFE?400:440,D_=SAFE?330:360,RX=SAFE?725:715,LX=SAFE?290:235;
+const MX0=SAFE?60:0,MX1=SAFE?1020:1080, T1=SAFE?375:205, T2=SAFE?470:300, PY=SAFE?505:345, TOPF=SAFE?625:470, BOTF=SAFE?1545:1640;
 const Ys=[Y0];steps.forEach((s,i)=>Ys.push(Y0+DY*(i+1)));
 const width=v=>v*k;
 const HO=0;   // the title NEVER moves (user rule: same place every episode, max 2 lines); a logo sits beside the counter
@@ -91,8 +96,8 @@ let segs=(D.segments&&D.segments.length)?D.segments.map(s=>({lines:s.lines,value
 if(segs.length>3){const srt=[...segs].sort((x,y)=>y.value-x.value),keep=srt.slice(0,2),rest=srt.slice(2);
  segs=segs.filter(s=>keep.includes(s));segs.push({lines:['Other'],value:rest.reduce((a,s)=>a+s.value,0)})}
 const segTot=segs.reduce((a,s)=>a+s.value,0);
-let xt=0,xb=L;const segX=[];
-segs.forEach((s,i)=>{const wt=1080*s.value/segTot,wb=WMAX*s.value/segTot,g1=i>0?3:0,g2=i<segs.length-1?3:0;
+let xt=MX0,xb=L;const segX=[];
+segs.forEach((s,i)=>{const wt=(MX1-MX0)*s.value/segTot,wb=WMAX*s.value/segTot,g1=i>0?3:0,g2=i<segs.length-1?3:0;
  ribbon(xt+g1,xt+wt-g2,Yt+BAR,xb+g1/2,xb+wb-g2/2,Y0,C.lblue,C.blue,nd(wt),23+i*6,...POUR0);
  segX.push([xt+g1,xt+wt-g2]);xt+=wt;xb+=wb;});
 let cur=[L,L+WMAX];   // running column
@@ -125,7 +130,7 @@ function lab(t,build){const g=el(W,'g',{});build(g);if(t!=null)anims.push({e:g,t
 const T=(p,x,y,s,size,fill,anchor,w)=>el(p,'text',{x,y,'font-family':'Inter','font-weight':w||800,'font-size':size,fill,'text-anchor':anchor||'middle'},s);
 segX.forEach(([a,b],i)=>bar(a,b,Yt,C.blue));
 lab(null,g=>segs.forEach((s,i)=>{const [a,b]=segX[i],w=b-a,big=w>300?54:w>170?42:34,sm=w>300?28:w>170?24:21;
- const right=(i===segs.length-1&&segs.length>1&&w<260),x=right?1062:a+(i===0?40:22),anc=right?'end':'start';
+ const right=(i===segs.length-1&&segs.length>1&&w<260),x=right?b-18:a+(i===0?40:22),anc=right?'end':'start';
  const v=T(g,x,Yt+80,money(s.value),big,C.blue,anc);
  if(v.getComputedTextLength()>w-30){v.remove();return}          // too narrow for a label: leave the band clean
  (s.lines||[]).forEach((ln,li)=>{const n=T(g,x,Yt+80+(big*.62)+sm*(1.1*li+.35),ln,sm,C.ink,anc,600);if(n.getComputedTextLength()>w-24)n.remove()});}));
@@ -152,27 +157,27 @@ const HS0=86;
 function headline(g,l1,l2,mark){
  let hs=HS0;
  const mk=el(g,'rect',{y:0,height:40,fill:C.gold});
- const t1=el(g,'text',{x:540,y:205+HO,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l1);
- const t2=el(g,'text',{x:540,y:300+HO,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l2);
+ const t1=el(g,'text',{x:540,y:T1+HO,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l1);
+ const t2=el(g,'text',{x:540,y:T2+HO,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l2);
  const wmax=Math.max(t1.getComputedTextLength(),t2.getComputedTextLength());
- if(wmax>1000){hs=Math.floor(hs*1000/wmax);t1.setAttribute('font-size',hs);t2.setAttribute('font-size',hs)}
+ const TW=SAFE?900:1000;if(wmax>TW){hs=Math.floor(hs*TW/wmax);t1.setAttribute('font-size',hs);t2.setAttribute('font-size',hs)}
  const inL1=l1.includes(mark),tx=inL1?t1:t2,line=inL1?l1:l2,i0=line.indexOf(mark);
  const xs=tx.getStartPositionOfChar(i0).x,xe=tx.getEndPositionOfChar(i0+mark.length-1).x;
- mk.setAttribute('x',xs-6);mk.setAttribute('width',xe-xs+12);mk.setAttribute('y',(inL1?205:300)+HO-Math.round(hs*.4));mk.setAttribute('height',Math.round(hs*.47));
+ mk.setAttribute('x',xs-6);mk.setAttribute('width',xe-xs+12);mk.setAttribute('y',(inL1?T1:T2)+HO-Math.round(hs*.4));mk.setAttribute('height',Math.round(hs*.47));
 }
 headline($('hq'),...D.headline_q);
 headline($('ha'),...D.headline_a);
 const PX=D.logo?490:380;   // with a logo: [logo 200x72][20 gap][counter 320] centred as one row under the title
-if(D.logo){el($('logo'),'image',{href:D.logo,x:270,y:345,width:200,height:72,preserveAspectRatio:'xMidYMid meet'})}
-el($('pill'),'rect',{x:PX,y:345+HO,width:320,height:72,rx:8,fill:'#1b1b1b'});
-const pillT=el($('pill'),'text',{x:PX+160,y:394+HO,'text-anchor':'middle','font-family':'Inter','font-weight':800,'font-size':38,fill:C.paper,style:'font-variant-numeric:tabular-nums'},'');
-el($('src'),'text',{x:540,y:1712,'text-anchor':'middle','font-family':'Inter','font-weight':500,'font-size':22,fill:'#444'},D.source);
+if(D.logo){el($('logo'),'image',{href:D.logo,x:270,y:PY,width:200,height:72,preserveAspectRatio:'xMidYMid meet'})}
+el($('pill'),'rect',{x:PX,y:PY+HO,width:320,height:72,rx:8,fill:'#1b1b1b'});
+const pillT=el($('pill'),'text',{x:PX+160,y:PY+49+HO,'text-anchor':'middle','font-family':'Inter','font-weight':800,'font-size':38,fill:C.paper,style:'font-variant-numeric:tabular-nums'},'');
+el($('src'),'text',{x:540,y:SAFE?1590:1712,'text-anchor':'middle','font-family':'Inter','font-weight':500,'font-size':22,fill:'#444'},D.source);
 
 // ---------- camera ----------
-const SY=1080+HO*.6;
+const SY=(SAFE?1180:1080)+HO*.6;
 const view=j=>(Ys[j]+Ys[j+1])/2+40;
 // wide shot: fit the whole world between the header and the caption-safe line
-const top=Yt-10, bot=YN+215, availTop=430+HO, availBot=1690;
+const top=Yt-10, bot=YN+215, availTop=(SAFE?615:430)+HO, availBot=SAFE?1560:1690;
 const WS=Math.min(.75,(availBot-availTop)/(bot-top)), WCY=(top+bot)/2, WSY=(availTop+availBot)/2;
 const CAM=[[0,540,1,SY],[.8,540,1,SY],[4.3,view(0)-12,1,SY]];
 steps.forEach((s,j)=>{CAM.push([s.b+1.8,view(j),1,SY]);if(j<steps.length-1)CAM.push([s.b+4.0,view(j+1)-12,1,SY])});
@@ -213,11 +218,11 @@ function draw(t,o){o=o||{};
  $('ha').setAttribute('opacity',aa);$('ha').setAttribute('transform',`translate(0 ${10*(1-aa)})`);
  $('pill').setAttribute('opacity',o.pill!=null?o.pill:1-eo(prog(t,PULL0+.5,PULL0+1.1)));
  $('logo').setAttribute('opacity',$('pill').getAttribute('opacity'));
- const tfh=470+HO-70*eio(wide);
+ const tfh=TOPF+HO-70*eio(wide);
  if(MASKFADE){$('tf').setAttribute('opacity',0);$('bf').setAttribute('opacity',0);
   document.getElementById('m1').setAttribute('offset',(tfh*.72/1920).toFixed(4));document.getElementById('m2').setAttribute('offset',(tfh/1920).toFixed(4));
-  const bo=1-wide;document.getElementById('m3').setAttribute('offset',((1640+(280*.0)*bo+280*wide)/1920).toFixed(4));
-  document.getElementById('m4').setAttribute('offset',Math.min(1,(1640+168+280*wide)/1920).toFixed(4));}
+  const bo=1-wide;document.getElementById('m3').setAttribute('offset',((BOTF+(1920-BOTF)*wide)/1920).toFixed(4));
+  document.getElementById('m4').setAttribute('offset',Math.min(1,(BOTF+168+(1920-BOTF)*wide)/1920).toFixed(4));}
  else{document.getElementById('m1').setAttribute('offset',0);document.getElementById('m2').setAttribute('offset',0);
   document.getElementById('m3').setAttribute('offset',1);document.getElementById('m4').setAttribute('offset',1);
   $('bf').setAttribute('opacity',1-wide);$('tf').setAttribute('height',tfh);}
