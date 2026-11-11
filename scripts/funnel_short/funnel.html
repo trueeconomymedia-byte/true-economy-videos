@@ -220,11 +220,12 @@ function draw(t,o){o=o||{};
  const [cy,s,sy]=o.cam||cam(t);W.setAttribute('transform',`translate(${540-540*s} ${sy-cy*s}) scale(${s})`);
  const wide=o.wide!=null?o.wide:prog(t,PULL0+.7,PULL0+1.9);
  const qa=o.tease?0:eo(prog(t,PULL0+.9,PULL0+1.4)), aa=o.tease?0:eo(prog(t,PULL0+1.3,PULL0+1.9));
- const up=o.up!=null?o.up:eio(prog(t,CAM[1][0],CAM[2][0])),TDY=112,TSC=1,CDY=84*up;   // moves WITH the first camera move (the chart shifting up under the title)
+ const FADE=D.title_mode==='fade';   // 'fade' (test): the title is pushed up and fades out, the money bar takes its place
+ const up=o.up!=null?o.up:eio(prog(t,CAM[1][0],CAM[2][0])),TDY=FADE?150:112,TSC=1,CDY=(FADE?200:84)*up;   // moves WITH the first camera move (the chart shifting up under the title)
  const ht=`translate(0 ${-TDY*up}) translate(540 ${T1+HO}) scale(${TSC}) translate(-540 ${-(T1+HO)})`;
  $('hq').setAttribute('transform',ht);
- $('hq').setAttribute('opacity',1-qa);
- $('ha').setAttribute('opacity',aa);$('ha').setAttribute('transform',`translate(0 ${10*(1-aa)}) `+ht);
+ $('hq').setAttribute('opacity',(1-qa)*(FADE?1-eo(prog(up,0,.7)):1));
+ $('ha').setAttribute('opacity',aa);$('ha').setAttribute('transform',`translate(0 ${10*(1-aa)}) `+(FADE?'':ht));
  $('pill').setAttribute('opacity',o.pill!=null?o.pill:1-eo(prog(t,PULL0+.5,PULL0+1.1)));
  $('logo').setAttribute('opacity',$('pill').getAttribute('opacity'));
  const tfh=TOPF+HO-CDY-70*eio(wide);
