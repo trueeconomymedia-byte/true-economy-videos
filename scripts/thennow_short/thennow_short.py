@@ -114,7 +114,7 @@ def main():
     g = {"years": years, "main": main_v, "compare": comp, "currency": cur, "suffix": suf, "main_label": d["main_label"],
          "compare_label": d.get("compare_label", ""), "ratio_label": rl, "ratio_style": rs, "colour": d.get("colour", "blue"),
          "gap_colour": d.get("gap_colour", "red"), "events": ev, "headline_q": hq, "headline_a": ha, "final": final,
-         "tease": tease, "source": d["source"], "numbers": fill, "cold_open": bool(d.get("cold_open", True))}
+         "tease": tease, "source": d["source"], "numbers": fill, "cold_open": bool(d.get("cold_open", False))}
     gpath = os.path.join(outdir, f"{slug}-build.json"); json.dump(g, open(gpath, "w"), ensure_ascii=False, indent=1)
     print(f"{d.get('subject', slug)}: {fill['start']} ({years[0]}) -> {fill['end']} ({years[-1]})"
           + (f", ratio {fill['ratio_start']} -> {fill['ratio_end']}" if comp else f", {fill['pct']}"))
