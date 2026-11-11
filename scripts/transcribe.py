@@ -14,14 +14,19 @@ model=opt('--model','small.en'); prompt=opt('--prompt','')
 clip,out=a[0],a[1]
 wav=os.path.join(tempfile.mkdtemp(),'a.wav')
 subprocess.run(['ffmpeg','-v','error','-y','-i',clip,'-ac','1','-ar','16000',wav],check=True)
+import wave, numpy as np
+with wave.open(wav) as wf: audio=np.frombuffer(wf.readframes(wf.getnframes()),dtype=np.int16).astype(np.float32)/32768.0  # pass samples, not a path (avoids PyAV version issues)
 from faster_whisper import WhisperModel
 m=WhisperModel(model,device='cpu',compute_type='int8')
-segs,_=m.transcribe(wav,word_timestamps=True,initial_prompt=prompt or None,vad_filter=True)
+segs,_=m.transcribe(audio,word_timestamps=True,initial_prompt=prompt or None,vad_filter=True)
 words=[]
 for s in segs:
     for w in s.words:
         t=w.word.strip()
-        if t: words.append({'w':t,'s':round(w.start,2),'e':round(w.end,2)})
+        if not t: continue
+        if words and t[0] in '-&/%' and w.start-words[-1]['e']<0.3:   # rejoin split tokens: 60/40, S&P, 10-year
+            words[-1]['w']+=t; words[-1]['e']=round(w.end,2); continue
+        words.append({'w':t,'s':round(w.start,2),'e':round(w.end,2)})
 json.dump(words,open(out,'w'),indent=0)
 # draft phrases
 ph=[];cur=[]

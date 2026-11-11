@@ -1,0 +1,424 @@
+{
+ "phrases": [
+  {
+   "text": "For every $100 invested,",
+   "mark": "$100",
+   "start": 0.0,
+   "end": 1.48
+  },
+  {
+   "text": "roughly $60 go into stocks",
+   "mark": "$60",
+   "start": 1.6,
+   "end": 3.32
+  },
+  {
+   "text": "and $40 into bonds.",
+   "mark": "$40",
+   "start": 3.32,
+   "end": 4.86
+  },
+  {
+   "text": "There's nothing magical",
+   "mark": "",
+   "start": 5.74,
+   "end": 6.48
+  },
+  {
+   "text": "about that split.",
+   "mark": "",
+   "start": 6.48,
+   "end": 7.28
+  },
+  {
+   "text": "It's simply a way",
+   "mark": "",
+   "start": 7.78,
+   "end": 8.56
+  },
+  {
+   "text": "of balancing",
+   "mark": "",
+   "start": 8.56,
+   "end": 9.04
+  },
+  {
+   "text": "two different kinds",
+   "mark": "",
+   "start": 9.04,
+   "end": 9.94
+  },
+  {
+   "text": "of investment.",
+   "mark": "",
+   "start": 9.94,
+   "end": 10.5
+  },
+  {
+   "text": "Stocks are ownership stakes",
+   "mark": "ownership",
+   "start": 11.46,
+   "end": 12.66
+  },
+  {
+   "text": "in businesses.",
+   "mark": "",
+   "start": 12.66,
+   "end": 13.34
+  },
+  {
+   "text": "In a 60/40 portfolio,",
+   "mark": "60/40",
+   "start": 14.14,
+   "end": 15.42
+  },
+  {
+   "text": "that part is often",
+   "mark": "",
+   "start": 16.02,
+   "end": 16.86
+  },
+  {
+   "text": "invested in an index fund,",
+   "mark": "index fund",
+   "start": 16.86,
+   "end": 18.34
+  },
+  {
+   "text": "tracking either the S&P 500",
+   "mark": "S&P 500",
+   "start": 18.66,
+   "end": 20.4
+  },
+  {
+   "text": "or a broad all-world index.",
+   "mark": "all-world",
+   "start": 20.4,
+   "end": 22.42
+  },
+  {
+   "text": "The aim is to benefit",
+   "mark": "",
+   "start": 23.02,
+   "end": 23.84
+  },
+  {
+   "text": "from the growth",
+   "mark": "growth",
+   "start": 23.84,
+   "end": 24.44
+  },
+  {
+   "text": "of companies over time.",
+   "mark": "",
+   "start": 24.44,
+   "end": 25.64
+  },
+  {
+   "text": "Bonds, meanwhile,",
+   "mark": "Bonds",
+   "start": 26.24,
+   "end": 26.8
+  },
+  {
+   "text": "are loans to governments",
+   "mark": "loans",
+   "start": 27.06,
+   "end": 27.94
+  },
+  {
+   "text": "or companies",
+   "mark": "",
+   "start": 27.94,
+   "end": 28.6
+  },
+  {
+   "text": "that pay interest.",
+   "mark": "interest",
+   "start": 28.6,
+   "end": 29.52
+  },
+  {
+   "text": "In this strategy,",
+   "mark": "",
+   "start": 30.0,
+   "end": 30.72
+  },
+  {
+   "text": "the bond allocation",
+   "mark": "",
+   "start": 31.1,
+   "end": 31.82
+  },
+  {
+   "text": "is usually made up of",
+   "mark": "",
+   "start": 31.82,
+   "end": 33.0
+  },
+  {
+   "text": "10-year US Treasury bonds.",
+   "mark": "10-year",
+   "start": 33.0,
+   "end": 34.52
+  },
+  {
+   "text": "The hope is that",
+   "mark": "",
+   "start": 35.42,
+   "end": 35.96
+  },
+  {
+   "text": "these investments",
+   "mark": "",
+   "start": 35.96,
+   "end": 36.56
+  },
+  {
+   "text": "won't always",
+   "mark": "",
+   "start": 36.56,
+   "end": 37.16
+  },
+  {
+   "text": "react to the economy",
+   "mark": "",
+   "start": 37.16,
+   "end": 38.06
+  },
+  {
+   "text": "in the same way.",
+   "mark": "same way",
+   "start": 38.06,
+   "end": 38.84
+  },
+  {
+   "text": "When stocks struggle,",
+   "mark": "struggle",
+   "start": 39.3,
+   "end": 40.06
+  },
+  {
+   "text": "bonds have often helped",
+   "mark": "",
+   "start": 40.66,
+   "end": 41.24
+  },
+  {
+   "text": "cushion the fall.",
+   "mark": "cushion the fall",
+   "start": 41.24,
+   "end": 41.98
+  },
+  {
+   "text": "And for much of the period",
+   "mark": "",
+   "start": 42.46,
+   "end": 43.32
+  },
+  {
+   "text": "between 2000 and 2020,",
+   "mark": "2000 and 2020",
+   "start": 43.32,
+   "end": 44.88
+  },
+  {
+   "text": "that's exactly what",
+   "mark": "",
+   "start": 45.42,
+   "end": 46.26
+  },
+  {
+   "text": "investors saw.",
+   "mark": "",
+   "start": 46.26,
+   "end": 47.12
+  },
+  {
+   "text": "Inflation in",
+   "mark": "",
+   "start": 48.18,
+   "end": 48.7
+  },
+  {
+   "text": "the United States",
+   "mark": "",
+   "start": 48.7,
+   "end": 49.32
+  },
+  {
+   "text": "was relatively",
+   "mark": "",
+   "start": 49.32,
+   "end": 49.96
+  },
+  {
+   "text": "low and stable.",
+   "mark": "low and stable",
+   "start": 49.96,
+   "end": 50.74
+  },
+  {
+   "text": "When investors",
+   "mark": "",
+   "start": 51.76,
+   "end": 52.18
+  },
+  {
+   "text": "became worried",
+   "mark": "",
+   "start": 52.18,
+   "end": 52.8
+  },
+  {
+   "text": "about economic growth,",
+   "mark": "",
+   "start": 52.8,
+   "end": 53.8
+  },
+  {
+   "text": "stocks and bonds could",
+   "mark": "",
+   "start": 54.34,
+   "end": 55.06
+  },
+  {
+   "text": "move in",
+   "mark": "",
+   "start": 55.06,
+   "end": 55.4
+  },
+  {
+   "text": "opposite directions.",
+   "mark": "opposite directions",
+   "start": 55.4,
+   "end": 56.22
+  },
+  {
+   "text": "Think about what happens",
+   "mark": "",
+   "start": 56.92,
+   "end": 57.78
+  },
+  {
+   "text": "when a recession",
+   "mark": "recession",
+   "start": 57.78,
+   "end": 58.44
+  },
+  {
+   "text": "looks more likely.",
+   "mark": "",
+   "start": 58.44,
+   "end": 59.46
+  },
+  {
+   "text": "Investors may expect",
+   "mark": "",
+   "start": 59.46,
+   "end": 60.82
+  },
+  {
+   "text": "businesses to make",
+   "mark": "",
+   "start": 60.82,
+   "end": 61.68
+  },
+  {
+   "text": "less money,",
+   "mark": "less money",
+   "start": 61.68,
+   "end": 62.24
+  },
+  {
+   "text": "pushing stock prices down.",
+   "mark": "down",
+   "start": 62.62,
+   "end": 63.94
+  },
+  {
+   "text": "At the same time,",
+   "mark": "",
+   "start": 64.48,
+   "end": 65.3
+  },
+  {
+   "text": "a weaker economy",
+   "mark": "",
+   "start": 65.66,
+   "end": 66.36
+  },
+  {
+   "text": "can encourage",
+   "mark": "",
+   "start": 66.36,
+   "end": 66.96
+  },
+  {
+   "text": "the Federal Reserve",
+   "mark": "Federal Reserve",
+   "start": 66.96,
+   "end": 67.84
+  },
+  {
+   "text": "to cut interest rates.",
+   "mark": "cut interest rates",
+   "start": 67.84,
+   "end": 68.92
+  },
+  {
+   "text": "When rates fall,",
+   "mark": "rates fall",
+   "start": 69.54,
+   "end": 70.3
+  },
+  {
+   "text": "existing bonds paying",
+   "mark": "",
+   "start": 70.82,
+   "end": 71.72
+  },
+  {
+   "text": "a fixed rate",
+   "mark": "",
+   "start": 71.72,
+   "end": 72.38
+  },
+  {
+   "text": "can become more valuable.",
+   "mark": "more valuable",
+   "start": 72.38,
+   "end": 73.44
+  },
+  {
+   "text": "So while the stock side",
+   "mark": "",
+   "start": 74.0,
+   "end": 75.02
+  },
+  {
+   "text": "of the portfolio",
+   "mark": "",
+   "start": 75.02,
+   "end": 75.52
+  },
+  {
+   "text": "is falling,",
+   "mark": "falling",
+   "start": 75.52,
+   "end": 76.08
+  },
+  {
+   "text": "the bond side might hold up",
+   "mark": "",
+   "start": 76.58,
+   "end": 77.96
+  },
+  {
+   "text": "or even rise.",
+   "mark": "rise",
+   "start": 77.96,
+   "end": 78.66
+  }
+ ]
+}
