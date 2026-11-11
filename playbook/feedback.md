@@ -188,3 +188,6 @@ The scripts already use these values (te_lib, make_flow, make_mkts, video_card, 
 - Gold KPI box at the bottom: big line = the rate gap in percentage points, small line = the catch-up year. Headline accent "none" was used on the first card; the bar option is still chosen per card.
 - Add more rows (per-capita, inflation, unemployment, debt) only when each figure is verified on two sources for the same year; the row heights share the space automatically (size rows 1.35x).
 - te_lib.Card.arrows gained an optional `cycles=` argument and video_card.py honours it (fixed passes per loop); older cards are unchanged.
+## 2026-11-11 CLIP SHORTS: SPOKEN CAPTIONS (user chose style B)
+- Landscape -> Short titles have NO gold marker any more (pass "" as the gold-words argument). Gold appears only in the spoken captions under the video, on one key word/number per phrase.
+- Captions: Inter Bold, ink, one centred line just below the video, short 2-5 word phrases synced to the voice (scripts/transcribe.py + scripts/captions.py; rules in clips.md "Spoken captions under the video"). Must stay inside every platform's safe zone.
