@@ -5,8 +5,19 @@
     "added": "2026-11-10",
     "priority": "normal",
     "notes": "",
-    "last_posted": null,
-    "posts": [],
+    "last_posted": "2026-11-11",
+    "posts": [
+      {
+        "date": "2026-11-11",
+        "time_utc": "13:37",
+        "platforms": {
+          "tiktok": "6af43fbdf41d6d2bbb6324c2",
+          "facebook": "6af43fbedb6e84f20bed7c8e",
+          "instagram": "6af43fc8f41d6d2bbb632bd3"
+        },
+        "status": "scheduled"
+      }
+    ],
     "short_file": "Documentary-full-v7-short.mp4",
     "short_title": [
       "Why bonds rise when",
