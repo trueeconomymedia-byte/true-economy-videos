@@ -1,0 +1,102 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- True Economy "HEAD TO HEAD" animation style. Driven by h2h_render.js; do not open by hand. Two rivals, 3-7 rounds:
+     central axis, side A grows LEFT (blue), side B grows RIGHT (red); the better side keeps full colour, the other turns to
+     its light tint; a scoreboard keeps count; the camera zooms into each round, pulls back before the decider, then the
+     winner lands in gold. Data = the build written by h2h_short.py (see its docstring). Transparent page: the card paper +
+     printed-ink finish is added by scripts/anim_shared/ink_pipe.py. -->
+<style>
+@font-face{font-family:'Lora';font-weight:700;src:url('../assets/Lora-Bold.ttf')}
+html,body{margin:0;background:transparent;overflow:hidden}
+#stage{width:1080px;height:1920px;position:relative}
+svg{position:absolute;left:0;top:0}
+</style></head><body><div id="stage"><svg id="sv" width="1080" height="1920" xmlns="http://www.w3.org/2000/svg"></svg></div>
+<script>
+const C={blue:'#3670D0',lblue:'#B3C9ED',red:'#D94437',lred:'#F2C4BC',gold:'#FACB3A',ink:'#111111',paper:'#FBF8F1',grey:'#5A554B'};
+const NS='http://www.w3.org/2000/svg';
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const eio=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const eo=x=>{x=clamp(x);return 1-Math.pow(1-x,3)};
+const prog=(t,a,b)=>clamp((t-a)/(b-a));
+function el(p,t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;p.appendChild(e);return e}
+function T(p,x,y,s,size,fill,anchor,w){return el(p,'text',{x,y,'font-family':'Inter','font-weight':w||800,'font-size':size,fill,'text-anchor':anchor||'middle'},s)}
+function fitT(e,w){const l=e.getComputedTextLength();if(l>w)e.setAttribute('font-size',(+e.getAttribute('font-size')*w/l).toFixed(1));return e}
+// shared SAFE title zone (same as every Animated Shorts series): baselines 395/490, scoreboard row at 525, content x 60-1020
+const T1=395,T2=490,PY=525;
+function headline(g,l1,l2,mark){
+ const hs=86, mk=el(g,'rect',{fill:C.gold});
+ const t1=el(g,'text',{x:540,y:T1,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l1);
+ const t2=el(g,'text',{x:540,y:T2,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l2);
+ const w=Math.max(t1.getComputedTextLength(),t2.getComputedTextLength());
+ if(w>900){const f=Math.floor(hs*900/w);t1.setAttribute('font-size',f);t2.setAttribute('font-size',f)}
+ const in1=l1.includes(mark),tx=in1?t1:t2,line=in1?l1:l2,i0=line.indexOf(mark),fs=+tx.getAttribute('font-size');
+ const xs=tx.getStartPositionOfChar(i0).x,xe=tx.getEndPositionOfChar(i0+mark.length-1).x;
+ Object.entries({x:xs-6,width:xe-xs+12,y:(in1?T1:T2)-Math.round(fs*.4),height:Math.round(fs*.47)}).forEach(([k,v])=>mk.setAttribute(k,v));
+}
+let D,TL,N,ROWY;
+const ROW0=712,RH=160,ZS=1.4,ZY=1030,L=220;
+function BUILD(d){
+ D=d;N=D.rounds.length;ROWY=D.rounds.map((r,i)=>ROW0+i*RH);
+ // timeline: each round = camera to row, header, bars grow, values, judgement; pull back before the decider; reveal
+ TL={rounds:[]};let t=0.6;
+ for(let i=0;i<N-1;i++){TL.rounds.push({cam:t-0.8,a:t,grow:[t+0.5,t+1.7],vals:t+1.5,judge:t+2.2});t+=3.7}
+ TL.pull1=[t-0.9,t+0.2];TL.hold=t+0.4;t+=2.4;
+ TL.rounds.push({cam:t-0.8,a:t,grow:[t+0.6,t+2.6],vals:t+2.4,judge:t+3.4});t+=3.4;
+ TL.pull2=[t+0.6,t+1.6];TL.ans=t+1.8;TL.end=t+7.2;
+ const lands=TL.rounds.map((r,i)=>[r.judge,i===N-1?0.9:0.6]);
+ window.BEATS={total:TL.end,cold:0,ticks:[],patter:[],rolls:[],
+  glides:TL.rounds.slice(1).map(r=>[r.cam,0.8]).concat([[TL.pull1[0],1.1],[TL.pull2[0],1.0]]),
+  swells:TL.rounds.map((r,i)=>[r.judge,i===N-1?2.4:0.9]),lands,notes:TL.rounds.map((r,i)=>[r.judge+0.05,[76,79,83,81,86,84,88][i%7]]),
+  hold:TL.hold,reveal:TL.ans,qa:[0.05,TL.rounds[0].judge+0.4,TL.rounds[Math.min(2,N-2)].judge+0.4,TL.hold+0.5,TL.rounds[N-1].grow[1],TL.ans+1.5],
+  thumb_ms:Math.round((TL.hold+0.9)*1000)};
+}
+function camAt(t){ // returns [scale, translateY]; zoom on the current row, pull back to the whole table at the two pauses
+ const tableS=1,tableTy=0;
+ const z=i=>[ZS,ZY-(ROWY[i]+22)*ZS];
+ let cur=z(0);
+ for(let i=1;i<N;i++){const r=TL.rounds[i];if(t>=r.cam){const from=(i===N-1)?[tableS,tableTy]:z(i-1),p=eio(prog(t,r.cam,r.a));cur=[from[0]+(z(i)[0]-from[0])*p,from[1]+(z(i)[1]-from[1])*p]}}
+ if(t>=TL.pull1[0]&&t<TL.rounds[N-1].cam){const p=eio(prog(t,TL.pull1[0],TL.pull1[1])),f=z(N-2);cur=[f[0]+(tableS-f[0])*p,f[1]+(tableTy-f[1])*p]}
+ if(t>=TL.pull2[0]){const p=eio(prog(t,TL.pull2[0],TL.pull2[1])),f=z(N-1);cur=[f[0]+(tableS-f[0])*p,f[1]+(tableTy-f[1])*p]}
+ return cur}
+function setTime(t){
+ const sv=document.getElementById('sv');sv.innerHTML='';const g=el(sv,'g',{});
+ const hq=el(g,'g',{opacity:1-prog(t,TL.ans,TL.ans+0.4)});headline(hq,...D.headline_q);
+ const ha=el(g,'g',{opacity:prog(t,TL.ans+0.1,TL.ans+0.5)});headline(ha,...D.headline_a);
+ // scoreboard
+ let sa=0,sb=0;D.rounds.forEach((R,i)=>{if(t>=TL.rounds[i].judge){if(R.win==='a')sa++;if(R.win==='b')sb++}});
+ el(g,'rect',{x:290,y:PY,width:500,height:76,rx:8,fill:'#1b1b1b'});
+ fitT(T(g,395,PY+51,D.a,32,C.lblue,'middle',800),150);fitT(T(g,685,PY+51,D.b,32,C.lred,'middle',800),150);
+ const pops=TL.rounds.map(r=>Math.sin(Math.PI*prog(t,r.judge,r.judge+0.35))).reduce((a,b)=>Math.max(a,b),0);
+ const sc=T(g,540,PY+55,sa+' – '+sb,46,C.paper,'middle',800);sc.setAttribute('transform',`translate(540,${PY+40}) scale(${1+0.12*pops}) translate(-540,${-(PY+40)})`);
+ // the table, seen through the camera
+ const [s,ty]=camAt(t);const cp=el(g,'clipPath',{id:'cl'});el(cp,'rect',{x:0,y:625,width:1080,height:830});
+ const clip=el(g,'g',{'clip-path':'url(#cl)'});const cam=el(clip,'g',{transform:`translate(${540*(1-s)},${ty}) scale(${s})`});
+ const zoomed=s>1.05;
+ D.rounds.forEach((R,i)=>{
+  const r=TL.rounds[i],y=ROWY[i];if(i>0&&t<r.cam+0.3&&!(i===N-1&&t>=TL.pull1[0]))return;
+  const dec=i===N-1,current=t>=r.cam&&(i===N-1||t<TL.rounds[i+1].cam);
+  const op=zoomed&&!current?0.22:1;const rg=el(cam,'g',{opacity:op});
+  const hidden=dec&&t<r.a;   // the decider shows as "?" until it is played
+  const hdr=i===0?1:prog(t,r.a-0.3,r.a+0.2);
+  T(rg,540,y-50,(dec?'Decider: ':'')+R.name,28,C.ink,'middle',800).setAttribute('opacity',hidden?1:Math.max(hdr,t>r.a?1:0));
+  T(rg,540,y-26,R.sub,17,C.grey,'middle',600).setAttribute('opacity',hidden?0:hdr);
+  if(hidden){T(rg,540,y+34,'?',44,C.ink,'middle',800);return}
+  const gr=eo(prog(t,r.grow[0],r.grow[1])),la=R.fa*L*gr,lb=R.fb*L*gr,judged=t>=r.judge,jk=prog(t,r.judge,r.judge+0.4);
+  const ca=judged&&R.win==='b'?mix(C.blue,C.lblue,jk):C.blue,cb=judged&&R.win==='a'?mix(C.red,C.lred,jk):C.red;
+  el(rg,'rect',{x:540-la,y,width:la,height:44,fill:ca});el(rg,'rect',{x:540,y,width:lb,height:44,fill:cb});
+  el(rg,'line',{x1:540,x2:540,y1:y-8,y2:y+52,stroke:C.ink,'stroke-width':3});
+  if(la>70)fitT(T(rg,530,y+29,D.a,17,'#fff','end',800),la-20);if(lb>70)fitT(T(rg,550,y+29,D.b,17,'#fff','start',800),lb-20);
+  const vk=eo(prog(t,r.vals,r.vals+0.35));
+  if(vk>0){const va=T(rg,540-la-12,y+31,R.ta,28,ca,'end',800),vb=T(rg,540+lb+12,y+31,R.tb,28,cb,'start',800);va.setAttribute('opacity',vk);vb.setAttribute('opacity',vk)}
+  if(judged&&current&&zoomed){const wtxt=R.win==='tie'?'Draw: no point':'Point: '+(R.win==='a'?D.a:D.b);const p=T(rg,540,y+78,wtxt,19,R.win==='a'?C.blue:R.win==='b'?C.red:C.grey,'middle',800);p.setAttribute('opacity',jk)}
+ });
+ // decider pause: the hidden final score; then the reveal
+ const hb=prog(t,TL.hold,TL.hold+0.4)*(1-prog(t,TL.rounds[N-1].cam,TL.rounds[N-1].cam+0.3)),ra=prog(t,TL.ans,TL.ans+0.35);
+ if(hb>0){const bg=el(g,'g',{opacity:hb});el(bg,'rect',{x:110,y:1462,width:860,height:80,fill:C.gold});fitT(T(bg,540,1515,D.tease,36,C.ink,'middle',800),820)}
+ if(ra>0){const s_=1+0.06*Math.sin(Math.PI*ra);const bg=el(g,'g',{opacity:ra,transform:`translate(540,1502) scale(${s_}) translate(-540,-1502)`});
+  el(bg,'rect',{x:110,y:1462,width:860,height:80,fill:C.gold});fitT(T(bg,540,1515,D.final,36,C.ink,'middle',800),820)}
+ fitT(T(g,540,1598,D.source,20,'#444','middle',500),900);
+}
+function mix(a,b,k){const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));const A=p(a),B=p(b);return 'rgb('+A.map((v,i)=>Math.round(v+(B[i]-v)*k)).join(',')+')'}
+function tease(){setTime(TL.hold+0.9)}
+function answer(){setTime(TL.end-0.05)}
+</script></body></html>
