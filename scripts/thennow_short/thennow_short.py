@@ -10,11 +10,9 @@ runs underneath with the gap shaded, then the camera pulls back to the whole cli
 Writes to OUTDIR:
   SLUG-youtube.mp4       the video -> sent to the user, who posts YouTube by hand
   SLUG-auto.mp4          the SAME video -> Buffer, with metadata.thumbnailOffset = "thumb_ms" in SLUG-build.json (33 = first frame)
-  REWIND OPENING (approved by the user 11 Nov 2026, on by default; "cold_open": false turns it off): the first frame is the
-  whole climb with today's values ("$???") and the answer ("??x") hidden; the line rewinds to the first year in ~1.1 s
-  (faint ghost of the full line, tape-rewind sound + year ticks), lands on a hit, the title pops
-  and the gold marker sweeps in; the reveal hold is short so the end frame loops back into the first frame.
-  SLUG-thumb-tease.png   the first frame (whole climb, today's value and answer hidden) -> YouTube custom thumbnail
+  STRAIGHT-IN OPENING (user rule 11 Nov 2026, default): no rewind, zoom or teaser; the line moves from the first frame.
+  "cold_open": true brings back the old rewind opening (only if the user asks).
+  SLUG-thumb-tease.png   the whole climb, today's value and answer hidden -> YouTube custom thumbnail (set by hand)
   SLUG-thumb-answer.png  the whole climb with the answer
   SLUG-qa-youtube.jpg    contact sheet of key frames: LOOK at it
   SLUG-build.json        every number the video shows (all derived numbers computed here, never typed)
@@ -114,7 +112,7 @@ def main():
     g = {"years": years, "main": main_v, "compare": comp, "currency": cur, "suffix": suf, "main_label": d["main_label"],
          "compare_label": d.get("compare_label", ""), "ratio_label": rl, "ratio_style": rs, "colour": d.get("colour", "blue"),
          "gap_colour": d.get("gap_colour", "red"), "events": ev, "headline_q": hq, "headline_a": ha, "final": final,
-         "tease": tease, "source": d["source"], "numbers": fill, "cold_open": bool(d.get("cold_open", True))}
+         "tease": tease, "source": d["source"], "numbers": fill, "cold_open": bool(d.get("cold_open", False))}
     gpath = os.path.join(outdir, f"{slug}-build.json"); json.dump(g, open(gpath, "w"), ensure_ascii=False, indent=1)
     print(f"{d.get('subject', slug)}: {fill['start']} ({years[0]}) -> {fill['end']} ({years[-1]})"
           + (f", ratio {fill['ratio_start']} -> {fill['ratio_end']}" if comp else f", {fill['pct']}"))

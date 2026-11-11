@@ -7,14 +7,16 @@ forward year by year (a tick per year; no year pill, the x axis shows the years)
 ratio tag AT THE TIP shows "= 3.9x / median income" beside a bracket between the two dots (no compare line: "+X% since
 1995" under the tip label); it turns to "= ?x" over the last year, then the camera pulls back to the whole climb, the answer
 is hidden ("2025: ??x median income") and revealed in gold. ~31 s. Same video for YouTube and Buffer; Buffer cover =
-thumbnailOffset `thumb_ms` from SLUG-build.json (the whole climb with the answer hidden).
+thumbnailOffset `thumb_ms` from SLUG-build.json (33 = the first frame).
 Renderer: `python3 scripts/thennow_short/thennow_short.py data.json OUTDIR SLUG` (read its docstring). Never change the
 look, timing or sound inside the renderer; only the data changes.
 
-REWIND OPENING (user-approved 11 Nov 2026, renderer default): the video opens on the whole climb with today's values
-("$???") and the answer ("??x") hidden, rewinds to the first year in ~1.1 s (faint ghost of the
-full line, tape-rewind sound), lands on a hit as the hook title pops and its gold marker sweeps in; short reveal hold so
-it loops. Buffer cover = thumbnailOffset `thumb_ms` from SLUG-build.json (33 ms = that first frame). Same video on YouTube.
+STRAIGHT-IN OPENING (user rule 11 Nov 2026, renderer default): NO rewind, NO zoom, NO "$???" teaser at the start. The
+first frame is the title plus the first year's values and ratio tag, and the line starts moving within 0.2 s so nobody
+scrolls away. Instagram and Facebook autoplay, so the cover barely matters; Buffer cover = thumbnailOffset 33 (first
+frame). YouTube: the user sets SLUG-thumb-tease.png (the whole climb, answer hidden) by hand. The hidden answer stays
+only at the END ("= ?x" over the last year, then the gold reveal). "cold_open": true (the old rewind) only if the user
+asks for it again.
 
 ## 1. What makes an episode
 - One yearly series of 10-40 years with no gaps (main line), optionally a comparison line in the SAME unit (house price
