@@ -5,8 +5,12 @@ Series (animation styles) and their episodes are listed in `registry.json`. Each
 (e.g. `funnel.md`) and its own renderer with the shared contract `render data.json OUTDIR SLUG`.
 
 ## 0. Look rules shared by every series (user rule, 10 Nov 2026)
-- BACKGROUND: exactly the same in every series: paper #F2EFE8 with the shared texture layers from
-  scripts/anim_shared/background.js. Never a different colour, texture, card, frame or moving background.
+- BACKGROUND + INK (user-approved 11 Nov 2026): every series uses the True Economy card paper as the full-frame background,
+  placed unchanged (assets_public/True-Economy_card-paper_2160x3840.png scaled to the output size; flat, no banner, no
+  shadow), and the PRINTED-INK finish from scripts/anim_shared/ink.py (each element drawn flat in its palette colour,
+  multiplied by the paper's own light/shade, slightly thinner on the tooth's high points and fine specks, ink-only
+  unsharp mask; the bare paper stays exactly as supplied). Renderers send transparent RGBA frames through
+  scripts/anim_shared/ink_pipe.py. No glow, drop shadow, outline or blur; never a different background.
 - TITLE: each series has ONE fixed title position (its `title_zone` in registry.json); every episode of that series
   puts its title in exactly that place, at most 2 lines. Different series may use different title positions.
   Never move the title for a logo or anything else; a series' renderer owns this, the task never changes it.

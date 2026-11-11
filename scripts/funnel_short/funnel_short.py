@@ -87,6 +87,7 @@ def main():
     d = json.load(open(data_path))
     g = from_company(d) if "rev" in d and "steps" not in d else d
     check(g)
+    g.setdefault("ink", True)          # printed-ink finish on the card paper is the default (user-approved 11 Nov 2026)
     gpath = os.path.join(outdir, f"{slug}-funnel-data.json"); json.dump(g, open(gpath, "w"), ensure_ascii=False, indent=1)
     subprocess.run(["node", os.path.join(HERE, "funnel_render.js"), gpath, outdir, slug], check=True)
     for v in ("auto", "youtube"):
