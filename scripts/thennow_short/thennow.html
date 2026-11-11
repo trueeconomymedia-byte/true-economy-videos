@@ -45,7 +45,7 @@ function BUILD(d){
  // COLD OPEN (test, 11 Nov 2026): first frame = the whole climb with today's value and the answer hidden; the line
  // rewinds to the first year (faint ghost of the full line stays), lands with a hit and the hook title pops in.
  COLD=D.cold?1.5:0;CO={rw0:0.08,rw1:1.18,land:1.18};
- const OPEN=D.cold?0.75:1.3;KEYS=[[COLD,0],[COLD+OPEN,0]];let t=COLD+OPEN;const evIdx=D.events.map(e=>e[0]-D.years[0]);
+ const OPEN=D.cold?0.75:0.2;/* no rewind: the line starts moving almost at once (user 11 Nov 2026) */KEYS=[[COLD,0],[COLD+OPEN,0]];let t=COLD+OPEN;const evIdx=D.events.map(e=>e[0]-D.years[0]);
  for(let i=1;i<=N;i++){t+=pace;KEYS.push([t,i]);if(evIdx.includes(i)){t+=0.95;KEYS.push([t,i])}}
  TL={rideEnd:t,pull:[t+0.3,t+2.8],hold:t+2.9,ans:t+3.9,end:D.cold?t+5.6:t+9.0};   // cold: short hold after the reveal so it loops
  const all=D.main.concat(D.compare||[]);FULLV=Math.max(...all)*1.22;
@@ -67,8 +67,7 @@ function setTime(t){
   FRAME({now,win:[rw[0]+(full[0]-rw[0])*p,rw[1]+(full[1]-rw[1])*p],vmax:rv+(FULLV-rv)*p,t,cold:true});return}
  const now=nowAt(Math.min(t,TL.rideEnd));
  const [rideWin,rideV]=rideView(now),full=[-0.4,N+0.6];
- // start cover: the opening frame shows the WHOLE runway (first year to last), then the camera dives into the ride view
- const p=Math.max(eio(prog(t,TL.pull[0],TL.pull[1])),COLD?0:1-eio(prog(t,KEYS[1][0]-0.1,KEYS[1][0]+1.0)));
+ const p=eio(prog(t,TL.pull[0],TL.pull[1]));
  const win=[rideWin[0]+(full[0]-rideWin[0])*p,rideWin[1]+(full[1]-rideWin[1])*p],vmax=rideV+(FULLV-rideV)*p;
  FRAME({now,win,vmax,t});
 }
@@ -132,12 +131,12 @@ function FRAME(o){
  else{const pc=(pv>=D.main[0]?'+':'−')+Math.abs(Math.round((pv/D.main[0]-1)*100))+'% since '+Y[0];T(g,tx+dx,py+60,qhide?'+??%':pc,30,C.ink,anc,800)}
  // START COVER (user 11 Nov 2026, no rewind): the opening frame is the cover. A dotted arrow climbs from the first value
  // to "<last year>: $???" in the top-right corner of the chart, so the frame asks the question; it fades as the ride starts.
- if(!COLD){const k=1-eio(prog(o.t,KEYS[1][0]-0.1,KEYS[1][0]+0.45));if(k>0){const sg=el(g,'g',{opacity:k});
-  const ax=tx+70,ay=V(pv)-80,ex=X(N),ey=BY[0]+70;
-  el(sg,'path',{d:`M${ax} ${ay} Q${ax+(ex-ax)*0.62} ${ay-30} ${ex} ${ey}`,fill:'none',stroke:C.ink,'stroke-width':5,'stroke-dasharray':'2 14','stroke-linecap':'round'});
-  const an=Math.atan2(ey-(ay-30),ex-(ax+(ex-ax)*0.62)),hl=22,ha=0.5;
+ if(!COLD){const k=1-eio(prog(o.t,KEYS[1][0]+0.2,KEYS[1][0]+1.0));if(k>0){const sg=el(g,'g',{opacity:k});
+  const ax=tx+30,ay=V(pv)-70,ex=990,ey=BY[0]-40;
+  el(sg,'path',{d:`M${ax} ${ay} Q${ex-40} ${ay+10} ${ex} ${ey}`,fill:'none',stroke:C.ink,'stroke-width':5,'stroke-dasharray':'2 14','stroke-linecap':'round'});
+  const an=Math.atan2(ey-(ay+10),40),hl=22,ha=0.5;
   el(sg,'path',{d:`M${ex-hl*Math.cos(an-ha)} ${ey-hl*Math.sin(an-ha)} L${ex} ${ey} L${ex-hl*Math.cos(an+ha)} ${ey-hl*Math.sin(an+ha)}`,fill:'none',stroke:C.ink,'stroke-width':5,'stroke-linecap':'round','stroke-linejoin':'round'});
-  T(sg,Math.min(ex+30,1010),ey-74,String(Y[N]),30,C.grey,'end',700);T(sg,Math.min(ex+30,1010),ey-20,D.currency+'???',64,COL,'end',800)}}
+  T(sg,1010,ey-86,String(Y[N]),30,C.grey,'end',700);T(sg,1010,ey-30,D.currency+'???',64,COL,'end',800)}}
  // live chip -> hidden total -> gold reveal
  if(answerOn){const s_=1+0.06*Math.sin(Math.PI*clamp(reveal));const bg=el(g,'g',{transform:`translate(540,1500) scale(${s_}) translate(-540,-1500)`});
   el(bg,'rect',{x:110,y:1458,width:860,height:84,fill:C.gold});fitT(T(bg,540,1513,D.final,40,C.ink),820)}
