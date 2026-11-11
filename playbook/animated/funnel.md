@@ -19,6 +19,8 @@ FLOW (user default 11 Nov 2026): the flow pieces are released from the TOP of ea
 under the segment labels); the zoom-in never stops - it keeps
 closing in slowly over the segment labels, then curves straight on into the first stage (no still moment anywhere at the
 start). The source line is hidden on the opening frame and shown on the final wide shot.
+Flow pieces: twice the original density, each piece a slightly different length and speed so it reads as a real
+flow (dash_density 2, dash_vary true: the renderer default).
 
 ## Writing the data (all episodes)
 - The story is always: a starting amount -> pieces taken off (or added) -> what is left, which is the payoff.
