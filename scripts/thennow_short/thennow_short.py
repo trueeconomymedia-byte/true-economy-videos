@@ -4,7 +4,7 @@ animation style in playbook/animated/registry.json:
 
     python3 thennow_short.py data.json OUTDIR SLUG
 
-Starts in the past on one value ("In 1995, a new US home cost $133,000."), the camera rides the tip of the line forward
+Title "Cost of a US home: 1995 vs 2025" (user rule 11 Nov 2026), the line starts in the past, the camera rides the tip of the line forward
 year by year (a tick per year), dotted event markers drop in as it passes them, an optional comparison line (e.g. income)
 runs underneath with the gap shaded, then the camera pulls back to the whole climb and the answer lands in gold.
 Writes to OUTDIR:
