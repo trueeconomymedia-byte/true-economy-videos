@@ -115,10 +115,10 @@ class Card:
     def pulse(s, x, y, w, h, rgb, cycles=None, r=6):
         """register a rectangle that gently flashes in the video (tile flash like Stock Market Today). rgb = (r,g,b)."""
         s.anim.setdefault("pulse", []).append([x, y, w, h, list(rgb), cycles, r])
-    def arrows(s, x, y, w, h, rgb=(255, 255, 255), n=28, alpha=0.55, size=13, shape="chevron", direction="up", avoid=None):
+    def arrows(s, x, y, w, h, rgb=(255, 255, 255), n=28, alpha=0.55, size=13, shape="chevron", direction="up", avoid=None, cycles=None):
         """register a rectangle where n solid rounded UP-ARROWS flow constantly upward (video only; seamless loop). Positions, start heights, speeds (1 or 2 passes per loop)
-        and sizes (+-25%) are random but fixed, spread evenly across the width. size = base size in canvas px; shape "chevron" (thin open ^, the preferred style, size ~13) or "arrow" (solid rounded arrow, size ~24). direction "up" for growth (green) or "down" for a fall (red); NEVER sideways. avoid = optional list of (x, y, w, h) text boxes: chevrons fade to ~10% near them so text on the block stays readable (pass the "toplabels" text box). Only use when it shows something that grew/is growing or fell/is falling. Use on the focal block instead of pulse."""
-        s.anim.setdefault("arrows", []).append([x, y, w, h, list(rgb), n, alpha, size, shape, direction, [list(a_) for a_ in (avoid or [])]])
+        and sizes (+-25%) are random but fixed, spread evenly across the width. size = base size in canvas px; shape "chevron" (thin open ^, the preferred style, size ~13) or "arrow" (solid rounded arrow, size ~24). direction "up" for growth (green) or "down" for a fall (red); NEVER sideways. avoid = optional list of (x, y, w, h) text boxes: chevrons fade to ~10% near them so text on the block stays readable (pass the "toplabels" text box). Only use when it shows something that grew/is growing or fell/is falling. Use on the focal block instead of pulse. cycles = fixed passes per loop for every chevron (int); with equal cycles a taller block moves its chevrons faster, so chevron SPEED can encode a rate (country_vs_country duel)."""
+        s.anim.setdefault("arrows", []).append([x, y, w, h, list(rgb), n, alpha, size, shape, direction, [list(a_) for a_ in (avoid or [])], cycles])
     _uid = 0
     def flag(s, cx, cy, r, code):
         """round flag icon. Known: US UK JP KR HK FR DE IT IE NL BE ES PL RU CH CN IN BR CA SE NO DK AU(approx none). Unknown code -> grey disc with the code."""

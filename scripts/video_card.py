@@ -221,11 +221,11 @@ def chart_state(t):
         k = 0.5 + 0.5 * math.sin((t / DUR) * 2 * math.pi * (cyc or max(1, round(DUR))) - math.pi / 2)
         d.rounded_rectangle([px * 2, py * 2, (px + pw) * 2, (py + ph_) * 2], radius=rad * 2, fill=tuple(rgb) + (int(255 * 0.45 * k),))
     for (ax, ay, aw, ah, argb, an, aalpha, asize, *_shp) in anim.get("arrows", []):
-        ashape = _shp[0] if _shp else "arrow"; adir = _shp[1] if len(_shp) > 1 else "up"; avoid = _shp[2] if len(_shp) > 2 else []      # direction: "up" (growth) or "down" (fall); never sideways        # constant upward flow of solid rounded arrows inside a rectangle (focal gain block)
+        ashape = _shp[0] if _shp else "arrow"; adir = _shp[1] if len(_shp) > 1 else "up"; avoid = _shp[2] if len(_shp) > 2 else []; fixcyc = _shp[3] if len(_shp) > 3 else None      # direction: "up" (growth) or "down" (fall); never sideways        # constant upward flow of solid rounded arrows inside a rectangle (focal gain block)
         rr = random.Random(int(ax * 7 + ay * 13 + aw))                             # fixed positions/phases/speeds/sizes -> identical every loop
         xs_ = [(i + rr.random()) / an for i in range(an)]; rr.shuffle(xs_)          # random look, but spread evenly across the width
         for i in range(an):
-            cx = ax + aw * (0.06 + 0.88 * xs_[i]); ph = rr.random(); cyc = rr.choice([1, 1, 2]); sz = asize * (0.75 + 0.5 * rr.random())
+            cx = ax + aw * (0.06 + 0.88 * xs_[i]); ph = rr.random(); cyc = rr.choice([1, 1, 2]); cyc = fixcyc or cyc; sz = asize * (0.75 + 0.5 * rr.random())
             q = (ph + cyc * t / DUR) % 1.0                                           # 0 = bottom edge, 1 = top edge; integer cycles per loop = seamless
             cy = ay + ah * ((1 - q) if adir == "up" else q); edge = min(1.0, q / 0.16, (1 - q) / 0.16)
             al = int(255 * aalpha * max(edge, 0))

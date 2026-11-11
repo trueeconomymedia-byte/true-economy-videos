@@ -1,0 +1,8 @@
+{"title":["India grows faster, but","needs 69 years to catch up"],"mark":"69 years","accent":"none",
+ "subtitle":"India vs China · IMF forecasts for 2026 · GDP in current US$",
+ "a":{"code":"CN","name":"China"},"b":{"code":"IN","name":"India"},
+ "rows":[{"label":"Size of the economy (GDP, 2026)","kind":"size","a":21.546,"b":4.060,"fmt":"${:.2f}tn","better":null,"gap_label":"gap to China"},
+         {"label":"Growth this year (real GDP, 2026)","kind":"rate","a":4.47,"b":7.01,"fmt":"{:.1f}%","better":"higher","note":"arrow speed = growth rate"}],
+ "kpi":["India grows 2.5 percentage points faster","At 7.0% vs 4.5% a year, India would match China around 2095"],
+ "footer":"Faster growth, but a long road to catch up",
+ "source":"Source: IMF WEO Oct 2026 · catch-up is illustrative: both keep 2026 growth, exchange rates fixed"}
