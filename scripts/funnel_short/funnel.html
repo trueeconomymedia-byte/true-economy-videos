@@ -62,7 +62,7 @@ window.NSTEPS=steps.length;
 // of the lower half (like/comment buttons). D.safe=false gives the original layout.
 const SAFE=D.safe!==false, CW=SAFE?380:425;
 const VMAX=Math.max(rev,...steps.map(s=>s.val)),WMAX=CW*rev/VMAX,k=CW/VMAX,L=SAFE?310:255,BAR=16,Yt=-40,Y0=520,DY=SAFE?400:440,D_=SAFE?330:360,RX=SAFE?725:715,LX=SAFE?290:235;
-const MX0=SAFE?60:0,MX1=SAFE?1020:1080, T1=SAFE?375:205, T2=SAFE?470:300, PY=SAFE?505:345, TOPF=SAFE?625:470, BOTF=SAFE?1545:1640;
+const MX0=SAFE?60:0,MX1=SAFE?1020:1080, T1=SAFE?395:205, T2=SAFE?490:300, PY=SAFE?525:345, TOPF=SAFE?645:470, BOTF=SAFE?1545:1640;
 const Ys=[Y0];steps.forEach((s,i)=>Ys.push(Y0+DY*(i+1)));
 const width=v=>v*k;
 const HO=0;   // the title NEVER moves (user rule: same place every episode, max 2 lines); a logo sits beside the counter
@@ -177,7 +177,7 @@ el($('src'),'text',{x:540,y:SAFE?1590:1712,'text-anchor':'middle','font-family':
 const SY=(SAFE?1180:1080)+HO*.6;
 const view=j=>(Ys[j]+Ys[j+1])/2+40;
 // wide shot: fit the whole world between the header and the caption-safe line
-const top=Yt-10, bot=YN+215, availTop=(SAFE?615:430)+HO, availBot=SAFE?1560:1690;
+const top=Yt-10, bot=YN+215, availTop=(SAFE?635:430)+HO, availBot=SAFE?1560:1690;
 const WS=Math.min(.75,(availBot-availTop)/(bot-top)), WCY=(top+bot)/2, WSY=(availTop+availBot)/2;
 const CAM=[[0,540,1,SY],[.8,540,1,SY],[4.3,view(0)-12,1,SY]];
 steps.forEach((s,j)=>{CAM.push([s.b+1.8,view(j),1,SY]);if(j<steps.length-1)CAM.push([s.b+4.0,view(j+1)-12,1,SY])});

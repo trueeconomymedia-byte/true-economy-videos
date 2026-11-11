@@ -15,7 +15,7 @@
    "status": "active",
    "since": "2026-11-11",
    "rules": "playbook/animated/funnel.md",
-   "title_zone": "2 centred lines, Lora Bold 86 px (auto-shrinks only if a line is too long), baselines y=205 and y=300; counter (and logo, if any) on the row below at y=345-417",
+   "title_zone": "2 centred lines, Lora Bold 86 px (auto-shrinks only if a line is too long), baselines y=395 and y=490 (SAFE layout: inside the 4:5 feed crop and below every app's top bar); counter (and logo, if any) on the row below at y=525; all content inside x 60-1020",
    "render": "python3 scripts/funnel_short/funnel_short.py {data} {outdir} {slug}",
    "outputs": {
     "buffer": "{slug}-auto.mp4",

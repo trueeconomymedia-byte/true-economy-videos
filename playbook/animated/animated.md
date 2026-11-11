@@ -14,6 +14,9 @@ Series (animation styles) and their episodes are listed in `registry.json`. Each
 - TITLE: each series has ONE fixed title position (its `title_zone` in registry.json); every episode of that series
   puts its title in exactly that place, at most 2 lines. Different series may use different title positions.
   Never move the title for a logo or anything else; a series' renderer owns this, the task never changes it.
+- SAFE ZONES (user rule, 11 Nov 2026), for every series: all content inside x 60-1020 (Shorts/Reels zoom in); the title sits
+  inside the 4:5 feed crop (y 285-1635) and below every app's top bar (nothing above y 340 except empty paper); nothing
+  important below y 1600 (captions, buttons) or in the right 120 px of the lower half. New series must be built to this.
 
 ## 1. Hard limits (never broken; `python3 scripts/anim_plan.py` applies them)
 - At most 1 animated Short per day across all series.
