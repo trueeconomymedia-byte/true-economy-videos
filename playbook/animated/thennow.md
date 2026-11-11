@@ -1,17 +1,18 @@
 # "Then vs now" series (approved by the user 11 Nov 2026)
 
 Look: the shared card paper with the printed-ink finish and the shared SAFE zones (animated.md section 0). The video STARTS
-IN THE PAST on one value (the hook: "In 1995, a new US home cost $133,000."), the camera rides the tip of the line
-forward year by year (a tick per year, year counter in the pill), dotted event markers drop in as the line passes them
+IN THE PAST (the hook title: "Cost of a US home: 1995 vs 2025"), the camera rides the tip of the line
+forward year by year (a tick per year; no year pill, the x axis shows the years), dotted event markers drop in as the line passes them
 (soft hit + piano note), an optional comparison line (income, wages, inflation) runs underneath with the gap shaded, a
-live chip shows "= 3.9x median income" (or "+X% since 1995"), then the camera pulls back to the whole climb, the answer
+ratio tag AT THE TIP shows "= 3.9x / median income" beside a bracket between the two dots (no compare line: "+X% since
+1995" under the tip label); it turns to "= ?x" over the last year, then the camera pulls back to the whole climb, the answer
 is hidden ("2025: ??x median income") and revealed in gold. ~31 s. Same video for YouTube and Buffer; Buffer cover =
 thumbnailOffset `thumb_ms` from SLUG-build.json (the whole climb with the answer hidden).
 Renderer: `python3 scripts/thennow_short/thennow_short.py data.json OUTDIR SLUG` (read its docstring). Never change the
 look, timing or sound inside the renderer; only the data changes.
 
 REWIND OPENING (user-approved 11 Nov 2026, renderer default): the video opens on the whole climb with today's values
-("$???") and the answer ("??x") hidden, rewinds to the first year in ~1.1 s (year pill spinning back, faint ghost of the
+("$???") and the answer ("??x") hidden, rewinds to the first year in ~1.1 s (faint ghost of the
 full line, tape-rewind sound), lands on a hit as the hook title pops and its gold marker sweeps in; short reveal hold so
 it loops. Buffer cover = thumbnailOffset `thumb_ms` from SLUG-build.json (33 ms = that first frame). Same video on YouTube.
 
@@ -19,7 +20,12 @@ it loops. Buffer cover = thumbnailOffset `thumb_ms` from SLUG-build.json (33 ms 
 - One yearly series of 10-40 years with no gaps (main line), optionally a comparison line in the SAME unit (house price
   vs income, rent vs wages, a price vs the minimum wage). The renderer works out the ratio, % change and every headline
   number itself ({start}, {end}, {ratio_start}, {ratio_end}, {pct}, {times}); never type a derived number.
-- The hook is always the PAST value ("In {y0}, ..."): people know today's price, not the old one.
+- TITLE (user rule 11 Nov 2026): obvious and attractive, "<What> : {y0} vs {y1}" with the gold marker on "{y0} vs {y1}",
+  e.g. headline_q ["Cost of a US home:", "{y0} vs {y1}", "{y0} vs {y1}"]; answer headline_a ["{start} → {end}",
+  "{ratio_start}x → {ratio_end}x income", "{ratio_end}x"] (no compare line: ["{start} → {end}", "{pct} since {y0}", "{pct}"]). Each line max 26 characters. The years in the title are the data's real first and last years
+  (never the calendar year if the data stops earlier). The CAPTION hook still leads with the PAST value.
+- THE KEY NUMBER LIVES IN THE CHART (user rule 11 Nov 2026): the ratio sits at the tip between the two dots, not in a
+  pill under the title; nothing sits between the title and the chart but the event labels.
 - A good episode has a clear long-term change AND a comparison or a turn that tells a story (the gap widening, a
   crash and recovery). Flat or noisy series are not eligible.
 - Colours: main line blue (red if the main line is itself a cost/problem such as debt), comparison teal, the gap
@@ -28,8 +34,8 @@ it loops. Buffer cover = thumbnailOffset `thumb_ms` from SLUG-build.json (33 ms 
   if no comparison exists, say "not adjusted for inflation" in the caption, or use a real (inflation-adjusted) series.
 
 - RATIO WORDING (user rule, 11 Nov 2026): a price compared with income is shown as "N x income", the way people talk
-  about it: chip "= 3.9x median income", answer box "1995: 3.9x → 2025: 4.7x median income", headline_a e.g.
-  ["Now it costs {end}:", "{ratio_end}x median income.", "{ratio_end}x"] (ratio_style "times", the renderer default).
+  about it: tip tag "= 3.9x median income", answer box "1995: 3.9x → 2025: 4.7x median income", headline_a e.g.
+  ["{start} → {end}", "{ratio_start}x → {ratio_end}x income", "{ratio_end}x"] (ratio_style "times", the renderer default).
   Never "years of income". Label the comparison line by what the data is: a median is "median income" (never
   "average income", which is the mean and a different, higher number); a true mean may be called "average income".
   Captions use the same "3.9x" wording.

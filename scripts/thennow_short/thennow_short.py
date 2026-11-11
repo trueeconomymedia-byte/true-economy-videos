@@ -12,7 +12,7 @@ Writes to OUTDIR:
   SLUG-auto.mp4          the SAME video -> Buffer, with metadata.thumbnailOffset = "thumb_ms" in SLUG-build.json (33 = first frame)
   REWIND OPENING (approved by the user 11 Nov 2026, on by default; "cold_open": false turns it off): the first frame is the
   whole climb with today's values ("$???") and the answer ("??x") hidden; the line rewinds to the first year in ~1.1 s
-  (year pill spinning back, faint ghost of the full line, tape-rewind sound + year ticks), lands on a hit, the title pops
+  (faint ghost of the full line, tape-rewind sound + year ticks), lands on a hit, the title pops
   and the gold marker sweeps in; the reveal hold is short so the end frame loops back into the first frame.
   SLUG-thumb-tease.png   the first frame (whole climb, today's value and answer hidden) -> YouTube custom thumbnail
   SLUG-thumb-answer.png  the whole climb with the answer
@@ -29,14 +29,14 @@ data.json:
   start_year, end_year   optional: trim the library series (10-40 years)
   currency   "$" | "£" | "€" | "" ; suffix optional, e.g. "%" for rates
   main_label     short label at the tip, e.g. "typical new home"
-  compare_label  optional, e.g. "median income"; ratio_style "times" (default, user rule 11 Nov 2026: chip "= 3.9x median income",
+  compare_label  optional, e.g. "median income"; ratio_style "times" (default, user rule 11 Nov 2026: tip tag "= 3.9x median income",
              answer "1995: 3.9x → 2025: 4.7x median income") | "years" ("= 3.9 years of income"); ratio_label the words
              after the ratio, default "median income" (times) / "years of income" (years). Say "median" when the data is a
              median (never call a median "average")
   colour     main line: "blue" (default) | "red" | "teal"; gap_colour "red" (main outruns compare, default) | "teal"
   events     [[year, "label"], ...] at most 5, each verified (playbook/animated/events.json), inside the years
-  headline_q [line1, line2, words to mark gold]  e.g. ["In {y0}, a new US home", "cost {start}.", "{start}"]
-  headline_a [line1, line2, words to mark gold]  e.g. ["Now it costs {end}:", "{ratio_end}x median income.", "{ratio_end}x"]
+  headline_q [line1, line2, words to mark gold]  e.g. ["Cost of a US home:", "{y0} vs {y1}", "{y0} vs {y1}"] (user rule 11 Nov 2026)
+  headline_a [line1, line2, words to mark gold]  e.g. ["{start} → {end}", "{ratio_start}x → {ratio_end}x income", "{ratio_end}x"]
   final, tease  optional; defaults (times): "{y0}: {ratio_start}x → {y1}: {ratio_end}x median income" / "... → {y1}: ??x median income"
              (without a compare line: "{y0}: {start} → {y1}: {end}" / "... → {y1}: {cur}??")
   source     e.g. "Source: U.S. Census Bureau & HUD via FRED (MSPUS, MEHOINUSA646N)"

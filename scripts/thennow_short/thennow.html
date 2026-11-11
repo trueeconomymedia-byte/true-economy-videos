@@ -80,7 +80,7 @@ function FRAME(o){
  const hq=el(g,'g',{opacity:1-prog(o.t,TL.ans,TL.ans+0.4),transform:`translate(540,${T1}) scale(${hpop}) translate(-540,${-T1})`});headline(hq,...D.headline_q,mp);
  const ha=el(g,'g',{opacity:prog(o.t,TL.ans+0.1,TL.ans+0.5)});headline(ha,...D.headline_a);
  const Y=D.years,now=o.now;
- {const t=T(g,540,PY+49,String(Math.floor(Y[0]+now+1e-6)),38,C.paper);const w=Math.max(260,t.getComputedTextLength()+70);g.insertBefore(el(g,'rect',{x:540-w/2,y:PY,width:w,height:72,rx:8,fill:'#1b1b1b'}),t)}
+ // (no year pill: user 11 Nov 2026 - the x axis already shows the years; the ratio lives at the tip instead)
  const [ya,yb]=o.win,BX=[110,960],BY=[745,1385],vmax=o.vmax;
  const X=i=>BX[0]+(i-ya)/(yb-ya)*(BX[1]-BX[0]),V=v=>BY[1]-v/vmax*(BY[1]-BY[0]);
  const gap=STEP/vmax*(BY[1]-BY[0]);
@@ -98,11 +98,13 @@ function FRAME(o){
   el(cg,'path',{d:path(pe),fill:'none',stroke:PAL.teal,'stroke-width':7,'stroke-linejoin':'round'})}
  el(cg,'path',{d:path(pp),fill:'none',stroke:COL,'stroke-width':9,'stroke-linejoin':'round'});
  // events: a dotted marker drops in when the tip reaches it; labels alternate height when close
- let lastx=-999,row=0;
- for(const ev of D.events){const i=ev[0]-Y[0];if(i>now+1e-6||X(i)<BX[0]-5)continue;const x=X(i);row=(x-lastx<170)?1-row:0;lastx=x;const ly=BY[0]-50-row*62;
+ let lastR=[-999,-999],row=0;
+ for(const ev of D.events){const i=ev[0]-Y[0];if(i>now+1e-6||X(i)<BX[0]-5)continue;const x=X(i);
   const k=o.cold?1:eo(clamp((o.t-evT(i))*2.5));const eg=el(g,'g',{opacity:k});
   el(eg,'line',{x1:x,x2:x,y1:BY[0]-10,y2:BY[0]-10+(BY[1]-BY[0]+10)*k,stroke:C.ink,'stroke-width':2,'stroke-dasharray':'6 8',opacity:.55});
-  const lt=T(eg,x,ly,ev[1],26,C.ink,'middle',800),hw=lt.getComputedTextLength()/2,lx=Math.max(60+hw,Math.min(1020-hw,x));lt.setAttribute('x',lx);T(eg,lx,ly+28,String(ev[0]),22,C.grey,'middle',600)}
+  const lt=T(eg,x,0,ev[1],26,C.ink,'middle',800),hw=lt.getComputedTextLength()/2,lx=Math.max(60+hw,Math.min(1020-hw,x));
+  row=(lx-hw<lastR[0]+18)?(lx-hw<lastR[1]+18?0:1):0;lastR[row]=lx+hw;const ly=BY[0]-50-row*62;
+  lt.setAttribute('x',lx);lt.setAttribute('y',ly);T(eg,lx,ly+28,String(ev[0]),22,C.grey,'middle',600)}
  // tip labels
  const tx=X(now),pv=val(D.main,now);
  el(g,'circle',{cx:tx,cy:V(pv),r:12,fill:COL});
@@ -111,13 +113,23 @@ function FRAME(o){
  T(g,tx+dx,py,hide?D.currency+'???':fmt(pv,D.currency,D.suffix),40,COL,anc);T(g,tx+dx,py+30,D.main_label,22,C.ink,anc,700);
  if(D.compare){const ev_=val(D.compare,now);el(g,'circle',{cx:tx,cy:V(ev_),r:10,fill:PAL.teal});
   const ey=right?V(ev_)+10:V(ev_)-46;T(g,tx+dx,ey,hide?D.currency+'???':fmt(ev_,D.currency,D.suffix),32,PAL.teal,anc);T(g,tx+dx,ey+28,D.compare_label,22,C.ink,anc,700)}
+ // ratio tag AT THE TIP (user 11 Nov 2026): a bracket between the two dots, "= 4.2x / median income" beside it, so the
+ // key number reads as part of the chart, not the title. Hidden as "?x" over the last year until the gold reveal.
+ const qhide=hide||(!answerOn&&now>N-1+1e-6);
+ if(D.compare){const ev_=val(D.compare,now),y1=V(pv)+20,y2=V(ev_)-(right?18:86);   // labels on the left: stop above the income label
+  if(y2-y1>70){const bx=tx-26,tk=12,bg=el(g,'g',{});   // always left of the tip, inside the shaded gap (never clipped at the right edge)
+   el(bg,'path',{d:`M${bx+tk} ${y1} L${bx} ${y1} L${bx} ${y2} L${bx+tk} ${y2}`,fill:'none',stroke:C.ink,'stroke-width':3});
+   const r=(pv/ev_).toFixed(1),big='= '+(qhide?'?':r)+(D.ratio_style==='years'?'':'x'),ym=(y1+y2)/2,ta='end',tx2=bx-16;
+   const t1=T(bg,tx2,ym+8,big,46,C.ink,ta,800),t2=T(bg,tx2,ym+38,D.ratio_label,22,C.grey,ta,700);
+   const w=Math.max(t1.getComputedTextLength(),t2.getComputedTextLength())+28,rx=tx2-w+14;
+   bg.insertBefore(el(bg,'rect',{x:rx,y:ym-36,width:w,height:84,rx:8,fill:C.paper,opacity:.92}),t1)}}
+ else{const pc=(pv>=D.main[0]?'+':'−')+Math.abs(Math.round((pv/D.main[0]-1)*100))+'% since '+Y[0];T(g,tx+dx,py+60,qhide?'+??%':pc,30,C.ink,anc,800)}
  // live chip -> hidden total -> gold reveal
  if(answerOn){const s_=1+0.06*Math.sin(Math.PI*clamp(reveal));const bg=el(g,'g',{transform:`translate(540,1500) scale(${s_}) translate(-540,-1500)`});
   el(bg,'rect',{x:110,y:1458,width:860,height:84,fill:C.gold});fitT(T(bg,540,1513,D.final,40,C.ink),820)}
  else if(o.cold&&now>N-2.5){el(g,'rect',{x:110,y:1458,width:860,height:84,fill:C.gold});fitT(T(g,540,1513,D.tease,40,C.ink),820)}
  else if(hold>0){const bg=el(g,'g',{opacity:hold});el(bg,'rect',{x:110,y:1458,width:860,height:84,fill:C.gold});fitT(T(bg,540,1513,D.tease,40,C.ink),820)}
- else{const txt=D.compare?'= '+(val(D.main,now)/val(D.compare,now)).toFixed(1)+(D.ratio_style==='years'?' ':'x ')+D.ratio_label:(val(D.main,now)>=D.main[0]?'+':'−')+Math.abs(Math.round((val(D.main,now)/D.main[0]-1)*100))+'% since '+Y[0];
-  const t2=T(g,540,1510,txt,36,C.paper);const cw=t2.getComputedTextLength()+60;g.insertBefore(el(g,'rect',{x:540-cw/2,y:1462,width:cw,height:70,fill:C.ink}),t2)}
+ // (no bottom chip: the live ratio sits at the tip)
  fitT(T(g,540,1598,D.source,22,'#444','middle',500),900);
 }
 function fitT(e,w){const l=e.getComputedTextLength();if(l>w)e.setAttribute('font-size',(+e.getAttribute('font-size')*w/l).toFixed(1));return e}
