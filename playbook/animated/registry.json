@@ -25,7 +25,8 @@
     "qa": [
      "{slug}-qa-auto.jpg",
      "{slug}-qa-youtube.jpg"
-    ]
+    ],
+    "thumbnail_offset_ms": 200
    },
    "unsupported_exit": 3,
    "episodes": {
@@ -88,9 +89,9 @@
     "thumb": "{slug}-thumb-tease.png",
     "thumb_answer": "{slug}-thumb-answer.png",
     "qa": [
-     "{slug}-qa-auto.jpg",
      "{slug}-qa-youtube.jpg"
-    ]
+    ],
+    "thumbnail_offset_ms": "thumb_ms in {slug}-build.json (the finished grid with the total hidden, near the end); no cold open in this series"
    },
    "unsupported_exit": 3,
    "episodes": {

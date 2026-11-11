@@ -1,5 +1,5 @@
 // True Economy "How big is it really?" renderer. node howbig_render.js <build.json> <outdir> <slug>
-// Writes <slug>-auto-silent.mp4 (cold open), <slug>-youtube-silent.mp4, <slug>-beats-<variant>.json,
+// Writes <slug>-youtube-silent.mp4 (the one video for every platform), <slug>-beats-youtube.json,
 // <slug>-thumb-tease.png, <slug>-thumb-answer.png. Frames go through the shared printed-ink finish (anim_shared/ink_pipe.py).
 const {chromium}=require('playwright');const {spawn,execFileSync}=require('child_process');
 const fs=require('fs'),path=require('path');
@@ -10,14 +10,14 @@ const inkPng=(raw,out)=>{execFileSync('python3',['-c',`import sys;sys.path.inser
 (async()=>{
  const b=await chromium.launch();const p=await b.newPage({viewport:{width:1080,height:1920}});
  p.on('pageerror',e=>{console.error('page error:',e.message);process.exit(1)});
- const VARS=(process.env.HOWBIG_VARIANTS||'auto,youtube').split(',');
+ const VARS=(process.env.HOWBIG_VARIANTS||'youtube').split(',');   // no cold open (user, 11 Nov 2026): the cover is picked by thumbnailOffset
  for(const [variant,cold] of [['auto',1],['youtube',0]].filter(v=>VARS.includes(v[0]))){
   await p.goto('file://'+path.join(__dirname,'howbig.html'));
   await p.evaluate(async()=>{await document.fonts.load('700 86px Lora');await document.fonts.load('800 54px Inter');await document.fonts.load('600 28px Inter');await document.fonts.ready});
   await p.evaluate(d=>BUILD(d),{...D,cold});
   const beats=await p.evaluate(()=>BEATS);
   fs.writeFileSync(path.join(outdir,`${slug}-beats-${variant}.json`),JSON.stringify(beats));
-  if(variant==='auto'){for(const [fn,nm] of [['tease','thumb-tease'],['answer','thumb-answer']]){
+  if(variant==='youtube'){for(const [fn,nm] of [['tease','thumb-tease'],['answer','thumb-answer']]){
    await p.evaluate(f=>window[f](),fn);const out=path.join(outdir,`${slug}-${nm}.png`),raw=out+'.rgba.png';
    await p.screenshot({path:raw,omitBackground:true});inkPng(raw,out)}}
   const N=Math.round(beats.total*30),tmp=path.join(outdir,`${slug}-${variant}-silent.tmp.mp4`);

@@ -3,9 +3,12 @@
 Look: the shared card paper with the printed-ink finish and the shared SAFE zones (animated.md section 0). ONE
 constant reference the whole video: **1 square = 1 hour of the money**. Day 1 fills hour by hour (00:00, 01:00 ...)
 with a tick per hour, the camera pulls back to the first week, then the first months, then the whole period laid out
-as a calendar (a year in month rows Apr-Mar or Jan-Dec, a quarter in rows of 14 days). The money counter is hidden
+as a calendar (a year: one row per month; a quarter: three month blocks side by side, 7 days a row, month names
+above). Captions (user, 11 Nov 2026): 1 Day, 1 Week = .., 1 Month = .., and the gold box 1 Quarter = .. / 1 Year = ..;
+the counter reads "N hours = £X". The money counter is hidden
 ("£??") while the last stage fills; the total is revealed in gold at the end. Calm news-style sound (ticks, soft
-patter, glides, low hits, warm piano reveal). 28.5 s (YouTube) / 30 s (Buffer, with the cold open).
+patter, glides, low hits, warm piano reveal). 28.5 s. NO cold open (user, 11 Nov 2026: the rewind was off-putting): Buffer gets the same video as YouTube, and its
+cover is set with thumbnailOffset = `thumb_ms` from SLUG-build.json (the finished grid with the total hidden).
 Renderer: `python3 scripts/howbig_short/howbig_short.py data.json OUTDIR SLUG` (read its docstring for the data
 format). Never change the look, timing or sound inside the renderer; only the data changes.
 
@@ -31,7 +34,7 @@ Why hours (user decision, 11 Nov 2026): the reference must never change during t
   "{hour}"]. headline_a: the total, e.g. ["One year of interest:", "{total}.", "{total}"]. Max 26 characters per line
   after filling (the renderer refuses longer lines, exit 4).
 - key: what one square is, short ("1 hour of interest", "1 hour of profit", "1 hour of his pay").
-- final: the gold answer, e.g. "{total} a year", "{total} in 3 months". tease defaults to "£?? a year" / "£?? a quarter".
+- final/tease: leave them out; the defaults are "1 Year = {total}" / "1 Quarter = {total}" and "1 Year = £??" / "1 Quarter = £??".
 - source: the primary source and its date; the renderer adds "· {total} ÷ N hours".
 - Captions: never give the total away in the first line (it is the payoff). Use the per-hour figure as the hook and
   put the comparison with a normal wage or a familiar cost in the caption text.
