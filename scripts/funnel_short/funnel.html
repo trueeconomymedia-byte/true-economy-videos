@@ -230,7 +230,7 @@ function draw(t,o){o=o||{};
  $('logo').setAttribute('opacity',$('pill').getAttribute('opacity'));
  const tfh=TOPF+HO-CDY-70*eio(wide);
  if(MASKFADE){$('tf').setAttribute('opacity',0);$('bf').setAttribute('opacity',0);
-  const hid=(PY+HO+72-CDY)*(1-wide)+(tfh*.72)*wide,vis=Math.max(hid+100*(1-wide)+40*wide,tfh-CDY*0.4);   // chart hidden above the money bar, then fades in
+  const hid=(PY+HO+72-CDY+(FADE?80*up:0))*(1-wide)+(tfh*.72)*wide,vis=Math.max(hid+100*(1-wide)+40*wide,tfh-CDY*0.4);   // chart hidden above the money bar, then fades in
   document.getElementById('m1').setAttribute('offset',(hid/1920).toFixed(4));document.getElementById('m2').setAttribute('offset',(vis/1920).toFixed(4));
   const bo=1-wide;document.getElementById('m3').setAttribute('offset',((BOTF+(1920-BOTF)*wide)/1920).toFixed(4));
   document.getElementById('m4').setAttribute('offset',Math.min(1,(BOTF+168+(1920-BOTF)*wide)/1920).toFixed(4));}
