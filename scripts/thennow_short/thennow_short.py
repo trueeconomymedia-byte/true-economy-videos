@@ -10,11 +10,9 @@ runs underneath with the gap shaded, then the camera pulls back to the whole cli
 Writes to OUTDIR:
   SLUG-youtube.mp4       the video -> sent to the user, who posts YouTube by hand
   SLUG-auto.mp4          the SAME video -> Buffer, with metadata.thumbnailOffset = "thumb_ms" in SLUG-build.json (33 = first frame)
-  REWIND OPENING (approved by the user 11 Nov 2026, on by default; "cold_open": false turns it off): the first frame is the
-  whole climb with today's values ("$???") and the answer ("??x") hidden; the line rewinds to the first year in ~1.1 s
-  (faint ghost of the full line, tape-rewind sound + year ticks), lands on a hit, the title pops
-  and the gold marker sweeps in; the reveal hold is short so the end frame loops back into the first frame.
-  SLUG-thumb-tease.png   the first frame (whole climb, today's value and answer hidden) -> YouTube custom thumbnail
+  STRAIGHT-IN OPENING (user rule 11 Nov 2026, default): no rewind, zoom or teaser; the line moves from the first frame.
+  "cold_open": true brings back the old rewind opening (only if the user asks).
+  SLUG-thumb-tease.png   the whole climb, today's value and answer hidden -> YouTube custom thumbnail (set by hand)
   SLUG-thumb-answer.png  the whole climb with the answer
   SLUG-qa-youtube.jpg    contact sheet of key frames: LOOK at it
   SLUG-build.json        every number the video shows (all derived numbers computed here, never typed)

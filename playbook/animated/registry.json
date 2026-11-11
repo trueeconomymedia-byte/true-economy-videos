@@ -151,7 +151,7 @@
     "qa": [
      "{slug}-qa-youtube.jpg"
     ],
-    "thumbnail_offset_ms": "thumb_ms in {slug}-build.json (33 = the first frame: whole climb, today's value and answer hidden; rewind opening approved 11 Nov 2026)"
+    "thumbnail_offset_ms": "thumb_ms in {slug}-build.json (33 = the first frame; straight-in opening, no rewind: user rule 11 Nov 2026)"
    },
    "unsupported_exit": 3,
    "episodes": {

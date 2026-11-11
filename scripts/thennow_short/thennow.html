@@ -129,14 +129,7 @@ function FRAME(o){
   else if(right){const bx=tx+dx+lw+22;y1=V(pv)-36;y2=Math.max(V(ev_)+36,y1+90);
    el(bg,'path',{d:`M${bx-12} ${y1} L${bx} ${y1} L${bx} ${y2} L${bx-12} ${y2}`,fill:'none',stroke:C.ink,'stroke-width':3});tag(bg,bx+18,(y1+y2)/2,'start')}}
  else{const pc=(pv>=D.main[0]?'+':'−')+Math.abs(Math.round((pv/D.main[0]-1)*100))+'% since '+Y[0];T(g,tx+dx,py+60,qhide?'+??%':pc,30,C.ink,anc,800)}
- // START COVER (user 11 Nov 2026, no rewind): the opening frame is the cover. A dotted arrow climbs from the first value
- // to "<last year>: $???" in the top-right corner of the chart, so the frame asks the question; it fades as the ride starts.
- if(!COLD){const k=1-eio(prog(o.t,KEYS[1][0]+0.2,KEYS[1][0]+1.0));if(k>0){const sg=el(g,'g',{opacity:k});
-  const ax=tx+30,ay=V(pv)-70,ex=990,ey=BY[0]-40;
-  el(sg,'path',{d:`M${ax} ${ay} Q${ex-40} ${ay+10} ${ex} ${ey}`,fill:'none',stroke:C.ink,'stroke-width':5,'stroke-dasharray':'2 14','stroke-linecap':'round'});
-  const an=Math.atan2(ey-(ay+10),40),hl=22,ha=0.5;
-  el(sg,'path',{d:`M${ex-hl*Math.cos(an-ha)} ${ey-hl*Math.sin(an-ha)} L${ex} ${ey} L${ex-hl*Math.cos(an+ha)} ${ey-hl*Math.sin(an+ha)}`,fill:'none',stroke:C.ink,'stroke-width':5,'stroke-linecap':'round','stroke-linejoin':'round'});
-  T(sg,1010,ey-86,String(Y[N]),30,C.grey,'end',700);T(sg,1010,ey-30,D.currency+'???',64,COL,'end',800)}}
+ // (no opening arrow or "$???": user 11 Nov 2026 - the video goes straight into the ride)
  // live chip -> hidden total -> gold reveal
  if(answerOn){const s_=1+0.06*Math.sin(Math.PI*clamp(reveal));const bg=el(g,'g',{transform:`translate(540,1500) scale(${s_}) translate(-540,-1500)`});
   el(bg,'rect',{x:110,y:1458,width:860,height:84,fill:C.gold});fitT(T(bg,540,1513,D.final,40,C.ink),820)}
