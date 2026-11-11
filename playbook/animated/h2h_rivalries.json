@@ -1,0 +1,23 @@
+{"_about":"Head to head pairs and measure sets. Every measure must be like for like; sources listed are where to look first.",
+ "measures":{
+  "countries":[
+   {"name":"GDP per person","sub":"adjusted for living costs (PPP)","better":"high","source":"IMF World Economic Outlook (both sides, one edition)"},
+   {"name":"Median full-time pay","sub":"per year, in US$","better":"high","source":"national statistics offices (BLS, ONS...) + FRED average exchange rate for the same year"},
+   {"name":"Unemployment rate","sub":"share of workers without a job","better":"low","source":"national statistics offices (ILO definition) or OECD"},
+   {"name":"Inflation","sub":"prices, last 12 months","better":"low","source":"national CPI releases for the same month, or OECD"},
+   {"name":"Government debt","sub":"as a share of the economy","better":"low","source":"IMF Fiscal Monitor / WEO (one edition)"},
+   {"name":"GDP growth","sub":"economy, last 12 months","better":"high","source":"national accounts (same quarter) or OECD"}],
+  "companies":[
+   {"name":"Revenue","sub":"sales, latest full year","better":"high","source":"annual report / 10-K"},
+   {"name":"Profit","sub":"net income, latest full year","better":"high","source":"annual report / 10-K"},
+   {"name":"Profit margin","sub":"profit per $1 of sales","better":"high","source":"computed in code from revenue and profit"},
+   {"name":"Revenue growth","sub":"vs the year before","better":"high","source":"annual report / 10-K"},
+   {"name":"Cash","sub":"cash and short-term investments","better":"high","source":"balance sheet"}],
+  "places":[
+   {"name":"Median full-time pay","sub":"per year","better":"high","source":"ONS ASHE / BLS OEWS"},
+   {"name":"House price to earnings","sub":"years of pay for a home","better":"low","source":"ONS housing affordability (same method both places)"},
+   {"name":"Unemployment rate","sub":"share of workers without a job","better":"low","source":"ONS regional labour market / BLS LAUS"}]},
+ "pairs":{
+  "countries":[["US","UK"],["UK","France"],["UK","Germany"],["UK","Ireland"],["US","China"],["UK","Australia"],["US","Canada"],["UK","Japan"]],
+  "companies":[["Apple","Microsoft"],["Tesla","BYD"],["Tesco","Sainsbury's"],["Coca-Cola","PepsiCo"],["Nvidia","AMD"],["Amazon","Walmart"],["Shell","BP"],["Netflix","Disney"]],
+  "places":[["London","Rest of UK"],["Scotland","England"],["London","Manchester"]]}}

@@ -18,7 +18,8 @@ a headline line over 26 characters, unknown placeholder).
 
 data.json:
   a, b          side names, short ("US", "UK", "Apple", "Gen Z") - A is drawn LEFT in blue, B RIGHT in red
-  rounds        [{ "name": "Median full-time pay", "sub": "2025, per year, at 2025 exchange rate",
+  rounds        [{ "name": "Median full-time pay", "sub": "per year, in US$" (max 8 words),
+                   "note": "2025 · UK converted at the 2025 average rate" (small grey line under the bars: dates, method),
                    "better": "high" | "low",
                    "fmt": {"prefix": "$", "suffix": "", "decimals": 0, "round_to": 100},
                    "a": {"value": 62608, "source": "..."},
@@ -73,8 +74,9 @@ def main():
         else: win = "a" if va < vb else "b"
         sa += win == "a"; sb += win == "b"
         m = max(va, vb) or 1
-        out.append({"name": r["name"], "sub": r["sub"], "va": va, "vb": vb, "ta": ta, "tb": tb, "fa": va / m, "fb": vb / m, "win": win,
-                    "better": r["better"]})
+        out.append({"name": r["name"], "sub": r["sub"], "note": r.get("note", ""), "fmt": f, "va": va, "vb": vb, "ta": ta, "tb": tb,
+                    "fa": va / m, "fb": vb / m, "win": win, "better": r["better"]})
+        if len(r["sub"].split()) > 8: fail(4, f"CHECK: round {i+1} sub-label is over 8 words; keep it short and put dates in 'note'")
     winner, loser = (d["a"], d["b"]) if sa > sb else (d["b"], d["a"]) if sb > sa else ("", "")
     fill = {"a": d["a"], "b": d["b"], "sa": sa, "sb": sb, "winner": winner or "nobody", "loser": loser or "nobody",
             "score": f"{max(sa, sb)}–{min(sa, sb)}"}

@@ -199,6 +199,65 @@
      "min_score": 75
     }
    }
+  },
+  "h2h": {
+   "name": "Head to head (two rivals, rounds and a scoreboard)",
+   "status": "trial",
+   "since": "2026-11-11",
+   "rules": "playbook/animated/h2h.md",
+   "idea_bank": "playbook/animated/h2h_bank.jsonl",
+   "library": "playbook/animated/h2h_rivalries.json",
+   "title_zone": "same SAFE title zone as the other series: 2 centred lines, Lora Bold 86 px (auto-shrinks), baselines y=395 and y=490; scoreboard at y=525; all content inside x 60-1020",
+   "render": "python3 scripts/h2h_short/h2h_short.py {data} {outdir} {slug}",
+   "outputs": {
+    "buffer": "{slug}-auto.mp4",
+    "youtube": "{slug}-youtube.mp4",
+    "thumb": "{slug}-thumb-tease.png",
+    "thumb_answer": "{slug}-thumb-answer.png",
+    "qa": [
+     "{slug}-qa-youtube.jpg"
+    ],
+    "thumbnail_offset_ms": "thumb_ms in {slug}-build.json (the table with the decider hidden); no cold open"
+   },
+   "unsupported_exit": 3,
+   "episodes": {
+    "countries": {
+     "name": "Country vs country economy",
+     "gap_days": 7,
+     "max_in_7_days": 1,
+     "repeat_key": "pair (90 days unless all data newer)",
+     "priority": 55
+    },
+    "companies": {
+     "name": "Company vs company",
+     "gap_days": 5,
+     "max_in_7_days": 1,
+     "repeat_key": "pair + fiscal year",
+     "priority": 50
+    },
+    "places": {
+     "name": "City or region vs city or region",
+     "gap_days": 10,
+     "max_in_7_days": 1,
+     "repeat_key": "pair + data year",
+     "priority": 45
+    },
+    "then_now": {
+     "name": "One economy then vs now",
+     "gap_days": 14,
+     "max_in_7_days": 1,
+     "repeat_key": "economy + years",
+     "priority": 40
+    },
+    "news": {
+     "name": "Bonus: the matchup behind today's headline",
+     "gap_days": 7,
+     "max_in_7_days": 1,
+     "repeat_key": "story",
+     "priority": 40,
+     "min_score": 75
+    }
+   }
   }
  }
 }
