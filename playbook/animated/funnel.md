@@ -14,6 +14,10 @@ opens fully zoomed out (the whole chart, answer hidden, under the hook title) an
 takes its place: the running amount ("$92.3B in", "$62.6B left") in big ink type over a short thick bar that starts
 all gold and turns dark red from the right as each cost is taken. A band of clear paper separates the bar from the
 chart. No black pill. At the end it pulls back to the whole chart and the answer title. Buffer cover = thumbnailOffset 33.
+FLOW (user default 11 Nov 2026): the flow pieces are released from the TOP of each stream when it opens and swarm down
+(the funnel is empty when the zoom lands, then fills from under the segment labels); the zoom-in never stops - it keeps
+closing in slowly over the segment labels, then curves straight on into the first stage (no still moment anywhere at the
+start). The source line is hidden on the opening frame and shown on the final wide shot.
 
 ## Writing the data (all episodes)
 - The story is always: a starting amount -> pieces taken off (or added) -> what is left, which is the payoff.
