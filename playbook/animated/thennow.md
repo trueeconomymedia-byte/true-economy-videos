@@ -10,6 +10,11 @@ thumbnailOffset `thumb_ms` from SLUG-build.json (the whole climb with the answer
 Renderer: `python3 scripts/thennow_short/thennow_short.py data.json OUTDIR SLUG` (read its docstring). Never change the
 look, timing or sound inside the renderer; only the data changes.
 
+REWIND OPENING (user-approved 11 Nov 2026, renderer default): the video opens on the whole climb with today's values
+("$???") and the answer ("??x") hidden, rewinds to the first year in ~1.1 s (year pill spinning back, faint ghost of the
+full line, tape-rewind sound), lands on a hit as the hook title pops and its gold marker sweeps in; short reveal hold so
+it loops. Buffer cover = thumbnailOffset `thumb_ms` from SLUG-build.json (33 ms = that first frame). Same video on YouTube.
+
 ## 1. What makes an episode
 - One yearly series of 10-40 years with no gaps (main line), optionally a comparison line in the SAME unit (house price
   vs income, rent vs wages, a price vs the minimum wage). The renderer works out the ratio, % change and every headline

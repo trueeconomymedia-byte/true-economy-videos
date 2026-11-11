@@ -82,6 +82,13 @@ while t<DUR:
 # ---------- effects from the renderer's beats ----------
 B=BEATS; hits=[]
 if B.get('cold',0)>0: add('fx',glide(1.2),0.45,0.05)                # cold open: the grid rewinds into Day 1
+if B.get('rewind'):                                                  # tape-rewind: noise swept high -> low, year ticks spinning back
+    t0,d,k=B['rewind']; n=int(d*SR); x=rng.standard_normal(n); out=np.zeros(n); seg=int(0.03*SR)
+    for j in range(0,n,seg):
+        u=j/n; fc=3200*(1-u)+260*u; out[j:j+seg]=bp(x[j:j+seg] if j+seg<=n else x[j:],fc*0.6,fc*1.6)[:len(out[j:j+seg])]
+    out*=np.sin(np.pi*np.arange(n)/n)**1.5; add('fx',out/np.abs(out).max(),t0,0.16)
+    for j in range(k):
+        u=(j+0.5)/k; add('fx',tickr(0.55),t0+d*(0.5-0.5*np.cos(np.pi*u)),0.12)
 for j,tt in enumerate(B['ticks']): add('fx',tickr(0.75+0.25*(j%8==7)),tt,0.30)          # day 1: one tick per hour
 for t0,t1,n,g in B['patter']:
     for j in range(n):

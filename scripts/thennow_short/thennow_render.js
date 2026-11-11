@@ -14,7 +14,7 @@ const inkPng=(raw,out)=>{execFileSync('python3',['-c',`import sys;sys.path.inser
  for(const [variant,cold] of [['auto',1],['youtube',0]].filter(v=>VARS.includes(v[0]))){
   await p.goto('file://'+path.join(__dirname,'thennow.html'));
   await p.evaluate(async()=>{await document.fonts.load('700 86px Lora');await document.fonts.load('800 54px Inter');await document.fonts.load('600 28px Inter');await document.fonts.ready});
-  await p.evaluate(d=>BUILD(d),{...D,cold});
+  await p.evaluate(d=>BUILD(d),{...D,cold:D.cold_open?1:cold});
   const beats=await p.evaluate(()=>BEATS);
   fs.writeFileSync(path.join(outdir,`${slug}-beats-${variant}.json`),JSON.stringify(beats));
   if(variant==='youtube'){for(const [fn,nm] of [['tease','thumb-tease'],['answer','thumb-answer']]){
