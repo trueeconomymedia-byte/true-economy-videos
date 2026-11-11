@@ -73,6 +73,64 @@
      "min_score": 75
     }
    }
+  },
+  "howbig": {
+   "name": "How big is it really? (1 square = 1 hour)",
+   "status": "trial",
+   "since": "2026-11-11",
+   "rules": "playbook/animated/howbig.md",
+   "idea_bank": "playbook/animated/howbig_bank.jsonl",
+   "title_zone": "same SAFE title zone as funnel: 2 centred lines, Lora Bold 86 px (auto-shrinks), baselines y=395 and y=490; hour/money counter at y=525; key above the source line; all content inside x 60-1020",
+   "render": "python3 scripts/howbig_short/howbig_short.py {data} {outdir} {slug}",
+   "outputs": {
+    "buffer": "{slug}-auto.mp4",
+    "youtube": "{slug}-youtube.mp4",
+    "thumb": "{slug}-thumb-tease.png",
+    "thumb_answer": "{slug}-thumb-answer.png",
+    "qa": [
+     "{slug}-qa-auto.jpg",
+     "{slug}-qa-youtube.jpg"
+    ]
+   },
+   "unsupported_exit": 3,
+   "episodes": {
+    "public_cost": {
+     "name": "What a public cost or problem costs every hour",
+     "gap_days": 7,
+     "max_in_7_days": 1,
+     "repeat_key": "subject + period",
+     "priority": 55
+    },
+    "public_budget": {
+     "name": "What a public service costs every hour",
+     "gap_days": 7,
+     "max_in_7_days": 1,
+     "repeat_key": "subject + period",
+     "priority": 50
+    },
+    "company": {
+     "name": "What [Company] makes every hour",
+     "gap_days": 4,
+     "max_in_7_days": 2,
+     "repeat_key": "company + measure + period",
+     "priority": 50
+    },
+    "pay": {
+     "name": "What [famous person] earns every hour",
+     "gap_days": 10,
+     "max_in_7_days": 1,
+     "repeat_key": "person + period",
+     "priority": 50
+    },
+    "news": {
+     "name": "Bonus: a money total in today's news",
+     "gap_days": 7,
+     "max_in_7_days": 1,
+     "repeat_key": "story",
+     "priority": 40,
+     "min_score": 75
+    }
+   }
   }
  }
 }

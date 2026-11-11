@@ -1,0 +1,139 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- True Economy "HOW BIG IS IT REALLY?" animation style (approved by the user 11 Nov 2026). Driven by howbig_render.js;
+     do not open by hand. 1 square = 1 hour of the money. Data = the build written by howbig_short.py (see its docstring).
+     Transparent page: the card paper + printed-ink finish is added by scripts/anim_shared/ink_pipe.py. -->
+<style>
+@font-face{font-family:'Lora';font-weight:700;src:url('../assets/Lora-Bold.ttf')}
+html,body{margin:0;background:transparent;overflow:hidden}
+#stage{width:1080px;height:1920px;position:relative}
+canvas,svg{position:absolute;left:0;top:0}
+</style></head><body><div id="stage"><canvas id="cv" width="1080" height="1920"></canvas><svg id="sv" width="1080" height="1920" xmlns="http://www.w3.org/2000/svg"></svg></div>
+<script>
+const PAL={red:'#D94437',blue:'#3670D0',teal:'#249972'};
+const C={gold:'#FACB3A',ink:'#111111',paper:'#FBF8F1',grey:'#5A554B'};
+const NS='http://www.w3.org/2000/svg';
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const eio=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const eo=x=>{x=clamp(x);return 1-Math.pow(1-x,3)};
+const prog=(t,a,b)=>clamp((t-a)/(b-a));
+function el(p,t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;p.appendChild(e);return e}
+function T(p,x,y,s,size,fill,anchor,w){return el(p,'text',{x,y,'font-family':'Inter','font-weight':w||800,'font-size':size,fill,'text-anchor':anchor||'middle'},s)}
+// shared SAFE title zone (same as every Animated Shorts series): baselines 395/490, counter row at 525, content x 60-1020
+const T1=395,T2=490,PY=525;
+function headline(g,l1,l2,mark){
+ const hs=86, mk=el(g,'rect',{fill:C.gold});
+ const t1=el(g,'text',{x:540,y:T1,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l1);
+ const t2=el(g,'text',{x:540,y:T2,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l2);
+ const w=Math.max(t1.getComputedTextLength(),t2.getComputedTextLength());
+ if(w>900){const f=Math.floor(hs*900/w);t1.setAttribute('font-size',f);t2.setAttribute('font-size',f)}
+ const in1=l1.includes(mark),tx=in1?t1:t2,line=in1?l1:l2,i0=line.indexOf(mark),fs=+tx.getAttribute('font-size');
+ const xs=tx.getStartPositionOfChar(i0).x,xe=tx.getEndPositionOfChar(i0+mark.length-1).x;
+ Object.entries({x:xs-6,width:xe-xs+12,y:(in1?T1:T2)-Math.round(fs*.4),height:Math.round(fs*.47)}).forEach(([k,v])=>mk.setAttribute(k,v));
+ return Math.min(hs,+t1.getAttribute('font-size'));
+}
+// money format: identical rules to howbig_short.py money()
+function money(v,cur){const a=Math.abs(v);
+ if(a>=1e9)return cur+(a/1e9).toFixed(a>=1e10?1:2)+'bn';
+ if(a>=1e6)return cur+(a/1e6).toFixed(1)+'m';
+ if(a>=1e3)return cur+Math.round(a).toLocaleString('en-GB');
+ return cur+a.toFixed(2)}
+// world layout: a day = 3 x 8 block of hour squares (three 8-hour shifts); days run left to right in rows (D.rows)
+const BW=3,BH=8,GD=0.7,GM=2.2;
+let D,G={},TL,CAMK,FT,STAGES,NH,HP,ROWSTART,COL,COLD=0,WW,WH;
+
+function BUILD(d){
+ D=d;COL=PAL[D.colour]||PAL.red;COLD=D.cold?1.6:0;
+ const sv=document.getElementById('sv');sv.innerHTML='';
+ const DAYS=[];D.rows.forEach(([lab,n],r)=>{for(let c=0;c<n;c++)DAYS.push({r,c})});
+ NH=DAYS.length*24;HP=new Float32Array(NH*2);
+ for(let h=0;h<NH;h++){const dd=DAYS[Math.floor(h/24)],k=h%24;HP[2*h]=dd.c*(BW+GD)+Math.floor(k/BH);HP[2*h+1]=dd.r*(BH+GM)+k%BH}
+ ROWSTART=[];{let a=0;D.rows.forEach(([l,n])=>{ROWSTART.push(a*24);a+=n})}
+ const maxRow=Math.max(...D.rows.map(r=>r[1]));WW=maxRow*(BW+GD)-GD;WH=D.rows.length*(BH+GM)-GM;
+ const S3=D.stage3_rows, S3H=ROWSTART[S3]!=null?ROWSTART[S3]:NH;          // hours in the third stage
+ // ---------- timeline ----------
+ TL={day:[0.15,2.7],dayL:2.9,camW:[3.9,5.7],week:[4.3,7.3],weekL:7.5,camQ:[8.6,10.7],q:[9.1,12.8],qL:13.0,camY:[13.9,16.1],y:[14.4,20.8],yL:21.0,hold:21.3,ans:23.4,end:28.5};
+ STAGES=[[24,0],[168,TL.camW[0]],[S3H,TL.camQ[0]],[NH,TL.camY[0]]];
+ FT=new Float32Array(NH);
+ for(let h=0;h<NH;h++){FT[h]= h<24 ? TL.day[0]+h*(TL.day[1]-TL.day[0])/23
+  : h<168 ? TL.week[0]+(h-24)/144*(TL.week[1]-TL.week[0])
+  : h<S3H ? TL.q[0]+Math.pow((h-168)/(S3H-168),0.9)*(TL.q[1]-TL.q[0])
+  : TL.y[0]+Math.pow((h-S3H)/(NH-S3H),0.85)*(TL.y[1]-TL.y[0])}
+ // ---------- camera: world rect -> screen box ----------
+ const S3W=Math.max(...D.rows.slice(0,S3).map(r=>r[1]))*(BW+GD)-GD, S3Hh=S3*(BH+GM)-GM;
+ const DAYV=[[0,0,3,8],[120,650,840,800]],WEEKV=[[0,0,7*(BW+GD)-GD,8],[120,640,840,820]],
+       QV=[[0,0,S3W,S3Hh],[150,640,810,820]],YV=[[0,0,WW,WH],[150,640,810,820]];
+ const fit=([w,b])=>{const s=Math.min(b[2]/w[2],b[3]/w[3]);return {s,cx:w[0]+w[2]/2,cy:w[1]+w[3]/2,sx:b[0]+b[2]/2,sy:b[1]+b[3]/2}};
+ const fy=fit(YV);G.ybottom=fy.sy+WH*fy.s/2;
+ CAMK=[[0,fit(DAYV)],[TL.camW[0],fit(DAYV)],[TL.camW[1],fit(WEEKV)],[TL.camQ[0],fit(WEEKV)],[TL.camQ[1],fit(QV)],[TL.camY[0],fit(QV)],[TL.camY[1],fy],[TL.end,Object.assign({},fy,{s:fy.s*1.01})]];
+ // ---------- layers ----------
+ G.hq=el(sv,'g',{});G.hsize=headline(G.hq,...D.headline_q);G.ha=el(sv,'g',{opacity:0});headline(G.ha,...D.headline_a);
+ G.pill=el(sv,'g',{});G.pillR=el(G.pill,'rect',{y:PY,height:72,rx:8,fill:'#1b1b1b'});
+ G.pillT=el(G.pill,'text',{x:540,y:PY+49,'text-anchor':'middle','font-family':'Inter','font-weight':800,'font-size':38,fill:C.paper,style:'font-variant-numeric:tabular-nums'},'');
+ G.hours=el(sv,'g',{});
+ G.Ld0=el(sv,'g',{});T(G.Ld0,0,0,'Day 1',48,C.ink);T(G.Ld0,0,48,D.day1,28,C.grey,'middle',600);
+ G.Ld1=el(sv,'g',{});T(G.Ld1,0,0,'1 day',48,C.ink);T(G.Ld1,0,52,D.txt.day,40,COL);
+ G.Lw=el(sv,'g',{});T(G.Lw,540,0,'7 days: '+D.txt.week,40,C.ink);
+ G.Lq=el(sv,'g',{});T(G.Lq,540,0,D.stage3_label+': '+D.txt.stage3,40,C.ink);
+ G.mon=el(sv,'g',{});G.monT=D.rows.map(([m])=>T(G.mon,0,0,m,22,C.grey,'end',700));
+ G.key=el(sv,'g',{});el(G.key,'rect',{x:0,y:1500,width:40,height:40,fill:COL});const kt=T(G.key,54,1531,'= '+D.key+' ('+D.txt.hour+')',28,C.ink,'start',700);
+ G.key.setAttribute('transform',`translate(${540-(54+kt.getComputedTextLength())/2},0)`);
+ const by=Math.min(1478,Math.max(G.ybottom+18,1440));
+ G.box=el(sv,'g',{});G.boxR=el(G.box,'rect',{x:240,y:by,width:600,height:84,fill:C.gold});G.boxY=by+42;
+ G.boxQ=T(G.box,540,by+58,D.tease,50,C.ink);G.boxA=T(G.box,540,by+58,D.final,50,C.ink);
+ for(const e of [G.boxQ,G.boxA]){const w=e.getComputedTextLength();if(w>560)e.setAttribute('font-size',Math.floor(50*560/w))}
+ const src=T(sv,540,1598,D.source,22,'#444','middle',500);{const w=src.getComputedTextLength();if(w>900)src.setAttribute('font-size',(22*900/w).toFixed(1))}
+ // ---------- beats for the sound (seconds in the final video) ----------
+ const o=COLD,sh=a=>a+o;
+ window.BEATS={total:TL.end+o,cold:o,ticks:Array.from({length:24},(_,h)=>sh(FT[h])),
+  patter:[[sh(TL.week[0]),sh(TL.week[1]),60,0.07],[sh(TL.q[0]),sh(TL.q[1]),90,0.055],[sh(TL.y[0]),sh(TL.y[1]),140,0.05]],
+  glides:[[sh(TL.camW[0]),TL.camW[1]-TL.camW[0]],[sh(TL.camQ[0]),TL.camQ[1]-TL.camQ[0]],[sh(TL.camY[0]),TL.camY[1]-TL.camY[0]]],
+  lands:[[sh(TL.dayL),0.6],[sh(TL.weekL),0.7],[sh(TL.qL),0.8],[sh(TL.yL),1.0]],swells:[[sh(TL.dayL),0.9],[sh(TL.weekL),1.0],[sh(TL.qL),1.2],[sh(TL.yL),3.5]],
+  rolls:[[sh(TL.week[0]),sh(TL.week[1]),18],[sh(TL.q[0]),sh(TL.q[1]),22]],hold:sh(TL.hold),reveal:sh(TL.ans),
+  notes:[[sh(TL.dayL+0.05),76],[sh(TL.weekL+0.05),79],[sh(TL.qL+0.05),83]],
+  qa:[0.05,sh(1.2),sh(3.3),sh(6.6),sh(12.5),sh(18),sh(TL.hold+0.8),sh(TL.ans+1.5)]};
+}
+function cam(t){let i=0;while(i<CAMK.length-2&&t>=CAMK[i+1][0])i++;const a=CAMK[i][1],b=CAMK[i+1][1],p=eio(prog(t,CAMK[i][0],CAMK[i+1][0]));
+ const s=Math.exp(Math.log(a.s)+(Math.log(b.s)-Math.log(a.s))*p);
+ return {s,cx:a.cx+(b.cx-a.cx)*p,cy:a.cy+(b.cy-a.cy)*p,sx:a.sx+(b.sx-a.sx)*p,sy:a.sy+(b.sy-a.sy)*p}}
+// the Buffer version opens on the finished grid with the total hidden, then rewinds into Day 1
+const TEASE_V=()=>TL.hold+0.8;
+function setTime(t){
+ if(COLD){if(t<COLD){const r=eio(prog(t,0.45,COLD));draw(TEASE_V()*(1-r),r>0);return}t-=COLD}
+ draw(t,false);
+}
+function tease(){draw(TEASE_V(),false)}
+function answer(){draw(TL.end-0.05,false)}
+function draw(t,rewinding){
+ const cv=document.getElementById('cv'),ctx=cv.getContext('2d');ctx.clearRect(0,0,1080,1920);
+ const c=cam(t),s=c.s,ox=c.sx-c.cx*s,oy=c.sy-c.cy*s;
+ const gap=s>=20?0.12*s:Math.max(1,Math.min(0.12*s*3,1.2));
+ // empty slots of the current stage (faint): the camera reveals the calendar, then the colour fills it
+ let tgt=0,ta=0;for(const [hN,t0] of STAGES)if(t>=t0){tgt=hN;ta=rewinding?1:eo(prog(t,t0,t0+0.6))}
+ ctx.globalAlpha=0.13*ta;ctx.fillStyle=COL;
+ for(let h=0;h<tgt;h++){if(t>=FT[h])continue;const px=ox+HP[2*h]*s,py=oy+HP[2*h+1]*s;if(px<-s||px>1080||py<-s||py>1920)continue;ctx.fillRect(px+gap/2,py+gap/2,s-gap,s-gap)}
+ ctx.globalAlpha=1;
+ let n=0;G.hours.innerHTML='';
+ for(let h=0;h<NH;h++){const ft=FT[h];if(t<ft)break;n=h+1;
+  const pp=rewinding?1:eo((t-ft)/0.18),z=(s-gap)*(0.4+0.6*pp);
+  const px=ox+HP[2*h]*s+s/2,py=oy+HP[2*h+1]*s+s/2;if(px<-s||px>1080+s||py<-s||py>1920+s)continue;
+  ctx.fillRect(px-z/2,py-z/2,z,z);
+  if(s>=60&&h<24){const e=T(G.hours,px,py+s*0.1,String(h%24).padStart(2,'0')+':00',s*0.27,'#fff','middle',700);e.setAttribute('opacity',pp)}}
+ const vis=(e,o)=>e.setAttribute('opacity',clamp(o));const fin=a=>eo(prog(t,a,a+0.45)),fout=a=>1-prog(t,a,a+0.35);
+ const dx=ox+3*s+150,dy=oy+4*s-10;
+ G.Ld0.setAttribute('transform',`translate(${dx},${dy})`);G.Ld1.setAttribute('transform',`translate(${dx},${dy})`);
+ vis(G.Ld0,rewinding?0:fin(0.2)*fout(TL.dayL-0.3));vis(G.Ld1,rewinding?0:fin(TL.dayL)*fout(TL.camW[0]));
+ G.Lw.setAttribute('transform',`translate(0,${oy+8*s+70})`);vis(G.Lw,rewinding?0:fin(TL.weekL)*fout(TL.camQ[0]));
+ const s3h=D.stage3_rows*(BH+GM)-GM;
+ G.Lq.setAttribute('transform',`translate(0,${oy+s3h*s+70})`);vis(G.Lq,rewinding?0:fin(TL.qL)*fout(TL.camY[0]));
+ G.monT.forEach((e,r)=>{e.setAttribute('x',ox-12);e.setAttribute('y',oy+(r*(BH+GM)+BH/2)*s+8);vis(e,t<TL.q[0]-0.4?0:(rewinding?(t>=FT[ROWSTART[r]]?1:0):fin(FT[ROWSTART[r]]-0.1))*(s<12?1:0))});
+ vis(G.key,1-prog(t,TL.yL-0.6,TL.yL-0.2));
+ const hb=rewinding?clamp(1-(TEASE_V()-t)/2.5):fin(TL.hold),ra=prog(t,TL.ans,TL.ans+0.3);vis(G.box,hb);
+ const pop=1+0.07*Math.sin(Math.PI*prog(t,TL.ans,TL.ans+0.35));G.box.setAttribute('transform',`translate(540,${G.boxY}) scale(${pop}) translate(-540,${-G.boxY})`);
+ vis(G.boxQ,1-ra);vis(G.boxA,ra);
+ vis(G.hq,1-prog(t,TL.ans,TL.ans+0.4));vis(G.ha,prog(t,TL.ans+0.1,TL.ans+0.5));
+ const hidden=t>=TL.y[0]&&t<TL.ans;
+ const hrs=n===1?'1 hour':n.toLocaleString('en-GB')+' hours';
+ G.pillT.textContent=n===0?'0 hours · '+D.currency+'0':hrs+' · '+(hidden?D.currency+'??':(n>=NH?D.txt.total:money(n*D.per_hour,D.currency)));
+ const pw=Math.max(420,G.pillT.getComputedTextLength()+70);G.pillR.setAttribute('x',540-pw/2);G.pillR.setAttribute('width',pw);
+}
+</script></body></html>

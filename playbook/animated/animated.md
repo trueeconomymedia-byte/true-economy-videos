@@ -28,6 +28,9 @@ Series (animation styles) and their episodes are listed in `registry.json`. Each
   let the task post every day.
 
 ## 2. Score each allowed episode (0-100), then pick
+SERIES WITH AN IDEA BANK (registry `idea_bank`, e.g. howbig): pick that series' candidate with the rubric in its
+rules file (it already includes topicality, data strength, performance and variety), then add the trial_boost and the
+-15 same-episode-as-last-post penalty below; compare it with the other series' candidates on the same 0-100 scale.
 Start from the episode `priority` (40-55) and add or subtract:
 - Fresh data: +30 if the data behind it was released in the last 3 days and has not been covered; +15 if in the
   last 14 days. Stale data (older than the episode's normal update cycle) -10.
