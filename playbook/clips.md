@@ -61,3 +61,4 @@
 ## Platforms (user, 11 Nov 2026; overrides older wording about posting to every channel)
 - Clip Shorts are scheduled in Buffer to TikTok ONLY. Do not post clips to Facebook or Instagram (or any other Buffer channel).
 - YouTube: the user uploads by hand. Each run sends the user (SendUserFile, display "attach") the exact posted file plus a thumbnail JPG (the cover frame: a full 1080x1920 frame at 0.05 s of the posted file), then a SendUserMessage with a ready-to-paste YouTube title (under 70 characters, ending #Shorts), a 2-sentence description and 3 hashtags. YouTube may not use the first frame as the thumbnail, hence the separate JPG.
+- Files in clips/ready/ whose names contain "-short" (e.g. -short.mp4, -short-cap.mp4) or end "-cover.mp4" are generated versions, never separate clips; only entries in clips_index.json are clips. Move every file listed for a clip (file, short_file, cover file) to posted/ together.
