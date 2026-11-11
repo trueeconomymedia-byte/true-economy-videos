@@ -4,7 +4,7 @@ Look: the shared card paper with the printed-ink finish and the shared SAFE zone
 IN THE PAST on one value (the hook: "In 1995, a new US home cost $133,000."), the camera rides the tip of the line
 forward year by year (a tick per year, year counter in the pill), dotted event markers drop in as the line passes them
 (soft hit + piano note), an optional comparison line (income, wages, inflation) runs underneath with the gap shaded, a
-live chip shows "= X years of income" (or "+X% since 1995"), then the camera pulls back to the whole climb, the answer
+live chip shows "= 3.9x median income" (or "+X% since 1995"), then the camera pulls back to the whole climb, the answer
 is hidden ("2025: ??x median income") and revealed in gold. ~31 s. Same video for YouTube and Buffer; Buffer cover =
 thumbnailOffset `thumb_ms` from SLUG-build.json (the whole climb with the answer hidden).
 Renderer: `python3 scripts/thennow_short/thennow_short.py data.json OUTDIR SLUG` (read its docstring). Never change the
