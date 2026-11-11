@@ -92,6 +92,7 @@ def main():
     g.setdefault("ink", True)          # printed-ink finish on the card paper is the default (user-approved 11 Nov 2026)
     g.setdefault("title_mode", "fade") # user default 11 Nov 2026: hook title fades as the chart moves up, the money bar takes its place
     g.setdefault("bar_red", "dark")    # user default 11 Nov 2026: money bar = gold left, dark red taken
+    g.setdefault("dash_density", 2); g.setdefault("dash_vary", True)   # user default 11 Nov 2026: twice the flow pieces, varied length and speed
     gpath = os.path.join(outdir, f"{slug}-funnel-data.json"); json.dump(g, open(gpath, "w"), ensure_ascii=False, indent=1)
     # ONE video for every platform (user default 11 Nov 2026): opens fully zoomed out and zooms in at once; YouTube gets the same file
     subprocess.run(["node", os.path.join(HERE, "funnel_render.js"), gpath, outdir, slug], check=True, env={**os.environ, "FUNNEL_VARIANTS": "auto"})
