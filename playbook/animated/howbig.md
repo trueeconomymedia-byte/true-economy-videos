@@ -5,10 +5,10 @@ constant reference the whole video: **1 square = 1 hour of the money**. Day 1 fi
 with a tick per hour, the camera pulls back to the first week, then the first months, then the whole period laid out
 as a calendar (a year: one row per month; a quarter: three month blocks side by side, 7 days a row, month names
 above). Captions (user, 11 Nov 2026): 1 Day, 1 Week = .., 1 Month = .., and the gold box 1 Quarter = .. / 1 Year = ..;
-the counter reads "N hours = £X" in plain ink under a PROGRESS BAR (user, 12 Nov 2026: replaces the black counter pill;
-light tint track, the colour fill grows with every hour of the period). The key is simple: one square "= £X" (the
-per-hour amount). Company episodes are titled "Visualising <Company>'s profit" (or revenue) with the gold marker on
-"<Company>'s profit" (user, 12 Nov 2026). The money counter is hidden
+the counter reads "N hours = £X" in plain ink under a PROGRESS BAR at the BOTTOM (user, 12 Nov 2026: replaces the black counter pill;
+light tint track, the colour fill grows with every hour of the period). The key sits at the TOP, under the title: one
+square "= £X" (the per-hour amount). Company episodes are titled "Visualising" / "<Company>'s Q3 profit" (the period
+and measure), with the gold marker on "<Company>'s" ONLY (user, 12 Nov 2026). The money counter is hidden
 ("£??") while the last stage fills; the total is revealed in gold at the end. Calm news-style sound (ticks, soft
 patter, glides, low hits, warm piano reveal). 28.5 s. NO cold open (user, 11 Nov 2026: the rewind was off-putting): Buffer gets the same video as YouTube, and its
 cover is set with thumbnailOffset = `thumb_ms` from SLUG-build.json (the finished grid with the total hidden).
@@ -33,7 +33,7 @@ Why hours (user decision, 11 Nov 2026): the reference must never change during t
 
 ## 2. Writing the data
 - headline_q: the per-hour shock, with {hour} marked gold, e.g. ["UK debt interest costs", "{hour} every hour.",
-  "{hour}"], ["Visualising", "Microsoft's profit", "Microsoft's profit"] (company episodes, user rule 12 Nov 2026), ["Erling Haaland earns", "{hour} an hour.",
+  "{hour}"], ["Visualising", "Microsoft's Q1 profit", "Microsoft's"] (company episodes, user rule 12 Nov 2026), ["Erling Haaland earns", "{hour} an hour.",
   "{hour}"]. headline_a: the total, e.g. ["One year of interest:", "{total}.", "{total}"]. Max 26 characters per line
   after filling (the renderer refuses longer lines, exit 4).
 - key: what one square is, short ("1 hour of interest", "1 hour of profit", "1 hour of his pay").
