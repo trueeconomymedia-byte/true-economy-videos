@@ -40,7 +40,10 @@ Why hours (user decision, 11 Nov 2026): the reference must never change during t
   ("■ = 1 hour (£X)") and the captions, not the title.
 - logo (company episodes): "logo": "<name>" when the USER has added a transparent PNG at scripts/assets/logos/<name>.png;
   it sits centred above the title (y 185-300; the user allows this area, visible once the Short is opened). Never draw,
-  download or recreate a logo; no file = no logo.
+  download or recreate a logo; no file = no logo. The USER supplies logos (12 Nov 2026): if a company episode is chosen
+  and its logo is missing, still post it without one, and say in the final message "No <Company> logo on file: send it
+  in a chat (any PNG/JPG; the background is made transparent) and future episodes will use it". When the user sends a
+  logo, make the background transparent, crop it, save it at 360 px wide as scripts/assets/logos/<company>.png, commit.
 - headline_a: ONE line too: ["Q3 profit: {total}", "", "{total}"], ["2025-26 interest: {total}", "", "{total}"].
 - (old two-line form, still accepted by the renderer) headline_a: the total, e.g. ["One year of interest:", "{total}.", "{total}"]. Max 26 characters per line
   after filling (the renderer refuses longer lines, exit 4).
