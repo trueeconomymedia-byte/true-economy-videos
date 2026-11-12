@@ -71,15 +71,16 @@ function BUILD(d){
  const BY=1482;
  G.pill=el(sv,'g',{});el(G.pill,'rect',{x:240,y:BY,width:600,height:24,rx:12,fill:tint(COL,0.28)});
  G.barF=el(G.pill,'rect',{x:240,y:BY,width:0,height:24,rx:12,fill:COL});
- G.pillT=el(G.pill,'text',{x:540,y:BY+68,'text-anchor':'middle','font-family':'Inter','font-weight':800,'font-size':36,fill:C.ink,style:'font-variant-numeric:tabular-nums'},'');
+ // counter at the TOP, just the running total (user, 12 Nov 2026); the bar stays at the bottom with the key under it
+ G.pillT=el(sv,'text',{x:540,y:KY+20,'text-anchor':'middle','font-family':'Inter','font-weight':800,'font-size':56,fill:C.ink,style:'font-variant-numeric:tabular-nums'},'');
  G.hours=el(sv,'g',{});
  G.Ld0=el(sv,'g',{});T(G.Ld0,0,0,'Day 1',48,C.ink);T(G.Ld0,0,48,D.day1,28,C.grey,'middle',600);
  G.Ld1=el(sv,'g',{});T(G.Ld1,0,0,'1 Day',48,C.ink);T(G.Ld1,0,52,D.txt.day,40,COL);
  G.Lw=el(sv,'g',{});T(G.Lw,540,0,D.cap.week,40,C.ink);
  G.Lq=el(sv,'g',{});T(G.Lq,540,0,D.cap.month,40,C.ink);
  G.mon=el(sv,'g',{});G.monT=D.labels.map(([m,x,y,anc,size])=>T(G.mon,0,0,m,size,C.grey,anc,700));
- G.key=el(sv,'g',{});el(G.key,'rect',{x:0,y:KY-25,width:50,height:50,fill:COL});const kt=T(G.key,66,KY+15,'= 1 hour ('+D.txt.hour+')',44,C.ink,'start',800);   // user, 12 Nov 2026: say what one square is
- G.key.setAttribute('transform',`translate(${540-(70+kt.getComputedTextLength())/2},0)`);   // simple key (user, 12 Nov 2026): one square = the per-hour amount
+ G.key=el(G.pill,'g',{});el(G.key,'rect',{x:0,y:1522,width:40,height:40,fill:COL});const kt=T(G.key,54,1554,'= 1 hour',36,C.ink,'start',800);   // key at the BOTTOM under the bar, just "■ = 1 hour" (user, 12 Nov 2026)
+ G.key.setAttribute('transform',`translate(${540-(54+kt.getComputedTextLength())/2},0)`);   // simple key (user, 12 Nov 2026): one square = the per-hour amount
  const by=Math.min(1478,G.ybottom+40);
  G.box=el(sv,'g',{});G.boxR=el(G.box,'rect',{x:240,y:by,width:600,height:84,fill:C.gold});G.boxY=by+42;
  G.boxQ=T(G.box,540,by+58,D.tease,50,C.ink);G.boxA=T(G.box,540,by+58,D.final,50,C.ink);
@@ -122,7 +123,7 @@ function draw(t,rewinding){
   const pp=(rewinding||ft===0)?1:eo((t-ft)/0.18),z=(s-gap)*(0.4+0.6*pp);
   const px=ox+HP[2*h]*s+s/2,py=oy+HP[2*h+1]*s+s/2;if(px<-s||px>1080+s||py<-s||py>1920+s)continue;
   ctx.fillRect(px-z/2,py-z/2,z,z);
-  if(s>=60&&h<24){const e=T(G.hours,px,py+s*0.1,String(h%24).padStart(2,'0')+':00',s*0.27,'#fff','middle',700);e.setAttribute('opacity',pp)}}
+  if(s>=60&&h<24){const e=T(G.hours,px,py+s*0.1,D.txt.hour,s*0.26,'#fff','middle',700);e.setAttribute('opacity',pp)}}
  const vis=(e,o)=>e.setAttribute('opacity',clamp(o));const fin=a=>eo(prog(t,a,a+0.45)),fout=a=>1-prog(t,a,a+0.35);
  const dx=ox+3*s+150,dy=oy+4*s-10;
  G.Ld0.setAttribute('transform',`translate(${dx},${dy})`);G.Ld1.setAttribute('transform',`translate(${dx},${dy})`);
@@ -139,7 +140,7 @@ function draw(t,rewinding){
  vis(G.hq,1-prog(t,TL.ans,TL.ans+0.4));vis(G.ha,prog(t,TL.ans+0.1,TL.ans+0.5));
  const hidden=t>=TL.y[0]&&t<TL.ans;
  const hrs=n===1?'1 hour':n.toLocaleString('en-GB')+' hours';
- G.pillT.textContent=n===0?'0 hours = '+D.currency+'0':hrs+' = '+(hidden?D.currency+'??':(n>=NH?D.txt.total:money(n*D.per_hour,D.currency)));
+ G.pillT.textContent=n===0?D.currency+'0':(hidden?D.currency+'??':(n>=NH?D.txt.total:money(n*D.per_hour,D.currency)));
  const fw=n<=0?0:Math.max(24,600*n/NH);G.barF.setAttribute('width',fw);
 }
 </script></body></html>

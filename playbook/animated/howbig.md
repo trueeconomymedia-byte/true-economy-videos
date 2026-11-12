@@ -7,9 +7,10 @@ as a calendar (a year: one row per month; a quarter: three month blocks side by 
 above). Captions (user, 11 Nov 2026): 1 Day, 1 Week = .., 1 Month = .., and the gold box 1 Quarter = .. / 1 Year = ..;
 the counter reads "N hours = £X" in plain ink under a PROGRESS BAR at the BOTTOM (user, 12 Nov 2026: replaces the black counter pill;
 light tint track, the colour fill grows with every hour of the period). The key sits at the TOP, under the title: one
-square "= 1 hour (£X)" (the per-hour amount). EVERY episode is titled on ONE line "<Owner>'s <period> <measure>" (e.g. "Shell's Q3 profit"),
-with the gold marker on "<Owner>'s" ONLY, the key on its own row below with breathing room, and the user's logo (if
-any) above the title (user, 12 Nov 2026). The money counter is hidden
+square "= 1 hour (£X)" (the per-hour amount). EVERY episode is titled on ONE line "<Owner>'s <period> <Measure> per hour" (e.g. "Shell's Q3 Profit per
+hour") with the gold marker on "<Owner>'s" ONLY; the counter (running total only) sits under the title, the key ("■ = 1
+hour") under the bottom progress bar, Day 1 squares carry the per-hour amount, and the user's logo (if any) sits above
+the title, unaltered (user, 12 Nov 2026). Section 2 LAYOUT overrides older wording here. The money counter is hidden
 ("£??") while the last stage fills; the total is revealed in gold at the end. Calm news-style sound (ticks, soft
 patter, glides, low hits, warm piano reveal). 28.5 s. NO cold open (user, 11 Nov 2026: the rewind was off-putting): Buffer gets the same video as YouTube, and its
 cover is set with thumbnailOffset = `thumb_ms` from SLUG-build.json (the finished grid with the total hidden).
@@ -33,11 +34,13 @@ Why hours (user decision, 11 Nov 2026): the reference must never change during t
   the ones that total covers (financial year 1 April - 31 March, a company's exact fiscal quarter dates).
 
 ## 2. Writing the data
-- headline_q (USER STANDARD, 12 Nov 2026, every episode): ONE line naming whose money, the period and the measure, with
-  line 2 left empty and the gold marker on the owner word ONLY: ["Shell's Q3 profit", "", "Shell's"],
-  ["Microsoft's Q1 profit", "", "Microsoft's"], ["The UK's debt interest", "", "UK's"], ["The NHS's 2025-26 budget",
-  "", "NHS's"], ["Haaland's yearly pay", "", "Haaland's"]. Max 26 characters. The per-hour shock lives in the key
-  ("■ = 1 hour (£X)") and the captions, not the title.
+- headline_q (USER STANDARD, 12 Nov 2026, every episode): ONE line "<Owner>'s <period> <Measure> per hour", line 2 left
+  empty, the gold marker on the owner word ONLY: ["Shell's Q3 Profit per hour", "", "Shell's"], ["Microsoft's Q1 Profit
+  per hour" is too long -> "Microsoft's Q1 profit per hr" is NOT allowed; shorten the measure instead: "Microsoft's
+  profit per hour"], ["UK debt interest per hour", "", "UK"], ["NHS spending per hour", "", "NHS"]. Max 26 characters.
+- LAYOUT (user, 12 Nov 2026): under the title the COUNTER shows only the running total ("$71.0m" ... "$??" in the last
+  stage ... the total); on Day 1 every hour square is labelled with the per-hour amount ("$5.5m") instead of a time;
+  at the bottom the progress bar with the key under it, just "■ = 1 hour". The renderer does all of this.
 - logo (company episodes): "logo": "<name>" when the USER has added a transparent PNG at scripts/assets/logos/<name>.png;
   it sits centred above the title (y 185-300; the user allows this area, visible once the Short is opened), UNALTERED
   (the renderer lays it on the finished frames after the ink finish: animated.md section 0, LOGOS). Never draw,
