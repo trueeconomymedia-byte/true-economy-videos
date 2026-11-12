@@ -76,7 +76,7 @@ function BUILD(d){
  G.Lw=el(sv,'g',{});T(G.Lw,540,0,D.cap.week,40,C.ink);
  G.Lq=el(sv,'g',{});T(G.Lq,540,0,D.cap.month,40,C.ink);
  G.mon=el(sv,'g',{});G.monT=D.labels.map(([m,x,y,anc,size])=>T(G.mon,0,0,m,size,C.grey,anc,700));
- G.key=el(sv,'g',{});el(G.key,'rect',{x:0,y:PY+8,width:50,height:50,fill:COL});const kt=T(G.key,66,PY+48,'= '+D.txt.hour+' (1 hour)',44,C.ink,'start',800);   // user, 12 Nov 2026: say what one square is
+ G.key=el(sv,'g',{});el(G.key,'rect',{x:0,y:PY+8,width:50,height:50,fill:COL});const kt=T(G.key,66,PY+48,'= 1 hour ('+D.txt.hour+')',44,C.ink,'start',800);   // user, 12 Nov 2026: say what one square is
  G.key.setAttribute('transform',`translate(${540-(70+kt.getComputedTextLength())/2},0)`);   // simple key (user, 12 Nov 2026): one square = the per-hour amount
  const by=Math.min(1478,G.ybottom+40);
  G.box=el(sv,'g',{});G.boxR=el(G.box,'rect',{x:240,y:by,width:600,height:84,fill:C.gold});G.boxY=by+42;

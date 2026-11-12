@@ -7,7 +7,7 @@ as a calendar (a year: one row per month; a quarter: three month blocks side by 
 above). Captions (user, 11 Nov 2026): 1 Day, 1 Week = .., 1 Month = .., and the gold box 1 Quarter = .. / 1 Year = ..;
 the counter reads "N hours = £X" in plain ink under a PROGRESS BAR at the BOTTOM (user, 12 Nov 2026: replaces the black counter pill;
 light tint track, the colour fill grows with every hour of the period). The key sits at the TOP, under the title: one
-square "= £X (1 hour)" (the per-hour amount). EVERY episode is titled "Visualising" / "<Owner>'s <period> <measure>" (the period
+square "= 1 hour (£X)" (the per-hour amount). EVERY episode is titled "Visualising" / "<Owner>'s <period> <measure>" (the period
 and measure), with the gold marker on "<Owner>'s" ONLY (user, 12 Nov 2026). The money counter is hidden
 ("£??") while the last stage fills; the total is revealed in gold at the end. Calm news-style sound (ticks, soft
 patter, glides, low hits, warm piano reveal). 28.5 s. NO cold open (user, 11 Nov 2026: the rewind was off-putting): Buffer gets the same video as YouTube, and its
@@ -36,7 +36,7 @@ Why hours (user decision, 11 Nov 2026): the reference must never change during t
   the period and the measure; the gold marker goes on the owner word ONLY. Examples: ["Visualising", "Shell's Q3 profit",
   "Shell's"], ["Visualising", "Microsoft's Q1 profit", "Microsoft's"], ["Visualising", "the UK's debt interest",
   "UK's"], ["Visualising", "the NHS's 2025-26 budget", "NHS's"], ["Visualising", "Haaland's yearly pay", "Haaland's"].
-  Line 2 max 26 characters (shorten the period: Q3, 2025-26, yearly). The per-hour shock lives in the key ("■ = £X (1 hour)")
+  Line 2 max 26 characters (shorten the period: Q3, 2025-26, yearly). The per-hour shock lives in the key ("■ = 1 hour (£X)")
   and the captions, not the title.
 - headline_a: the total, e.g. ["One year of interest:", "{total}.", "{total}"]. Max 26 characters per line
   after filling (the renderer refuses longer lines, exit 4).
