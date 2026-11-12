@@ -13,7 +13,7 @@
         "platforms": {
           "tiktok": "6af45cede0bb54c4a7eeb6f7"
         },
-        "status": "scheduled"
+        "status": "sent"
       }
     ],
     "short_file": "Documentary-full-v7-short-cap.mp4",
@@ -23,6 +23,7 @@
       ""
     ],
     "cover_at": 19.0,
-    "captions": true
+    "captions": true,
+    "status": "posted"
   }
 ]
