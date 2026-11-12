@@ -19,16 +19,17 @@ const prog=(t,a,b)=>clamp((t-a)/(b-a));
 function el(p,t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;p.appendChild(e);return e}
 function T(p,x,y,s,size,fill,anchor,w){return el(p,'text',{x,y,'font-family':'Inter','font-weight':w||800,'font-size':size,fill,'text-anchor':anchor||'middle'},s)}
 // shared SAFE title zone (same as every Animated Shorts series): baselines 395/490, counter row at 525, content x 60-1020
-const T1=395,T2=490,PY=525;
+const T1=395,T2=490,PY=525,TS=432,KY=548;   // TS: one-line title baseline; KY: key row centre (breathing room, user 12 Nov 2026)
 function headline(g,l1,l2,mark){
- const hs=86, mk=el(g,'rect',{fill:C.gold});
- const t1=el(g,'text',{x:540,y:T1,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l1);
- const t2=el(g,'text',{x:540,y:T2,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l2);
+ // one-line titles (user, 12 Nov 2026: "Shell's Q3 profit"): an empty line 2 puts line 1 on a single baseline (TS)
+ const hs=86, mk=el(g,'rect',{fill:C.gold}), one=!l2, B1=one?TS:T1;
+ const t1=el(g,'text',{x:540,y:B1,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l1);
+ const t2=el(g,'text',{x:540,y:T2,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l2||'');
  const w=Math.max(t1.getComputedTextLength(),t2.getComputedTextLength());
  if(w>900){const f=Math.floor(hs*900/w);t1.setAttribute('font-size',f);t2.setAttribute('font-size',f)}
  const in1=l1.includes(mark),tx=in1?t1:t2,line=in1?l1:l2,i0=line.indexOf(mark),fs=+tx.getAttribute('font-size');
  const xs=tx.getStartPositionOfChar(i0).x,xe=tx.getEndPositionOfChar(i0+mark.length-1).x;
- Object.entries({x:xs-6,width:xe-xs+12,y:(in1?T1:T2)-Math.round(fs*.4),height:Math.round(fs*.47)}).forEach(([k,v])=>mk.setAttribute(k,v));
+ Object.entries({x:xs-6,width:xe-xs+12,y:(in1?B1:T2)-Math.round(fs*.4),height:Math.round(fs*.47)}).forEach(([k,v])=>mk.setAttribute(k,v));
  return Math.min(hs,+t1.getAttribute('font-size'));
 }
 // money format: identical rules to howbig_short.py money()
@@ -62,6 +63,8 @@ function BUILD(d){
  const fy=fit(YV);G.ybottom=fy.sy+(V.all[1]+V.all[3]-fy.cy)*fy.s;
  CAMK=[[0,fit(DAYV)],[TL.camW[0],fit(DAYV)],[TL.camW[1],fit(WEEKV)],[TL.camQ[0],fit(WEEKV)],[TL.camQ[1],fit(QV)],[TL.camY[0],fit(QV)],[TL.camY[1],fy],[TL.end,Object.assign({},fy,{s:fy.s*1.01})]];
  // ---------- layers ----------
+ if(D.logo_uri){const LH=115,im=new Image();im.src=D.logo_uri;const lw=Math.round(LH*(D.logo_ar||1));
+  el(sv,'image',{href:D.logo_uri,x:540-lw/2,y:185,width:lw,height:LH,preserveAspectRatio:'xMidYMid meet'})}   // user logo above the title (user, 12 Nov 2026)
  G.hq=el(sv,'g',{});G.hsize=headline(G.hq,...D.headline_q);G.ha=el(sv,'g',{opacity:0});headline(G.ha,...D.headline_a);
  // progress bar (user, 12 Nov 2026: replaces the black counter pill; sits at the BOTTOM, the key sits under the title):
  // light tint track, the colour fill grows with every hour; the running count sits under it in plain ink
@@ -76,7 +79,7 @@ function BUILD(d){
  G.Lw=el(sv,'g',{});T(G.Lw,540,0,D.cap.week,40,C.ink);
  G.Lq=el(sv,'g',{});T(G.Lq,540,0,D.cap.month,40,C.ink);
  G.mon=el(sv,'g',{});G.monT=D.labels.map(([m,x,y,anc,size])=>T(G.mon,0,0,m,size,C.grey,anc,700));
- G.key=el(sv,'g',{});el(G.key,'rect',{x:0,y:PY+8,width:50,height:50,fill:COL});const kt=T(G.key,66,PY+48,'= 1 hour ('+D.txt.hour+')',44,C.ink,'start',800);   // user, 12 Nov 2026: say what one square is
+ G.key=el(sv,'g',{});el(G.key,'rect',{x:0,y:KY-25,width:50,height:50,fill:COL});const kt=T(G.key,66,KY+15,'= 1 hour ('+D.txt.hour+')',44,C.ink,'start',800);   // user, 12 Nov 2026: say what one square is
  G.key.setAttribute('transform',`translate(${540-(70+kt.getComputedTextLength())/2},0)`);   // simple key (user, 12 Nov 2026): one square = the per-hour amount
  const by=Math.min(1478,G.ybottom+40);
  G.box=el(sv,'g',{});G.boxR=el(G.box,'rect',{x:240,y:by,width:600,height:84,fill:C.gold});G.boxY=by+42;

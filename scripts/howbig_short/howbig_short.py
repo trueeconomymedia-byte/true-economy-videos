@@ -31,6 +31,8 @@ data.json (the task writes ONLY the source numbers and words; per-hour/day/week 
             user 12 Nov 2026); the counter sits under a progress bar (no black pill)
   final     optional gold answer box, default "{whole} = {total}" (e.g. "1 Year = £97.6bn", "1 Quarter = $36.6bn")
   tease     optional, default "{whole} = {cur}??"
+  logo      optional, e.g. "shell": a transparent PNG the USER added at scripts/assets/logos/shell.png, shown centred
+            above the title (y 185-300, above the safe zone: user, 12 Nov 2026, visible once the Short is opened)
   source    e.g. "Source: ONS & OBR, debt interest 2025-26 (Apr 2026)"  (" · {total} ÷ N hours" is added)
   Placeholders, filled from the computed numbers: {hour} {day} {week} {month} {total} {cur} {hours} {whole}
   Each headline line must fit 2 lines at the series' title size: about 24 characters per line after filling.
@@ -114,7 +116,7 @@ def main():
         except KeyError as e: fail(4, f"CHECK: unknown placeholder {e} in '{s}'")
     hq = [F(x) for x in d["headline_q"]]; ha = [F(x) for x in d["headline_a"]]
     for h in (hq, ha):
-        if h[2] not in h[0] and h[2] not in h[1]: fail(4, f"CHECK: marker '{h[2]}' is not in the headline {h[:2]}")
+        if h[2] not in h[0] and h[2] not in (h[1] or ""): fail(4, f"CHECK: marker '{h[2]}' is not in the headline {h[:2]}")
         for line in h[:2]:
             if len(line) > MAXLINE: fail(4, f"CHECK: headline line '{line}' is {len(line)} characters (max {MAXLINE}); shorten it")
     tease = F(d.get("tease", "{whole} = {cur}??"))
@@ -123,6 +125,13 @@ def main():
          "day1": f"{start.day} {start.strftime('%B %Y')}", "txt": txt, "headline_q": hq, "headline_a": ha, "key": F(d["key"]),
          "final": F(d.get("final", "{whole} = {total}")), "tease": tease, "source": F(d["source"]) + f" · {txt['total']} ÷ {hours:,} hours",
          "hours": hours, "ndays": days}
+    if d.get("logo"):   # user-supplied logo only (scripts/assets/logos/<name>.png, transparent); never drawn or downloaded
+        import base64
+        lp = os.path.join(HERE, "..", "assets", "logos", f"{d['logo']}.png")
+        if not os.path.exists(lp): fail(4, f"CHECK: logo file {lp} not found (only logos the user has added)")
+        g["logo_uri"] = "data:image/png;base64," + base64.b64encode(open(lp, "rb").read()).decode()
+        from PIL import Image
+        with Image.open(lp) as li: g["logo_ar"] = li.size[0] / li.size[1]
     gpath = os.path.join(outdir, f"{slug}-build.json"); json.dump(g, open(gpath, "w"), ensure_ascii=False, indent=1)
     print(f"{d.get('subject', slug)}: {txt['total']} over {days} days = {txt['hour']} an hour, {txt['day']} a day, {txt['week']} a week")
     subprocess.run(["node", os.path.join(HERE, "howbig_render.js"), gpath, outdir, slug], check=True)

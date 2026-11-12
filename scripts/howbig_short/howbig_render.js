@@ -15,6 +15,7 @@ const inkPng=(raw,out)=>{execFileSync('python3',['-c',`import sys;sys.path.inser
   await p.goto('file://'+path.join(__dirname,'howbig.html'));
   await p.evaluate(async()=>{await document.fonts.load('700 86px Lora');await document.fonts.load('800 54px Inter');await document.fonts.load('600 28px Inter');await document.fonts.ready});
   await p.evaluate(d=>BUILD(d),{...D,cold});
+  await p.evaluate(()=>Promise.all([...document.querySelectorAll('image')].map(i=>new Promise(r=>{const m=new Image();m.onload=m.onerror=r;m.src=i.getAttribute('href')}))).then(()=>new Promise(r=>setTimeout(r,200))));   // let a logo finish loading
   const beats=await p.evaluate(()=>BEATS);
   fs.writeFileSync(path.join(outdir,`${slug}-beats-${variant}.json`),JSON.stringify(beats));
   if(variant==='youtube'){for(const [fn,nm] of [['tease','thumb-tease'],['answer','thumb-answer']]){
