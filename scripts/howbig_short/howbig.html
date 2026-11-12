@@ -63,8 +63,7 @@ function BUILD(d){
  const fy=fit(YV);G.ybottom=fy.sy+(V.all[1]+V.all[3]-fy.cy)*fy.s;
  CAMK=[[0,fit(DAYV)],[TL.camW[0],fit(DAYV)],[TL.camW[1],fit(WEEKV)],[TL.camQ[0],fit(WEEKV)],[TL.camQ[1],fit(QV)],[TL.camY[0],fit(QV)],[TL.camY[1],fy],[TL.end,Object.assign({},fy,{s:fy.s*1.01})]];
  // ---------- layers ----------
- if(D.logo_uri){const LH=115,im=new Image();im.src=D.logo_uri;const lw=Math.round(LH*(D.logo_ar||1));
-  el(sv,'image',{href:D.logo_uri,x:540-lw/2,y:185,width:lw,height:LH,preserveAspectRatio:'xMidYMid meet'})}   // user logo above the title (user, 12 Nov 2026)
+ // a user logo is NOT drawn here: howbig_short.py lays it on the finished frames unaltered (user rule, 12 Nov 2026)
  G.hq=el(sv,'g',{});G.hsize=headline(G.hq,...D.headline_q);G.ha=el(sv,'g',{opacity:0});headline(G.ha,...D.headline_a);
  // progress bar (user, 12 Nov 2026: replaces the black counter pill; sits at the BOTTOM, the key sits under the title):
  // light tint track, the colour fill grows with every hour; the running count sits under it in plain ink

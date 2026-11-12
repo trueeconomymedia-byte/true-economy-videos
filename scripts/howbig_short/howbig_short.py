@@ -32,7 +32,8 @@ data.json (the task writes ONLY the source numbers and words; per-hour/day/week 
   final     optional gold answer box, default "{whole} = {total}" (e.g. "1 Year = £97.6bn", "1 Quarter = $36.6bn")
   tease     optional, default "{whole} = {cur}??"
   logo      optional, e.g. "shell": a transparent PNG the USER added at scripts/assets/logos/shell.png, shown centred
-            above the title (y 185-300, above the safe zone: user, 12 Nov 2026, visible once the Short is opened)
+            above the title (y 185-300, above the safe zone: user, 12 Nov 2026, visible once the Short is opened);
+            laid on the finished frames EXACTLY as supplied (no printed-ink finish, no texture or recolouring), only scaled
   source    e.g. "Source: ONS & OBR, debt interest 2025-26 (Apr 2026)"  (" · {total} ÷ N hours" is added)
   Placeholders, filled from the computed numbers: {hour} {day} {week} {month} {total} {cur} {hours} {whole}
   Each headline line must fit 2 lines at the series' title size: about 24 characters per line after filling.
@@ -125,13 +126,18 @@ def main():
          "day1": f"{start.day} {start.strftime('%B %Y')}", "txt": txt, "headline_q": hq, "headline_a": ha, "key": F(d["key"]),
          "final": F(d.get("final", "{whole} = {total}")), "tease": tease, "source": F(d["source"]) + f" · {txt['total']} ÷ {hours:,} hours",
          "hours": hours, "ndays": days}
+    logo_png = None
     if d.get("logo"):   # user-supplied logo only (scripts/assets/logos/<name>.png, transparent); never drawn or downloaded
-        import base64
         lp = os.path.join(HERE, "..", "assets", "logos", f"{d['logo']}.png")
         if not os.path.exists(lp): fail(4, f"CHECK: logo file {lp} not found (only logos the user has added)")
-        g["logo_uri"] = "data:image/png;base64," + base64.b64encode(open(lp, "rb").read()).decode()
+        # UNALTERED LOGO (user rule, 12 Nov 2026): the logo is NOT drawn in the page and never goes through the printed-ink
+        # finish; it is laid on the finished frames exactly as supplied (true colours, no texture), only scaled.
         from PIL import Image
-        with Image.open(lp) as li: g["logo_ar"] = li.size[0] / li.size[1]
+        LH = 115
+        with Image.open(lp) as li:
+            li = li.convert("RGBA"); lw = round(LH * li.size[0] / li.size[1])
+            logo_png = os.path.join(outdir, f"{slug}-logo-{lw}x{LH}.png"); li.resize((lw, LH), Image.LANCZOS).save(logo_png)
+        logo_xy = (540 - lw // 2, 185)
     gpath = os.path.join(outdir, f"{slug}-build.json"); json.dump(g, open(gpath, "w"), ensure_ascii=False, indent=1)
     print(f"{d.get('subject', slug)}: {txt['total']} over {days} days = {txt['hour']} an hour, {txt['day']} a day, {txt['week']} a week")
     subprocess.run(["node", os.path.join(HERE, "howbig_render.js"), gpath, outdir, slug], check=True)
@@ -142,12 +148,24 @@ def main():
         subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", silent, "-i", wav, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac",
                         "-b:a", "192k", "-shortest", "-movflags", "+faststart", tmp], check=True)
         os.replace(tmp, final); os.remove(silent); os.remove(wav)
+        if logo_png:
+            tmp2 = final + ".logo.mp4"
+            subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", final, "-i", logo_png, "-filter_complex",
+                            f"[0:v][1:v]overlay={logo_xy[0]}:{logo_xy[1]}:format=auto,format=yuv420p", "-c:v", "libx264", "-crf", "17",
+                            "-preset", "veryfast", "-r", "30", "-c:a", "copy", "-movflags", "+faststart", tmp2], check=True)
+            os.replace(tmp2, final)
         b = json.load(open(beats))
         ts = b["qa"]
         sel = "+".join(f"eq(n\\,{max(0, int(t * 30))})" for t in ts)
         subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", final, "-vf", f"select='{sel}',scale=320:-1,tile={len(ts)}x1",
                         "-frames:v", "1", "-vsync", "0", os.path.join(outdir, f"{slug}-qa-{v}.jpg")], check=True)
         print(f"done {v}: {final} ({b['total']:.1f}s)")
+    if logo_png:
+        from PIL import Image
+        lg = Image.open(logo_png).convert("RGBA")
+        for nm in ("thumb-tease", "thumb-answer"):
+            tp = os.path.join(outdir, f"{slug}-{nm}.png"); im = Image.open(tp).convert("RGBA"); im.alpha_composite(lg, logo_xy); im.convert("RGB").save(tp)
+        os.remove(logo_png)
     import shutil; shutil.copyfile(os.path.join(outdir, f"{slug}-youtube.mp4"), os.path.join(outdir, f"{slug}-auto.mp4"))
     g["thumb_ms"] = b["thumb_ms"]; json.dump(g, open(gpath, "w"), ensure_ascii=False, indent=1)
     print(f"Buffer cover: thumbnailOffset {b['thumb_ms']} (finished grid, total hidden)")

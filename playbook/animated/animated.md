@@ -11,6 +11,9 @@ Series (animation styles) and their episodes are listed in `registry.json`. Each
   multiplied by the paper's own light/shade, slightly thinner on the tooth's high points and fine specks, ink-only
   unsharp mask; the bare paper stays exactly as supplied). Renderers send transparent RGBA frames through
   scripts/anim_shared/ink_pipe.py. No glow, drop shadow, outline or blur; never a different background.
+- LOGOS (user rule, 12 Nov 2026), every series: only logos the USER has supplied (scripts/assets/logos/<name>.png), and
+  ALWAYS UNALTERED: laid on the finished frames exactly as supplied after the printed-ink finish (true colours, no paper
+  texture, no recolouring, outline, shadow, distortion or cropping), only scaled in proportion. Never through ink.py.
 - TITLE: each series has ONE fixed title position (its `title_zone` in registry.json); every episode of that series
   puts its title in exactly that place, at most 2 lines. Different series may use different title positions.
   Never move the title for a logo or anything else; a series' renderer owns this, the task never changes it.
