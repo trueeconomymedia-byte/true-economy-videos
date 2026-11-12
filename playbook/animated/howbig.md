@@ -5,9 +5,8 @@ constant reference the whole video: **1 square = 1 hour of the money**. Day 1 fi
 with a tick per hour, the camera pulls back to the first week, then the first months, then the whole period laid out
 as a calendar (a year: one row per month; a quarter: three month blocks side by side, 7 days a row, month names
 above). Captions (user, 11 Nov 2026): 1 Day, 1 Week = .., 1 Month = .., and the gold box 1 Quarter = .. / 1 Year = ..;
-the counter reads "N hours = £X" in plain ink under a PROGRESS BAR at the BOTTOM (user, 12 Nov 2026: replaces the black counter pill;
-light tint track, the colour fill grows with every hour of the period). The key sits at the TOP, under the title: one
-square (see section 2 LAYOUT). EVERY episode is titled on ONE line "<Owner>'s <period> <Measure> per hour" (e.g. "Shell's Q3 Profit per
+a PROGRESS BAR sits at the BOTTOM (user, 12 Nov 2026: replaces the black counter pill; light tint track, the
+colour fill grows with every hour of the period). EVERY episode is titled on ONE line "<Owner>'s <period> <Measure> per hour" (e.g. "Shell's Q3 Profit per
 hour") with the gold marker on "<Owner>'s" ONLY; the counter (running total only) sits under the title, the key ("■ = 1
 hour") under the bottom progress bar, Day 1 squares carry the per-hour amount, and the user's logo (if any) sits above
 the title, unaltered (user, 12 Nov 2026). Section 2 LAYOUT overrides older wording here. The money counter is hidden
