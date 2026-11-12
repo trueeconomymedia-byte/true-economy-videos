@@ -81,7 +81,7 @@
    "since": "2026-11-11",
    "rules": "playbook/animated/howbig.md",
    "idea_bank": "playbook/animated/howbig_bank.jsonl",
-   "title_zone": "same SAFE title zone as funnel: 2 centred lines, Lora Bold 86 px (auto-shrinks), baselines y=395 and y=490; hour/money counter at y=525; key above the source line; all content inside x 60-1020",
+   "title_zone": "same SAFE title zone as funnel: 2 centred lines, Lora Bold 86 px (auto-shrinks), baselines y=395 and y=490; progress bar at y=531 with the hour/money count under it (no black pill, user 12 Nov 2026); key above the source line; all content inside x 60-1020",
    "render": "python3 scripts/howbig_short/howbig_short.py {data} {outdir} {slug}",
    "outputs": {
     "buffer": "{slug}-auto.mp4",
