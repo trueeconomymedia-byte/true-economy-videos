@@ -32,7 +32,7 @@ data.json (the task writes ONLY the source numbers and words; per-hour/day/week 
   final     optional gold answer box, default "{whole} = {total}" (e.g. "1 Year = £97.6bn", "1 Quarter = $36.6bn")
   tease     optional, default "{whole} = {cur}??"
   logo      optional, e.g. "shell": a transparent PNG the USER added at scripts/assets/logos/shell.png, shown centred
-            above the title (y 185-300, above the safe zone: user, 12 Nov 2026, visible once the Short is opened);
+            above the title (y 170-285, above the safe zone: user, 12 Nov 2026, visible once the Short is opened);
             laid on the finished frames EXACTLY as supplied (no printed-ink finish, no texture or recolouring), only scaled
   source    e.g. "Source: ONS & OBR, debt interest 2025-26 (Apr 2026)"  (" · {total} ÷ N hours" is added)
   Placeholders, filled from the computed numbers: {hour} {day} {week} {month} {total} {cur} {hours} {whole}
@@ -137,7 +137,7 @@ def main():
         with Image.open(lp) as li:
             li = li.convert("RGBA"); lw = round(LH * li.size[0] / li.size[1])
             logo_png = os.path.join(outdir, f"{slug}-logo-{lw}x{LH}.png"); li.resize((lw, LH), Image.LANCZOS).save(logo_png)
-        logo_xy = (540 - lw // 2, 185)
+        logo_xy = (540 - lw // 2, 170)
     gpath = os.path.join(outdir, f"{slug}-build.json"); json.dump(g, open(gpath, "w"), ensure_ascii=False, indent=1)
     print(f"{d.get('subject', slug)}: {txt['total']} over {days} days = {txt['hour']} an hour, {txt['day']} a day, {txt['week']} a week")
     subprocess.run(["node", os.path.join(HERE, "howbig_render.js"), gpath, outdir, slug], check=True)

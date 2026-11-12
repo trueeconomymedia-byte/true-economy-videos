@@ -5,10 +5,9 @@ constant reference the whole video: **1 square = 1 hour of the money**. Day 1 fi
 with a tick per hour, the camera pulls back to the first week, then the first months, then the whole period laid out
 as a calendar (a year: one row per month; a quarter: three month blocks side by side, 7 days a row, month names
 above). Captions (user, 11 Nov 2026): 1 Day, 1 Week = .., 1 Month = .., and the gold box 1 Quarter = .. / 1 Year = ..;
-a PROGRESS BAR sits at the BOTTOM (user, 12 Nov 2026: replaces the black counter pill; light tint track, the
-colour fill grows with every hour of the period). EVERY episode is titled on ONE line "<Owner>'s <period> <Measure> per hour" (e.g. "Shell's Q3 Profit per
-hour") with the gold marker on "<Owner>'s" ONLY; the counter (running total only) sits under the title, the key ("■ = 1
-hour") under the bottom progress bar, Day 1 squares carry the per-hour amount, and the user's logo (if any) sits above
+a PROGRESS BAR sits under the running total at the top (user, 12 Nov 2026: replaces the black counter pill). EVERY episode is titled on ONE line "<Owner>'s <period> <Measure> per hour" (e.g. "Shell's Q3 Profit per
+hour") with the gold marker on "<Owner>'s" ONLY; the counter (running total only) and the progress bar sit under the title, the key ("■ = 1
+hour") alone at the bottom, Day 1 squares carry the per-hour amount, and the user's logo (if any) sits above
 the title, unaltered (user, 12 Nov 2026). Section 2 LAYOUT overrides older wording here. The money counter is hidden
 ("£??") while the last stage fills; the total is revealed in gold at the end. Calm news-style sound (ticks, soft
 patter, glides, low hits, warm piano reveal). 28.5 s. NO cold open (user, 11 Nov 2026: the rewind was off-putting): Buffer gets the same video as YouTube, and its
@@ -37,9 +36,10 @@ Why hours (user decision, 11 Nov 2026): the reference must never change during t
   empty, gold marker on the owner word ONLY: ["Shell's Q3 Profit per hour", "", "Shell's"], ["Apple's Q4 Profit per
   hour", "", "Apple's"], ["UK debt interest per hour", "", "UK"]. Max 26 characters; if it is longer, split it over the
   two lines instead: ["Microsoft's Q1", "Profit per hour", "Microsoft's"]. Never abbreviate ("hr", "/hour").
-- LAYOUT (user, 12 Nov 2026): under the title the COUNTER shows only the running total ("$71.0m" ... "$??" in the last
-  stage ... the total); on Day 1 every hour square is labelled with the per-hour amount ("$5.5m") instead of a time;
-  at the bottom the progress bar with the key under it, just "■ = 1 hour". The renderer does all of this.
+- LAYOUT (user, 12 Nov 2026), the renderer does all of this: TOP STACK = [user logo, unaltered, y 170-285] / one-line
+  title (baseline 405) / running total only ("$71.0m" ... "$??" in the last stage ... the total, baseline 510) /
+  progress bar right under it (y 548, light tint track, colour fill grows every hour). Day 1 squares carry the per-hour
+  amount ("$5.5m") instead of a time. BOTTOM: the key alone, "■ = 1 hour" (fades only if a gold answer box covers it).
 - logo (company episodes): "logo": "<name>" when the USER has added a transparent PNG at scripts/assets/logos/<name>.png;
   it sits centred above the title (y 185-300; the user allows this area, visible once the Short is opened), UNALTERED
   (the renderer lays it on the finished frames after the ink finish: animated.md section 0, LOGOS). Never draw,
