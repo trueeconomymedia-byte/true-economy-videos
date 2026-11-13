@@ -202,11 +202,22 @@ for (xs, ys0, ys1, xd, yd0, yd1, col) in anim.get("flow", []):
     cyc = int(min(8, max(1, round(62 * DUR / max(ln, 1)))))
     for i in range(n):
         parts.append((xs, ys0, ys1, xd, yd0, yd1, (i + rng.random() * 0.8) / n, rng.random(), cyc, PCOL.get(col, (54, 112, 208))))
+BEHIND = bool(anim.get("red_behind"))     # red ribbon sits BEHIND the other ribbons: its flow bits are hidden wherever a non-red ribbon covers it (user 13 Nov)
+FRONT_MASK = None
+if BEHIND:
+    FRONT_MASK = Image.new("L", (1896, 2600), 0); _md = ImageDraw.Draw(FRONT_MASK)
+    for (xs, ys0, ys1, xd, yd0, yd1, col) in anim.get("flow", []):
+        if PCOL.get(col) == (217, 68, 55): continue
+        xm = (xs + xd) / 2; qs = [i / 80 for i in range(81)]
+        top = [((xs*(1-q)**3 + 3*xm*(1-q)**2*q + 3*xm*(1-q)*q*q + xd*q**3) * 2, (ys0*((1-q)**3 + 3*(1-q)**2*q) + yd0*(3*(1-q)*q*q + q**3)) * 2) for q in qs]
+        bot = [((xs*(1-q)**3 + 3*xm*(1-q)**2*q + 3*xm*(1-q)*q*q + xd*q**3) * 2, (ys1*((1-q)**3 + 3*(1-q)**2*q) + yd1*(3*(1-q)*q*q + q**3)) * 2) for q in qs]
+        _md.polygon(top + bot[::-1], fill=255)
 def bez(p0, p1, p2, p3, t):
     u = 1 - t; return u*u*u*p0 + 3*u*u*t*p1 + 3*u*t*t*p2 + t*t*t*p3
 def chart_state(t):
     img = chart_static.copy()
     lay = Image.new("RGBA", (1896, 2600), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    lay_red = Image.new("RGBA", (1896, 2600), (0, 0, 0, 0)) if BEHIND else None; d_red = ImageDraw.Draw(lay_red) if BEHIND else None
     for (xs, ys0, ys1, xd, yd0, yd1, ph, u, cyc, rgb) in parts:                  # money streaks along ribbons
         tt = (ph + cyc * t / DUR) % 1.0
         xm = (xs + xd) / 2
@@ -216,7 +227,7 @@ def chart_state(t):
         q0 = tt; q1 = max(0.0, tt - 26 / max(abs(xd - xs) * 2, 1))
         edge = min(1.0, tt / 0.1, (1 - tt) / 0.1)
         al = int(255 * 0.5 * max(edge, 0))
-        if al > 2: d.line([pos(q1), pos(q0)], fill=tuple(rgb) + (al,), width=8)
+        if al > 2: (d_red if (BEHIND and tuple(rgb) == (217, 68, 55)) else d).line([pos(q1), pos(q0)], fill=tuple(rgb) + (al,), width=8)
     for (px, py, pw, ph_, rgb, cyc, rad) in anim.get("pulse", []):                # flashing rectangles (tile flash)
         k = 0.5 + 0.5 * math.sin((t / DUR) * 2 * math.pi * (cyc or max(1, round(DUR))) - math.pi / 2)
         d.rounded_rectangle([px * 2, py * 2, (px + pw) * 2, (py + ph_) * 2], radius=rad * 2, fill=tuple(rgb) + (int(255 * 0.45 * k),))
@@ -247,6 +258,9 @@ def chart_state(t):
         a = int(255 * sw.get("alpha", 0.1))
         bd.polygon([(cx - 120, 0), (cx + 120, 0), (cx + 120 - 700, 2600), (cx - 120 - 700, 2600)], fill=tuple(sw.get("rgb", [54, 112, 208])) + (a,))
         lay = Image.alpha_composite(lay, band.filter(ImageFilter.GaussianBlur(40)))
+    if BEHIND:                                                                       # red bits behind the blue ribbons: cut them out under the blue ribbons, then blue bits go on top
+        ra = lay_red.getchannel("A"); ra = Image.composite(Image.new("L", ra.size, 0), ra, FRONT_MASK.filter(ImageFilter.GaussianBlur(0.8)))
+        lay_red.putalpha(ra); lay = Image.alpha_composite(lay_red, lay)
     lay = lay.filter(ImageFilter.GaussianBlur(0.9)) if parts else lay
     img.alpha_composite(lay)
     if L_top is not None: img.alpha_composite(L_top)
