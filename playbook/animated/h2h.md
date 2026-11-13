@@ -8,6 +8,13 @@ Look: the shared card paper with the printed-ink finish and the shared SAFE zone
 3-7 rounds (5 is best). Central axis: side A grows LEFT in blue, side B RIGHT in red; the better side of each round
 keeps full colour and wins the point, the other fades to its light tint; a tie gives no point. Numbers count up as the
 bars grow, both values HOLD for about a second before the point lands (so viewers can call it), the scoreboard pops.
+SCOREBOARD (user default 13 Nov 2026): small and quiet, two touching colour squares with the scores (side A blue on
+the left, side B red on the right, white numbers) and the side names in ink either side ("UK [1][3] Germany"); when a
+side wins a point, ITS square flips over around its horizontal axis (~0.5 s) and shows the new number (the other stays
+still). No black tab. Built into the renderer: never change it per episode.
+TITLE (user default 13 Nov 2026): short and obvious, "<A> vs <B>:" on line 1 with the gold marker on "<A> vs <B>", and
+the subject in one or two words on line 2, e.g. ["UK vs Germany:", "Economies", "UK vs Germany"],
+["Apple vs Microsoft:", "Business", "Apple vs Microsoft"]. Not "5 economic rounds".
 The camera zooms into each round with a slow drift, pulls back before the LAST round (the decider, shown as "?" with
 "Final score: A ? – ? B"), then the winner lands in gold. About 34 s. Same video for YouTube and Buffer; Buffer cover
 = thumbnailOffset `thumb_ms` from SLUG-build.json (the table with the decider hidden).

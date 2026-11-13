@@ -62,12 +62,18 @@ function setTime(t){
  const sv=document.getElementById('sv');sv.innerHTML='';const g=el(sv,'g',{});
  const hq=el(g,'g',{opacity:1-prog(t,TL.ans,TL.ans+0.4)});headline(hq,...D.headline_q);
  const ha=el(g,'g',{opacity:prog(t,TL.ans+0.1,TL.ans+0.5)});headline(ha,...D.headline_a);
- // scoreboard
- let sa=0,sb=0;D.rounds.forEach((R,i)=>{if(t>=TL.rounds[i].judge){if(R.win==='a')sa++;if(R.win==='b')sb++}});
- el(g,'rect',{x:290,y:PY,width:500,height:76,rx:8,fill:'#1b1b1b'});
- fitT(T(g,395,PY+51,D.a,32,C.lblue,'middle',800),150);fitT(T(g,685,PY+51,D.b,32,C.lred,'middle',800),150);
- const pops=TL.rounds.map(r=>Math.sin(Math.PI*prog(t,r.judge,r.judge+0.35))).reduce((a,b)=>Math.max(a,b),0);
- const sc=T(g,540,PY+55,sa+' – '+sb,46,C.paper,'middle',800);sc.setAttribute('transform',`translate(540,${PY+40}) scale(${1+0.12*pops}) translate(-540,${-(PY+40)})`);
+ // scoreboard (user default 13 Nov 2026): two touching colour squares with the scores, ink country labels either side;
+ // a point flips the scoring side's square over (around its horizontal axis) to the new number
+ const FL=0.5,SQ=64,sy=PY+4;
+ const shown=side=>D.rounds.reduce((n,R,i)=>n+(R.win===side&&t>=TL.rounds[i].judge+FL/2?1:0),0);
+ const flip=side=>TL.rounds.reduce((k,r,i)=>{if(D.rounds[i].win!==side)return k;const p=prog(t,r.judge,r.judge+FL);return p>0&&p<1?Math.abs(Math.cos(Math.PI*p)):k},1);
+ [['a',540-SQ,C.blue],['b',540,C.red]].forEach(([side,x,col])=>{
+  const k=Math.max(flip(side),0.02),cy=sy+SQ/2;
+  const sq=el(g,'g',{transform:`translate(0,${cy}) scale(1,${k}) translate(0,${-cy})`});
+  el(sq,'rect',{x,y:sy,width:SQ,height:SQ,fill:col});
+  T(sq,x+SQ/2,sy+SQ/2+15,String(shown(side)),42,'#fff','middle',800);
+ });
+ fitT(T(g,540-SQ-18,sy+SQ/2+11,D.a,30,C.ink,'end',800),300);fitT(T(g,540+SQ+18,sy+SQ/2+11,D.b,30,C.ink,'start',800),300);
  // the table, seen through the camera
  const [s,ty]=camAt(t);const cp=el(g,'clipPath',{id:'cl'});el(cp,'rect',{x:0,y:625,width:1080,height:830});
  const clip=el(g,'g',{'clip-path':'url(#cl)'});const cam=el(clip,'g',{transform:`translate(${540*(1-s)},${ty}) scale(${s})`});
