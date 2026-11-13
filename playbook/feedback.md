@@ -194,3 +194,8 @@ The scripts already use these values (te_lib, make_flow, make_mkts, video_card, 
 
 ## 2026-11-11 CLIP SHORTS: TIKTOK ONLY + YOUTUBE COPY FOR THE USER
 - Clip Shorts go to TikTok only via Buffer (no Facebook, no Instagram). The run sends the user the posted video file and a thumbnail JPG with a ready-to-paste YouTube title, description and hashtags to upload by hand (see clips.md "Platforms").
+
+## 13 Nov 2026 - ribbon/alluvial layering
+- On bump/alluvial (wave) cards the RED focal ribbon must be drawn FIRST so it passes UNDER the other ribbons: no red must ever appear on top of a blue ribbon. Order the `series` dict with the red country first.
+- The red ribbon also gets NO flow streaks (drop its entries from `anim["flow"]`): the animation layer sits above every ribbon, so red streaks would still show on top of the blue ones. Blue streaks over the red ribbon are correct.
+
