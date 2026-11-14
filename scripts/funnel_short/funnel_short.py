@@ -93,6 +93,20 @@ def main():
     g.setdefault("title_mode", "fade") # user default 11 Nov 2026: hook title fades as the chart moves up, the money bar takes its place
     g.setdefault("bar_red", "dark")    # user default 11 Nov 2026: money bar = gold left, dark red taken
     g.setdefault("dash_density", 2); g.setdefault("dash_vary", True)   # user default 11 Nov 2026: twice the flow pieces, varied length and speed
+    # LOGO ABOVE THE TITLE (user, 14 Nov 2026): a user-supplied logo (scripts/assets/logos/<logo_key>.png) sits ONCE, centred
+    # above the title (y 170-285, outside the safe zone: allowed by the user), for the whole video. UNALTERED (user rule,
+    # 12 Nov 2026): not drawn in the page and never through the printed-ink finish; laid on the finished frames, only scaled.
+    logo_png = None
+    cs = "".join(ch if ch.isalnum() else "-" for ch in str(g.get("logo_key") or "none").lower()).strip("-")
+    lp = g.pop("logo", None) or os.path.join(HERE, "..", "assets", "logos", f"{cs}.png")
+    g["logo_key"] = "none"            # the page never draws the logo itself
+    if lp and os.path.exists(lp) and lp.endswith(".png"):
+        from PIL import Image
+        LH = 115
+        with Image.open(lp) as li:
+            li = li.convert("RGBA"); lw = round(LH * li.size[0] / li.size[1])
+            logo_png = os.path.join(outdir, f"{slug}-logo-{lw}x{LH}.png"); li.resize((lw, LH), Image.LANCZOS).save(logo_png)
+        logo_xy = (540 - lw // 2, 170)
     gpath = os.path.join(outdir, f"{slug}-funnel-data.json"); json.dump(g, open(gpath, "w"), ensure_ascii=False, indent=1)
     # ONE video for every platform (user default 11 Nov 2026): opens fully zoomed out and zooms in at once; YouTube gets the same file
     subprocess.run(["node", os.path.join(HERE, "funnel_render.js"), gpath, outdir, slug], check=True, env={**os.environ, "FUNNEL_VARIANTS": "auto"})
@@ -105,12 +119,24 @@ def main():
         subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", silent, "-i", wav, "-map", "0:v", "-map", "1:a",
                         "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", tmp], check=True)
         os.replace(tmp, final); os.remove(silent); os.remove(wav)
+        if logo_png:
+            tmp2 = final + ".logo.mp4"
+            subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", final, "-i", logo_png, "-filter_complex",
+                            f"[0:v][1:v]overlay={logo_xy[0]}:{logo_xy[1]}:format=auto,format=yuv420p", "-c:v", "libx264", "-crf", "17",
+                            "-preset", "veryfast", "-r", "30", "-c:a", "copy", "-movflags", "+faststart", tmp2], check=True)
+            os.replace(tmp2, final)
         b = json.load(open(beats))
         ts = [0.05, b["cold"] + 2.0] + [s["b"] + 1.2 for s in b["steps"]] + [b["kt"] + 1.6, b["pull1"] + 1.0, b["total"] - 0.1]
         sel = "+".join(f"eq(n\\,{int(t*30)})" for t in ts)
         subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", final, "-vf", f"select='{sel}',scale=360:-1,tile={len(ts)}x1",
                         "-frames:v", "1", "-vsync", "0", os.path.join(outdir, f"{slug}-qa-{v}.jpg")], check=True)
         print(f"done {v}: {final} ({b['total']:.1f}s)")
+    if logo_png:
+        from PIL import Image
+        lg = Image.open(logo_png).convert("RGBA")
+        for nm in ("thumb-tease", "thumb-answer"):
+            tp = os.path.join(outdir, f"{slug}-{nm}.png"); im = Image.open(tp).convert("RGBA"); im.alpha_composite(lg, logo_xy); im.convert("RGB").save(tp)
+        os.remove(logo_png)
     for a, b_ in ((f"{slug}-auto.mp4", f"{slug}-youtube.mp4"), (f"{slug}-qa-auto.jpg", f"{slug}-qa-youtube.jpg")):
         shutil.copyfile(os.path.join(outdir, a), os.path.join(outdir, b_))
     print("thumbnails:", os.path.join(outdir, f"{slug}-thumb-tease.png"), os.path.join(outdir, f"{slug}-thumb-answer.png"))
