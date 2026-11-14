@@ -198,3 +198,6 @@ The scripts already use these values (te_lib, make_flow, make_mkts, video_card, 
 ## 13 Nov 2026 - ribbon/alluvial layering
 - On bump/alluvial (wave) cards the RED focal ribbon must sit BEHIND the other ribbons: order the `series` dict with the red country first so it is drawn first.
 - The red ribbon KEEPS its flow bits. They must be hidden wherever a blue ribbon covers it and the blue flow bits must draw on top of them. Set `c.anim["red_behind"] = True` before `c.save(...)`; video_card.py then masks the red streaks by the non-red ribbons and composites blue streaks above.
+
+## 2026-11-14 WHO OWNS: FUNNEL FORM (user, iterated; approved "Nice")
+- For ownership / "who is left" breakdowns the user prefers a FUNNEL: one continuous funnel split into LEVEL horizontal sections of different colours, only the outside edge curves (smooth single curve, never wobbly); section widths = amount remaining. Pastel fills (op 0.6) with constant vertical money streaks in the full colour (same look as the Sankey streaks); streaks stay off label text. Labels large and dark. No black bar beside the headline (accent none) and no extra solid caps. Script: scripts/make_post_funnel9.py + scripts/video_card_vflow.py.
