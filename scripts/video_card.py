@@ -229,7 +229,7 @@ def chart_state(t):
         al = int(255 * 0.5 * max(edge, 0))
         if al > 2: (d_red if (BEHIND and tuple(rgb) == (217, 68, 55)) else d).line([pos(q1), pos(q0)], fill=tuple(rgb) + (al,), width=8)
     for (dx_, dy_, dr_, drgb, dph, damp) in anim.get("dots", []):                   # twinkling dots: a soft white ripple travels across the dot grid, one pass per loop (periodic, so first frame = last frame)
-        kk = 0.5 - 0.5 * math.cos(2 * math.pi * ((t / DUR + dph) % 1.0)); kk = kk ** 10
+        kk = 0.5 - 0.5 * math.cos(2 * math.pi * 2 * ((t / DUR + dph) % 1.0)); kk = kk ** 1.5
         if kk > 0.01: d.ellipse([(dx_ - dr_) * 2, (dy_ - dr_) * 2, (dx_ + dr_) * 2, (dy_ + dr_) * 2], fill=tuple(drgb) + (int(255 * damp * kk),))
     for (px, py, pw, ph_, rgb, cyc, rad) in anim.get("pulse", []):                # flashing rectangles (tile flash)
         k = 0.5 + 0.5 * math.sin((t / DUR) * 2 * math.pi * (cyc or max(1, round(DUR))) - math.pi / 2)
