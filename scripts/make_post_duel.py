@@ -51,8 +51,12 @@ for i, r in enumerate(rows):
                 for (x1_, y1_, x2_, y2_) in ((x, gy0, x + COLW, gy0), (x, gy0, x, gy1), (x + COLW, gy0, x + COLW, gy1)):
                     c.line(x1_, y1_, x2_, y2_, RED, 3, "10 7")
                 gl = r.get("gap_label", "the gap")
-                c.text(cx, gy0 + gh * 0.42, gl, fit("b", gl, 26, COLW - 30), RED, "b", "m")
-                c.text(cx, gy0 + gh * 0.42 + 42, fmt.format(m - abs(v)), 38, RED, "b", "m")
+                if gh < 110:
+                    c.text(cx, base - h + 62, fmt.format(abs(v)), 48, "#FFFFFF", "b", "m")
+                    t1 = gl + " " + fmt.format(m - abs(v)); c.text(cx, gy0 + gh / 2 + 1, t1, fit("b", t1, 28, COLW - 24), RED, "b", "m")
+                else:
+                    c.text(cx, gy0 + gh * 0.42, gl, fit("b", gl, 26, COLW - 30), RED, "b", "m")
+                    c.text(cx, gy0 + gh * 0.42 + 42, fmt.format(m - abs(v)), 38, RED, "b", "m")
             if r["kind"] == "rate":
                 light = col == GREEN_L
                 c.arrows(x, base - h, COLW, h, (36, 153, 114) if light else (255, 255, 255), n=max(6, int(14 * h / hmax)),
@@ -60,7 +64,10 @@ for i, r in enumerate(rows):
     with c.group("toplabels"):
         for cx, k, v in ((CXA, "a"), (CXB, "b")) and ((CXA, "a", va), (CXB, "b", vb)):
             h = abs(v) * sc; topy = base - h
-            s = fmt.format(v); c.text(cx, topy - 14, s, 48 if len(s) < 8 else 42, INK, "b", "m")
+            s = fmt.format(v)
+            if r["kind"] == "size" and abs(v) < m and (m - abs(v)) * sc < 110:
+                continue
+            c.text(cx, topy - 14, s, 48 if len(s) < 8 else 42, INK, "b", "m")
     if r["kind"] == "rate" and r.get("note"):
         with c.group("body"): c.text(948, ry + 36, r["note"], 17, GREY, "sb", "r")
     y += rh
