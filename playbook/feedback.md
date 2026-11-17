@@ -204,3 +204,4 @@ The scripts already use these values (te_lib, make_flow, make_mkts, video_card, 
 
 ## 2026-11-17 HOW (COMPANY): MORE IN-DEPTH FLOW (user: "more in depth flow chart" on the Meta card, then "Nice, update the buffer")
 - The user prefers a more detailed Sankey for how_company: split the running costs into their reported lines (R&D, marketing and sales, G&A) and pull out any big one-off item as its own highlighted ribbon (Meta's $9.9B legal charge), and split revenue by reported segment where verified. Use scripts/make_flow_detail.py (make_flow.py plus `opex_parts` [{name,value,hot}] and optional `note`; data example in post JSON). Add a one-line note above the footer when a one-off item matters (e.g. profit without the charge). Every split line must be verified in the release text.
+- (17 Nov, user) how_company: drop the black bar beside the headline; headline flush left (post JSON "accent":"none" in make_flow.py / make_flow_detail.py).

@@ -80,12 +80,13 @@ yoy = lambda a, b: f"{(a / b - 1) * 100:+.0f}% YoY"
 X0 = 0
 # ---- title (same look as the template: bold serif, yellow marker behind company name)
 line1 = f"How {co} makes"
-TX = 38
+NOBAR = d.get("accent") == "none"
+TX = 0 if NOBAR else 38
 size = min(92.0, (948 - TX) / width("cb", line1, 1))
 b1 = max(66, __import__("math").ceil(size * 0.76) + 3); pitch = size * 0.93   # keep ascenders inside the canvas
 out.append('<g id="title">')
 wp = width("cb", "How ", size); wn = width("cb", co, size)
-rect(X0, b1 - size * 0.70, 12, size * 0.70, INK)   # short black bar beside line 1 (3 options: short / tall / none; user 9 Nov)
+if not NOBAR: rect(X0, b1 - size * 0.70, 12, size * 0.70, INK)   # short black bar beside line 1 (3 options: short / tall / none; user 9 Nov)
 rect(X0 + TX + wp - 6, b1 - size * 0.25, wn + 12, size * 0.40, YEL, 1, 3)
 text(X0 + TX, b1, line1, size, INK, "cb")
 text(X0 + TX, b1 + pitch, "money?", size, INK, "cb")
