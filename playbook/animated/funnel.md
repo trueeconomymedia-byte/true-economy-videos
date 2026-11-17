@@ -84,6 +84,8 @@ flow (dash_density 2, dash_vary true: the renderer default).
   explainable in 3-5 steps. If in doubt, skip.
 
 LOGO (user, 14 Nov 2026): when the user has supplied scripts/assets/logos/<company>.png, the renderer lays it ONCE, centred
-above the title (y 170-285, outside the safe zone: user-approved), for the whole video and on both thumbnails, UNALTERED
+above the title (y 170-285, outside the safe zone: user-approved) and on both thumbnails, UNALTERED
 (after the printed-ink finish, only scaled; same method as howbig). The page no longer draws a logo beside the counter.
 A logo on a solid background (e.g. white mark on navy) keeps its background: only the empty margin is cropped.
+LOGO MOTION (user, 17 Nov 2026): the logo moves up and fades out WITH the hook title when the chart starts moving, is gone
+while the money bar shows, and comes back with the answer title at the end (renderer default; pixels still unaltered).

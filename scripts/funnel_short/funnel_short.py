@@ -94,7 +94,8 @@ def main():
     g.setdefault("bar_red", "dark")    # user default 11 Nov 2026: money bar = gold left, dark red taken
     g.setdefault("dash_density", 2); g.setdefault("dash_vary", True)   # user default 11 Nov 2026: twice the flow pieces, varied length and speed
     # LOGO ABOVE THE TITLE (user, 14 Nov 2026): a user-supplied logo (scripts/assets/logos/<logo_key>.png) sits ONCE, centred
-    # above the title (y 170-285, outside the safe zone: allowed by the user), for the whole video. UNALTERED (user rule,
+    # above the title (y 170-285, outside the safe zone: allowed by the user); it moves up and fades out WITH the hook title and
+    # returns with the answer title (user, 17 Nov 2026). UNALTERED (user rule,
     # 12 Nov 2026): not drawn in the page and never through the printed-ink finish; laid on the finished frames, only scaled.
     logo_png = None
     cs = "".join(ch if ch.isalnum() else "-" for ch in str(g.get("logo_key") or "none").lower()).strip("-")
@@ -120,11 +121,26 @@ def main():
                         "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", tmp], check=True)
         os.replace(tmp, final); os.remove(silent); os.remove(wav)
         if logo_png:
+            # LOGO FOLLOWS THE TITLE (user, 17 Nov 2026): it moves up and fades out with the hook title and returns with the
+            # answer title; per-frame [dy, opacity] from the page (SLUG-logo-track-auto.json). Pixels stay unaltered (only scaled).
+            from PIL import Image
+            trk_p = os.path.join(outdir, f"{slug}-logo-track-{v}.json"); trk = json.load(open(trk_p))
+            lg = Image.open(logo_png).convert("RGBA"); lw_, lh_ = lg.size; BAND = logo_xy[1] + lh_ + 10
+            lv = os.path.join(outdir, f"{slug}-logo-layer.mov")
+            enc = subprocess.Popen(["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgba", "-s", f"{lw_}x{BAND}", "-r", "30",
+                                    "-i", "-", "-c:v", "qtrle", lv], stdin=subprocess.PIPE)
+            base_a = lg.getchannel("A")
+            for dy, op in trk:
+                fr = Image.new("RGBA", (lw_, BAND), (0, 0, 0, 0)); y = round(logo_xy[1] + dy)
+                if op > 0.003 and y + lh_ > 0:
+                    l2 = lg.copy(); l2.putalpha(base_a.point(lambda a, o=op: round(a * o))); fr.alpha_composite(l2, (0, y)) if y >= 0 else fr.alpha_composite(l2.crop((0, -y, lw_, lh_)), (0, 0))
+                enc.stdin.write(fr.tobytes())
+            enc.stdin.close(); enc.wait()
             tmp2 = final + ".logo.mp4"
-            subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", final, "-i", logo_png, "-filter_complex",
-                            f"[0:v][1:v]overlay={logo_xy[0]}:{logo_xy[1]}:format=auto,format=yuv420p", "-c:v", "libx264", "-crf", "17",
+            subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", final, "-i", lv, "-filter_complex",
+                            f"[0:v][1:v]overlay={logo_xy[0]}:0:format=auto:eof_action=pass,format=yuv420p", "-c:v", "libx264", "-crf", "17",
                             "-preset", "veryfast", "-r", "30", "-c:a", "copy", "-movflags", "+faststart", tmp2], check=True)
-            os.replace(tmp2, final)
+            os.replace(tmp2, final); os.remove(lv); os.remove(trk_p)
         b = json.load(open(beats))
         ts = [0.05, b["cold"] + 2.0] + [s["b"] + 1.2 for s in b["steps"]] + [b["kt"] + 1.6, b["pull1"] + 1.0, b["total"] - 0.1]
         sel = "+".join(f"eq(n\\,{int(t*30)})" for t in ts)

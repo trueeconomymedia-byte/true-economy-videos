@@ -274,6 +274,10 @@ window.setTime=function(T){
  else{frameAt(T);if(T>F1)alpha=1-eq((T-F1)/(F2-F1));}
  $('content').setAttribute('opacity',alpha);
 };
+// LOGO TRACK (user, 17 Nov 2026): the user's logo (laid on unaltered after the ink finish by funnel_short.py) moves up and
+// fades out WITH the hook title, and comes back with the answer title at the end. Returns [dy, opacity] for this frame.
+window.logoState=function(){const op=e=>parseFloat($(e).getAttribute('opacity')||'1'),dy=e=>{const m=/translate\(0 ([-0-9.e]+)\)/.exec($(e).getAttribute('transform')||'');return m?parseFloat(m[1]):0};
+ const c=op('content'),q=op('hq'),a=op('ha');return q>=a?[dy('hq'),q*c]:[dy('ha'),a*c]};
 window.tease=()=>{draw(END,{tease:true});$('content').setAttribute('opacity',1)};
 window.answer=()=>{draw(END);$('content').setAttribute('opacity',1)};
 window.BEATS={total:TOTAL,cold:COLD,revbar:REVBAR+COLD,kt:KT+COLD,pull0:PULL0+COLD,pull1:PULL1+COLD,

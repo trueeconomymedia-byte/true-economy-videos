@@ -39,7 +39,8 @@ const b64=(p,mime)=>`data:${mime};base64,`+fs.readFileSync(p).toString('base64')
   const N=Math.round(beats.total*30), tmp=path.join(outdir,`${slug}-${variant}-silent.tmp.mp4`);
   const ff=INK?spawn('python3',[path.join(INKDIR,'ink_pipe.py'),tmp],{stdio:['pipe','inherit','inherit']})
    :spawn('ffmpeg',['-y','-v','error','-f','image2pipe','-framerate','30','-c:v','mjpeg','-i','-','-c:v','libx264','-crf','17','-preset','veryfast','-pix_fmt','yuv420p',tmp],{stdio:['pipe','inherit','inherit']});
-  for(let f=0;f<N;f++){await p.evaluate(t=>setTime(t),f/30);
+  const track=[];
+  for(let f=0;f<N;f++){track.push(await p.evaluate(t=>{setTime(t);return logoState()},f/30));
    let buf=INK?await p.screenshot({type:'png',omitBackground:true}):await p.screenshot({type:'jpeg',quality:92});
    if(INK){const h=Buffer.alloc(4);h.writeUInt32BE(buf.length);buf=Buffer.concat([h,buf]);}
    if(!ff.stdin.write(buf))await new Promise(r=>ff.stdin.once('drain',r));}
@@ -47,6 +48,7 @@ const b64=(p,mime)=>`data:${mime};base64,`+fs.readFileSync(p).toString('base64')
   ff.stdin.end();const code=await new Promise(r=>ff.on('close',r));
   if(code!==0){console.error('ffmpeg failed',variant);process.exit(1)}
   fs.renameSync(tmp,path.join(outdir,`${slug}-${variant}-silent.mp4`));
+  fs.writeFileSync(path.join(outdir,`${slug}-logo-track-${variant}.json`),JSON.stringify(track));   // logo follows the title (user 17 Nov 2026)
   console.log('rendered',variant,beats.total.toFixed(2)+'s',logo?'with logo':'no logo');
  }
  await b.close();
