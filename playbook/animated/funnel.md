@@ -89,3 +89,12 @@ above the title (y 170-285, outside the safe zone: user-approved) and on both th
 A logo on a solid background (e.g. white mark on navy) keeps its background: only the empty margin is cropped.
 LOGO MOTION (user, 17 Nov 2026): the logo moves up and fades out WITH the hook title when the chart starts moving, is gone
 while the money bar shows, and comes back with the answer title at the end (renderer default; pixels still unaltered).
+LOGO WORKFLOW (user, 17 Nov 2026): the USER supplies logos, usually after seeing the first version of an episode. If the
+chosen company has no scripts/assets/logos/<company>.png, still make and schedule the episode without one, and say in the
+final message "No <Company> logo on file: send it in this chat and I'll add it and swap the scheduled posts". When the user
+sends a logo: save it UNALTERED (only scaled to 360 px wide; a logo on a solid background keeps it, crop only empty margin)
+as scripts/assets/logos/<company-slug>.png and commit it; set "logo_key": "<company-slug>" in the data; re-render (the
+renderer places it centred above the title, y 170-285, moving up and fading with the hook title and returning with the
+answer title); QA it; host it under a new file name; edit the already-scheduled Buffer posts to the new video URL (same
+captions, same time) with edit_post; update the log's file entry; send the user the new YouTube file and thumbnail.
+Future episodes for that company pick the logo up automatically.
