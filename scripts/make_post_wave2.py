@@ -30,17 +30,18 @@ def flag(c, cx, cy, r, code):
     c._o("".join(o))
 
 c = Card()
-L1, L2, MK = "Which country has", "the most people?", "most people"
-size = min(76.0, 948 / width("cb", L1, 1), 948 / width("cb", L2, 1)); b1 = math.ceil(size * 0.76) + 3; pitch = size * 0.93
+L1, L2, MK = "Which country has the", "most people?", "most people"
+size = min(76.0, 948 / width("cb", L1, 1)); b1 = math.ceil(size * 0.76) + 3; pitch = size * 0.93
 with c.group("title"):
     for ln, by in ((L1, b1), (L2, b1 + pitch)):
         if MK in ln:
             i = ln.index(MK); wp = width("cb", ln[:i], size); wn = width("cb", MK, size)
             c.rect(wp - 6, by - size * 0.25, wn + 12, size * 0.40, YEL, 1, 3)
         c.text(0, by, ln, size, INK, "cb")
-    c.text(0, b1 + pitch + 46, "Today's 10 biggest countries, traced back · 1950 vs 2026 · ribbon width = people", 22, GREY, "m")
-b1 = b1 + pitch + 2
-c.top = b1 + 44 + 30
+    c.text(0, b1 + pitch + 44, "Today's 10 biggest countries,", 22, GREY, "m")
+    c.text(0, b1 + pitch + 72, "1950 vs 2026 · ribbon width = people", 22, GREY, "m")
+print("title size", size, "line1 w", width("cb", L1, size), "line2 w", width("cb", L2, size))
+c.top = b1 + 78 - 44          # chart rises beside line 2: its peak is on the right, where line 2 and the subtitle leave the paper empty
 NW, GR, PITCH = 16, 5, 22
 yt, yb = c.top + 44, c.bottom - 8
 k = (yb - yt - GR * 9) / sum(V1.values())
