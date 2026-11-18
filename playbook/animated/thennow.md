@@ -11,6 +11,8 @@ thumbnailOffset `thumb_ms` from SLUG-build.json (33 = the first frame).
 Renderer: `python3 scripts/thennow_short/thennow_short.py data.json OUTDIR SLUG` (read its docstring). Never change the
 look, timing or sound inside the renderer; only the data changes.
 
+MOVING FROM FRAME 1 (user rule 18 Nov 2026, renderer default): the line and the camera move from the very first frame
+(camera push-in over the first 1.6 s, first year quicker) so nobody scrolls away; never add a still opening.
 STRAIGHT-IN OPENING (user rule 11 Nov 2026, renderer default): NO rewind, NO zoom, NO "$???" teaser at the start. The
 first frame is the title plus the first year's values and ratio tag, and the line starts moving within 0.2 s so nobody
 scrolls away. Instagram and Facebook autoplay, so the cover barely matters; Buffer cover = thumbnailOffset 33 (first
