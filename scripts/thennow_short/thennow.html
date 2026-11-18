@@ -45,8 +45,8 @@ function BUILD(d){
  // COLD OPEN (test, 11 Nov 2026): first frame = the whole climb with today's value and the answer hidden; the line
  // rewinds to the first year (faint ghost of the full line stays), lands with a hit and the hook title pops in.
  COLD=D.cold?1.5:0;CO={rw0:0.08,rw1:1.18,land:1.18};
- const OPEN=D.cold?0.75:0.2;/* no rewind: the line starts moving almost at once (user 11 Nov 2026) */KEYS=[[COLD,0],[COLD+OPEN,0]];let t=COLD+OPEN;const evIdx=D.events.map(e=>e[0]-D.years[0]);
- for(let i=1;i<=N;i++){t+=pace;KEYS.push([t,i]);if(evIdx.includes(i)){t+=0.95;KEYS.push([t,i])}}
+ const OPEN=D.cold?0.75:0.001;/* user 18 Nov 2026: moving from the very first frame *//* no rewind: the line starts moving almost at once (user 11 Nov 2026) */KEYS=[[COLD,0],[COLD+OPEN,0]];let t=COLD+OPEN;const evIdx=D.events.map(e=>e[0]-D.years[0]);
+ for(let i=1;i<=N;i++){t+=(i===1&&!D.cold)?Math.min(pace,0.4):pace;KEYS.push([t,i]);if(evIdx.includes(i)){t+=0.95;KEYS.push([t,i])}}
  TL={rideEnd:t,pull:[t+0.3,t+2.8],hold:t+2.9,ans:t+3.9,end:D.cold?t+5.6:t+9.0};   // cold: short hold after the reveal so it loops
  const all=D.main.concat(D.compare||[]);FULLV=Math.max(...all)*1.22;
  const raw=FULLV/5,mag=Math.pow(10,Math.floor(Math.log10(raw)));STEP=[1,2,2.5,5,10].map(m=>m*mag).find(s=>s>=raw);
@@ -59,14 +59,16 @@ function BUILD(d){
 function evT(i){const k=KEYS.find(k=>k[1]===i);return k?k[0]:0}
 function nowAt(t){let i=0;while(i<KEYS.length-2&&t>=KEYS[i+1][0])i++;const a=KEYS[i],b=KEYS[i+1];return a[1]+(b[1]-a[1])*prog(t,a[0],b[0])}
 const val=(arr,f)=>{const i=Math.floor(f),u=f-i;return i+1<arr.length?arr[i]+(arr[i+1]-arr[i])*u:arr[i]};
-function rideView(now){const lo=Math.max(0,Math.floor(now-5.2));const vis=[];for(let i=lo;i<=now;i++){vis.push(D.main[i]);if(D.compare)vis.push(D.compare[i])}
- return [[now-5.2,now+1.8],Math.max(val(D.main,now),...(D.compare?[val(D.compare,now)]:[]),...vis)*1.3]}
+function rideView(now){const L=D.compare?5.2:5.0,R=D.compare?1.8:2.2;/* no-compare: tip a little further left so its label fits right of the dot inside x 1020 (18 Nov 2026) */const lo=Math.max(0,Math.floor(now-L));const vis=[];for(let i=lo;i<=now;i++){vis.push(D.main[i]);if(D.compare)vis.push(D.compare[i])}
+ return [[now-L,now+R],Math.max(val(D.main,now),...(D.compare?[val(D.compare,now)]:[]),...vis)*1.3]}
 function setTime(t){
  if(COLD&&t<COLD){   // rewind: accelerate then brake into the first year; camera glides from the whole climb to the ride view
   const u=prog(t,CO.rw0,CO.rw1),e=eio(u),now=N*(1-e),[rw,rv]=rideView(now),full=[-0.4,N+0.6],p=1-eio(prog(t,CO.rw0+0.15,CO.rw1));
   FRAME({now,win:[rw[0]+(full[0]-rw[0])*p,rw[1]+(full[1]-rw[1])*p],vmax:rv+(FULLV-rv)*p,t,cold:true});return}
  const now=nowAt(Math.min(t,TL.rideEnd));
- const [rideWin,rideV]=rideView(now),full=[-0.4,N+0.6];
+ let [rideWin,rideV]=rideView(now);const full=[-0.4,N+0.6];
+ // camera push-in over the first 1.6 s (user 18 Nov 2026): the whole frame moves from frame 1 so nobody scrolls past
+ if(!COLD){const z=1+0.35*(1-eo(prog(t,0,1.6)));rideWin=[now-(now-rideWin[0])*z,now+(rideWin[1]-now)*z];rideV=rideV*z}
  const p=eio(prog(t,TL.pull[0],TL.pull[1]));
  const win=[rideWin[0]+(full[0]-rideWin[0])*p,rideWin[1]+(full[1]-rideWin[1])*p],vmax=rideV+(FULLV-rideV)*p;
  FRAME({now,win,vmax,t});
@@ -108,7 +110,7 @@ function FRAME(o){
  // tip labels
  const tx=X(now),pv=val(D.main,now);
  el(g,'circle',{cx:tx,cy:V(pv),r:12,fill:COL});
- const right=tx<760,anc=right?'start':'end',dx=right?24:-20,py=right?V(pv)-6:V(pv)-58;
+ const right=tx<(D.compare?760:730),/* no-compare tip label (~255 px) stays inside x 1020 (18 Nov 2026) */anc=right?'start':'end',dx=right?24:-20,py=right?V(pv)-6:V(pv)-58;
  const hide=o.cold&&now>N-2.5;   // cold open: today's value stays hidden (the hook is the past value)
  const LW=[];LW.push(T(g,tx+dx,py,hide?D.currency+'???':fmt(pv,D.currency,D.suffix),40,COL,anc),T(g,tx+dx,py+30,D.main_label,22,C.ink,anc,700));
  if(D.compare){const ev_=val(D.compare,now);el(g,'circle',{cx:tx,cy:V(ev_),r:10,fill:PAL.teal});
