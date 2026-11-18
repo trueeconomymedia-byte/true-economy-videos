@@ -31,7 +31,7 @@ def flag(c, cx, cy, r, code):
 
 c = Card()
 L1, L2, MK = "Which country has", "the most people?", "most people"
-size = min(92.0, 948 / width("cb", L1, 1), 948 / width("cb", L2, 1)); b1 = max(66, math.ceil(size * 0.76) + 3); pitch = size * 0.93
+size = min(76.0, 948 / width("cb", L1, 1), 948 / width("cb", L2, 1)); b1 = math.ceil(size * 0.76) + 3; pitch = size * 0.93
 with c.group("title"):
     for ln, by in ((L1, b1), (L2, b1 + pitch)):
         if MK in ln:
