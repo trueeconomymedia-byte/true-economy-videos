@@ -21,6 +21,12 @@ Series (animation styles) and their episodes are listed in `registry.json`. Each
   inside the 4:5 feed crop (y 285-1635) and below every app's top bar (nothing above y 340 except empty paper); nothing
   important below y 1600 (captions, buttons) or in the right 120 px of the lower half. New series must be built to this.
 
+## 0b. Web research without approval prompts (user, 18 Nov 2026)
+WebSearch first and WebFetch ONLY URLs exactly as they appear in this run's search results or in a page already
+fetched in this run; never type a URL from memory or edit a known link (that can trigger an approval prompt and stall
+the unattended run). To reach a specific page (a FRED series, an ONS release, an earnings release), search for it by
+name and fetch the result. No curl/wget/requests for research pages.
+
 ## 1. Hard limits (never broken; `python3 scripts/anim_plan.py` applies them)
 - At most 1 animated Short per day across all series.
 - Each series: at most 3 in any rolling 7 days (today + the 6 days before), and never on two days in a row.

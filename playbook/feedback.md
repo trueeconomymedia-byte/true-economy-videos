@@ -205,3 +205,18 @@ The scripts already use these values (te_lib, make_flow, make_mkts, video_card, 
 ## 2026-11-17 HOW (COMPANY): MORE IN-DEPTH FLOW (user: "more in depth flow chart" on the Meta card, then "Nice, update the buffer")
 - The user prefers a more detailed Sankey for how_company: split the running costs into their reported lines (R&D, marketing and sales, G&A) and pull out any big one-off item as its own highlighted ribbon (Meta's $9.9B legal charge), and split revenue by reported segment where verified. Use scripts/make_flow_detail.py (make_flow.py plus `opex_parts` [{name,value,hot}] and optional `note`; data example in post JSON). Add a one-line note above the footer when a one-off item matters (e.g. profit without the charge). Every split line must be verified in the release text.
 - (17 Nov, user) how_company: drop the black bar beside the headline; headline flush left (post JSON "accent":"none" in make_flow.py / make_flow_detail.py).
+
+## 2026-11-18 WEB RESEARCH WITHOUT APPROVAL PROMPTS (user: "my scheduled tasks always need approval")
+- Scheduled runs are unattended, so a WebFetch that needs approval stalls the run. WebFetch only accepts, without
+  asking, URLs that ALREADY APPEARED in this run: in a WebSearch result or in a page fetched earlier in the run. A URL
+  typed from memory or built by editing a known URL's path (e.g. changing a FRED series id or a date in a link) can
+  trigger an approval prompt.
+- So: ALWAYS WebSearch first and fetch only URLs exactly as they appear in the search results (or links found on a
+  page you fetched). To reach a specific page (a FRED series, an ONS release, a company's results page), search for
+  it by name ("FRED MSPUS median sales price of houses sold", "ONS consumer price inflation October 2026") and fetch
+  the result URL. Never hand-build or edit a URL.
+- If the page you need is not in the results, search again with different words (WebSearch mode "extended" if
+  standard is thin), or use another source that is. Prefer the search result snippet plus a fetched page from the
+  results over guessing a link.
+- Never use curl/wget/python requests from the shell for research pages (the shell is limited to an allowlist and is
+  refused); only the hosting checks on raw.githubusercontent.com use curl.
