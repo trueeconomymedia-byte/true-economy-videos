@@ -30,7 +30,7 @@ def flag(c, cx, cy, r, code):
     c._o("".join(o))
 
 c = Card()
-T1, MK = "Population: India vs China", "Population"; TX = 0
+T1, MK = "Which country has the most people?", "most people"; TX = 0
 size = min(92.0, (948 - TX) / width("cb", T1, 1)); b1 = max(66, math.ceil(size * 0.76) + 3)
 with c.group("title"):
     i = T1.index(MK); wp = width("cb", T1[:i], size); wn = width("cb", MK, size)
