@@ -220,3 +220,18 @@ The scripts already use these values (te_lib, make_flow, make_mkts, video_card, 
   results over guessing a link.
 - Never use curl/wget/python requests from the shell for research pages (the shell is limited to an allowlist and is
   refused); only the hosting checks on raw.githubusercontent.com use curl.
+
+## 2026-11-18 WAVE SERIES: STANDARD LAYOUT v2 (user iterated on the population card, approved "Perfect" / "Nice"; applies to every future wave post)
+Reference build: scripts/make_post_wave2.py (card) + scripts/video_card_wide.py (video). Start from these, change only the data and wording. Do NOT use Card.alluvial defaults for this series any more.
+- STORY: lead with the story people care about (the biggest players swapping places, e.g. India overtaking China), never an obscure country just because it has the biggest growth multiple. The focal country must be one of the biggest ribbons.
+- COLUMNS: two time columns only (then vs now). No middle column.
+- COLOURS: exactly as the 13 Nov China GDP card: focal country True Economy red, its main rival main blue, all other countries light blue. Red ribbon drawn first so it sits BEHIND (anim red_behind = True).
+- RIBBON STYLE: every ribbon pastel (op 0.6) with solid node bars (16 wide) at both ends, and flow streaks on EVERY ribbon. Never solid ribbons (same-colour streaks vanish on them). Streak density is 1.35x the old default (already set in video_card_wide.py).
+- ACCURACY: node heights = value x ONE scale for both columns; ribbons start and end exactly on their nodes; keep the assert at the end of the script. Each label must sit level with its own node (no label drifting to another node).
+- STACKS: both columns are stacked blocks, largest on top, 5 px gaps, BOTTOM-aligned (the smaller/earlier column sits on the bottom edge). In the smaller column widen a gap only as far as needed for one label line per node (pitch about 22 px). No leader lines, no brackets, no "N other countries" grouping.
+- LABELS: small, one line each (rivals 20-22 px name, others 16 px; values 15-17 px). Right side: the VALUE goes INSIDE the ribbon end (dark ink on the pastel, bold, 26 px for the two rivals, 17 px others, group "toplabels"), flag + name outside. Left side order from the chart outward: value, flag, name. Never put country names inside the chart. Draw real flags for every country (flag() helper in make_post_wave2.py has ID, PK, NG, BD, ET; add any new one the same way), never grey code discs.
+- WIDTH: stretch the chart so the two rivals' labels touch the safe-zone edges (x=0 and x=948); longer names may run slightly past the safe zone onto the card paper (user gave permission). This needs video_card_wide.py (draws 66 units either side of the safe zone); the card position/template is unchanged. Export PNG/PDF with viewBox "-66 0 1080 1300".
+- HEADLINE: ONE line, flush left, no black bar, gold marker on the topic word, in the form "<Topic>: A vs B" (e.g. "Population: India vs China"). Subtitle one grey line directly under it (22 px). Column year headings sit directly above their own stack.
+- NO EXTRAS: no gold KPI box, no big callout numbers in the empty space, no extra verdict text. The chart should be as large as possible; open paper above the smaller stack is fine.
+- FOOTER: one sentence with the two rivals' change in plain numbers ("India added 1.13bn people; China added 869m").
+- QA before queueing: compare a frame against the reference video videos/wave-india-china-2026-11-18.mp4 (same ribbon pastel colours, streaks on all ribbons, layout as above).

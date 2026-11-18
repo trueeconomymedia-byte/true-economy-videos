@@ -154,11 +154,9 @@
    "kind": "data",
    "gap_days": 14,
    "desc": "A flowing 'wave' / ridge / ribbon style graphic comparing 8-10 countries on one statistic (the user's saved Instagram reference). If reference_style is missing, make the nicest clean wave: smooth sorted ribbon or stacked wave with flags at each country.",
-   "reference_style": "User's saved reference (a 'Top 10 economies 1980-2025' style graphic): a ranked bump/alluvial chart. 3-4 time columns, country stacks bottom-aligned with the largest on top, joined by smooth S-curve ribbons whose width = the value, each country its own colour, round flag at every node, values at the nodes, big condensed headline, one-line takeaway. Build OUR version with Card.alluvial() in scripts/te_lib.py (True Economy fonts, the Canva card, our palette extended with tints). Do not copy the reference's design, fonts, colours or wording; it is for the idea only. Left labels need room: use x_left = X0+190 when the first column has small stacks.",
+   "reference_style": "STANDARD LAYOUT v2 (user-approved 18 Nov 2026): build from scripts/make_post_wave2.py and render with scripts/video_card_wide.py; follow feedback.md '2026-11-18 WAVE SERIES: STANDARD LAYOUT v2' exactly (two columns, focal rival pair red vs main blue with the rest light blue, pastel ribbons with streaks on every ribbon, bottom-aligned stacks to one exact scale, small one-line labels with the right-hand values inside the ribbon ends, one-line headline '<Topic>: A vs B', no KPI box or callouts). Reference video: videos/wave-india-china-2026-11-18.mp4. Original True Economy design; never copy another brand's chart.",
    "forms": [
-    "Card.alluvial ribbons across 3-4 years (preferred)",
-    "smooth sorted wave line with flag markers",
-    "stacked wave bands"
+    "make_post_wave2.py two-column ribbon chart (required; see feedback.md 18 Nov)"
    ],
    "sources": [
     "World Bank",
@@ -167,7 +165,7 @@
     "UN",
     "Eurostat"
    ],
-   "verify": "Same year and definition for every country; mark the highlighted country in red.",
+   "verify": "Same year and definition for every country; the focal country (red) must be one of the two biggest ribbons and the headline must be the story of the two rivals.",
    "topics": [
     "Top 10 economies 1980 vs 2000 vs 2025 (GDP, current US$, IMF WEO)",
     "Top 10 by population 1950-2050 (UN)",
