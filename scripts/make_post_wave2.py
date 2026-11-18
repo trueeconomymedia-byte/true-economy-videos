@@ -30,13 +30,16 @@ def flag(c, cx, cy, r, code):
     c._o("".join(o))
 
 c = Card()
-T1, MK = "Which country has the most people?", "most people"; TX = 0
-size = min(92.0, (948 - TX) / width("cb", T1, 1)); b1 = max(66, math.ceil(size * 0.76) + 3)
+L1, L2, MK = "Which country has", "the most people?", "most people"
+size = min(92.0, 948 / width("cb", L1, 1), 948 / width("cb", L2, 1)); b1 = max(66, math.ceil(size * 0.76) + 3); pitch = size * 0.93
 with c.group("title"):
-    i = T1.index(MK); wp = width("cb", T1[:i], size); wn = width("cb", MK, size)
-    c.rect(TX + wp - 6, b1 - size * 0.25, wn + 12, size * 0.40, YEL, 1, 3)
-    c.text(TX, b1, T1, size, INK, "cb")
-    c.text(0, b1 + 44, "Today's 10 biggest countries, traced back · 1950 vs 2026 · ribbon width = people", 22, GREY, "m")
+    for ln, by in ((L1, b1), (L2, b1 + pitch)):
+        if MK in ln:
+            i = ln.index(MK); wp = width("cb", ln[:i], size); wn = width("cb", MK, size)
+            c.rect(wp - 6, by - size * 0.25, wn + 12, size * 0.40, YEL, 1, 3)
+        c.text(0, by, ln, size, INK, "cb")
+    c.text(0, b1 + pitch + 46, "Today's 10 biggest countries, traced back · 1950 vs 2026 · ribbon width = people", 22, GREY, "m")
+b1 = b1 + pitch + 2
 c.top = b1 + 44 + 30
 NW, GR, PITCH = 16, 5, 22
 yt, yb = c.top + 44, c.bottom - 8

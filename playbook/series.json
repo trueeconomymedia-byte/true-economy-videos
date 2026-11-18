@@ -154,7 +154,7 @@
    "kind": "data",
    "gap_days": 14,
    "desc": "A flowing 'wave' / ridge / ribbon style graphic comparing 8-10 countries on one statistic (the user's saved Instagram reference). If reference_style is missing, make the nicest clean wave: smooth sorted ribbon or stacked wave with flags at each country.",
-   "reference_style": "STANDARD LAYOUT v2 (user-approved 18 Nov 2026): build from scripts/make_post_wave2.py and render with scripts/video_card_wide.py; follow feedback.md '2026-11-18 WAVE SERIES: STANDARD LAYOUT v2' exactly (two columns, focal rival pair red vs main blue with the rest light blue, pastel ribbons with streaks on every ribbon, bottom-aligned stacks to one exact scale, small one-line labels with the right-hand values inside the ribbon ends, one-line headline (a plain question or '<Topic>: A vs B'), no KPI box or callouts). Reference video: videos/wave-most-people-2026-11-18.mp4. Original True Economy design; never copy another brand's chart.",
+   "reference_style": "STANDARD LAYOUT v2 (user-approved 18 Nov 2026): build from scripts/make_post_wave2.py and render with scripts/video_card_wide.py; follow feedback.md '2026-11-18 WAVE SERIES: STANDARD LAYOUT v2' exactly (two columns, focal rival pair red vs main blue with the rest light blue, pastel ribbons with streaks on every ribbon, bottom-aligned stacks to one exact scale, small one-line labels with the right-hand values inside the ribbon ends, two-line plain-question headline, no KPI box or callouts). Reference video: videos/wave-most-people-v2-2026-11-18.mp4. Original True Economy design; never copy another brand's chart.",
    "forms": [
     "make_post_wave2.py two-column ribbon chart (required; see feedback.md 18 Nov)"
    ],
