@@ -27,14 +27,14 @@ data.json (the task writes ONLY the source numbers and words; per-hour/day/week 
             | "teal" (money coming in that is good news: profit for savers, tax receipts)
   headline_q [line1, line2, words to mark gold]  e.g. ["UK debt interest costs", "{hour} every hour.", "{hour}"]
   headline_a [line1, line2, words to mark gold]  e.g. ["One year of interest:", "{total}.", "{total}"]
-  key       what one square is, e.g. "1 hour of interest" (kept for the build; on screen the key is simply "■ = £11.1m",
-            user 12 Nov 2026); the counter sits under a progress bar (no black pill)
+  key       what one square is, e.g. "1 hour of interest" (kept for the build; on screen the key is "■ = 1 hour (£11.1m)",
+            user 19 Nov 2026); the counter sits under a progress bar (no black pill)
   final     optional gold answer box, default "{whole} = {total}" (e.g. "1 Year = £97.6bn", "1 Quarter = $36.6bn")
   tease     optional, default "{whole} = {cur}??"
   logo      optional, e.g. "shell": a transparent PNG the USER added at scripts/assets/logos/shell.png, shown centred
             above the title (y 170-285, above the safe zone: user, 12 Nov 2026, visible once the Short is opened);
             laid on the finished frames EXACTLY as supplied (no printed-ink finish, no texture or recolouring), only scaled
-  source    e.g. "Source: ONS & OBR, debt interest 2025-26 (Apr 2026)"  (" · {total} ÷ N hours" is added)
+  source    e.g. "Source: ONS & OBR, debt interest 2025-26 (Apr 2026)"  (shown as given; never put the total in it: it spoils the reveal, user 19 Nov 2026)
   Placeholders, filled from the computed numbers: {hour} {day} {week} {month} {total} {cur} {hours} {whole}
   Each headline line must fit 2 lines at the series' title size: about 24 characters per line after filling.
 Needs: node + playwright (pre-installed), ffmpeg, numpy, scipy, opencv-python, Pillow. Fonts: Lora (scripts/assets), Inter (system).
@@ -124,7 +124,7 @@ def main():
     g = {"per_hour": ph, "currency": cur, "colour": d.get("colour", "red"), "days": daypos, "labels": labels, "views": views, "box": box, "mbox": mbox,
          "month_hours": m0days * 24, "cap": cap,
          "day1": f"{start.day} {start.strftime('%B %Y')}", "txt": txt, "headline_q": hq, "headline_a": ha, "key": F(d["key"]),
-         "final": F(d.get("final", "{whole} = {total}")), "tease": tease, "source": F(d["source"]) + f" · {txt['total']} ÷ {hours:,} hours",
+         "final": F(d.get("final", "{whole} = {total}")), "tease": tease, "source": F(d["source"]),   # no total in the source line: it spoils the reveal (user, 19 Nov 2026)
          "hours": hours, "ndays": days}
     logo_png = None
     if d.get("logo"):   # user-supplied logo only (scripts/assets/logos/<name>.png, transparent); never drawn or downloaded

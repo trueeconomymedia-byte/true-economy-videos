@@ -7,7 +7,7 @@ as a calendar (a year: one row per month; a quarter: three month blocks side by 
 above). Captions (user, 11 Nov 2026): 1 Day, 1 Week = .., 1 Month = .., and the gold box 1 Quarter = .. / 1 Year = ..;
 a PROGRESS BAR sits under the running total at the top (user, 12 Nov 2026: replaces the black counter pill). EVERY episode is titled on ONE line "<Owner>'s <period> <Measure> per hour" (e.g. "Shell's Q3 Profit per
 hour") with the gold marker on "<Owner>'s" ONLY; the counter (running total only) and the progress bar sit under the title, the key ("■ = 1
-hour") alone at the bottom, Day 1 squares carry the per-hour amount, and the user's logo (if any) sits above
+hour ($29.9m)") alone at the bottom, Day 1 squares carry the per-hour amount, and the user's logo (if any) sits above
 the title, unaltered (user, 12 Nov 2026). Section 2 LAYOUT overrides older wording here. The money counter is hidden
 ("£??") while the last stage fills; the total is revealed in gold at the end. Calm news-style sound (ticks, soft
 patter, glides, low hits, warm piano reveal). 28.5 s. NO cold open (user, 11 Nov 2026: the rewind was off-putting): Buffer gets the same video as YouTube, and its
@@ -39,7 +39,7 @@ Why hours (user decision, 11 Nov 2026): the reference must never change during t
 - LAYOUT (user, 12 Nov 2026), the renderer does all of this: TOP STACK = [user logo, unaltered, y 170-285] / one-line
   title (baseline 405) / running total only ("$71.0m" ... "$??" in the last stage ... the total, baseline 510) /
   progress bar right under it (y 548, light tint track, colour fill grows every hour). Day 1 squares carry the per-hour
-  amount ("$5.5m") instead of a time. BOTTOM: the key alone, "■ = 1 hour" (fades only if a gold answer box covers it).
+  amount ("$5.5m") instead of a time. BOTTOM: the key alone, "■ = 1 hour ($29.9m)" with the per-hour amount in brackets (user, 19 Nov 2026; renderer fills it; fades only if a gold answer box covers it).
 - logo (company episodes): "logo": "<name>" when the USER has added a transparent PNG at scripts/assets/logos/<name>.png;
   it sits centred above the title (y 185-300; the user allows this area, visible once the Short is opened), UNALTERED
   (the renderer lays it on the finished frames after the ink finish: animated.md section 0, LOGOS). Never draw,
@@ -52,7 +52,7 @@ Why hours (user decision, 11 Nov 2026): the reference must never change during t
   after filling (the renderer refuses longer lines, exit 4).
 - key: what one square is, short ("1 hour of interest", "1 hour of profit", "1 hour of his pay").
 - final/tease: leave them out; the defaults are "1 Year = {total}" / "1 Quarter = {total}" and "1 Year = £??" / "1 Quarter = £??".
-- source: the primary source and its date; the renderer adds "· {total} ÷ N hours".
+- source: the primary source and its date only. Never the total (or anything that gives it away) in the source line: it spoils the reveal (user, 19 Nov 2026).
 - Captions: never give the total away in the first line (it is the payoff). Use the per-hour figure as the hook and
   put the comparison with a normal wage or a familiar cost in the caption text.
 

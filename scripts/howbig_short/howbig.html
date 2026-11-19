@@ -79,7 +79,7 @@ function BUILD(d){
  G.Lw=el(sv,'g',{});T(G.Lw,540,0,D.cap.week,40,C.ink);
  G.Lq=el(sv,'g',{});T(G.Lq,540,0,D.cap.month,40,C.ink);
  G.mon=el(sv,'g',{});G.monT=D.labels.map(([m,x,y,anc,size])=>T(G.mon,0,0,m,size,C.grey,anc,700));
- G.key=el(sv,'g',{});el(G.key,'rect',{x:0,y:1482,width:40,height:40,fill:COL});const kt=T(G.key,54,1514,'= 1 hour',36,C.ink,'start',800);   // key alone at the BOTTOM, just "■ = 1 hour" (user, 12 Nov 2026)
+ G.key=el(sv,'g',{});el(G.key,'rect',{x:0,y:1482,width:40,height:40,fill:COL});const kt=T(G.key,54,1514,'= 1 hour ('+D.txt.hour+')',36,C.ink,'start',800);   // key alone at the BOTTOM: "■ = 1 hour ($29.9m)" (user, 19 Nov 2026)
  G.key.setAttribute('transform',`translate(${540-(54+kt.getComputedTextLength())/2},0)`);   // simple key (user, 12 Nov 2026): one square = the per-hour amount
  const by=Math.min(1478,G.ybottom+40);
  G.box=el(sv,'g',{});G.boxR=el(G.box,'rect',{x:240,y:by,width:600,height:84,fill:C.gold});G.boxY=by+42;
