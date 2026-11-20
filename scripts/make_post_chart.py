@@ -32,8 +32,8 @@ for x, v, col, lab, lc in bars:
     with c.group("toplabels"): c.text(x, base - h - 16, lab, 36, lc, "m", "m")
 with c.group("toplabels"):
     c.line(AX, base, R, base, INK, 4)                                                             # black baseline on top
-    for cx, code, nm in ((230, "UK", "UK"), (660, "FR", "France")):                               # flag + name under the first bar of each group
-        w = width("m", nm, 32) + 38; c.flag(cx - w / 2 + 14, base + 42, 14, code); c.text(cx - w / 2 + 38, base + 53, nm, 32, INK, "m")
+    for cx, code, nm in ((230, "UK", "UK"), (660, "FR", "France")):                               # flag centred under the first bar of each group, name follows to its right
+        c.flag(cx, base + 42, 14, code); c.text(cx + 24, base + 53, nm, 32, INK, "m")      # flag centred under the bar, name follows
 c.footer("The UK is bigger, and growing faster: 1.3% vs 0.4%")
 c.source("Source: IMF WEO Oct 2026 (via Worldometers, Admirals) · growth bars drawn to scale")
 c.save(OUT)
