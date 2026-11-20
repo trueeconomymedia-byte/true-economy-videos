@@ -65,3 +65,5 @@ Before building, write one line: "the one comparison/idea is ___". Then:
 - (9 Nov 2026) Motion option: STATION-PATH DIAGRAM with sequenced travelling dots (scripts/video_card_seq.py). Only when the topic is a process/journey of 3 to 6 stages and the movement improves clarity; see feedback.md 'OPTION: ANIMATED STATION-PATH DIAGRAM'. Never forced for variety.
 
 - (10 Nov 2026) How (company) layout: full-width Sankey, segment labels inside the chart on the first ribbon (feedback.md 2026-11-10).
+
+- (20 Nov 2026) CHART STYLE for every bar/line chart Short: one chart, Lora headline + gold marker, centred key with rough squares, value axis with round ticks and dotted warm gridlines, slim Card.rough bars (option A), values above bars in Inter Medium, true scale always, static, no gold KPI box. See feedback.md 2026-11-20 and scripts/make_post_chart.py.

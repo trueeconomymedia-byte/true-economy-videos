@@ -115,7 +115,8 @@
    "gap_days": 10,
    "desc": "Two (sometimes three) countries compared on 4-6 relevant economic measures with one clear verdict per measure. Pick matchups people care about or are in the news.",
    "forms": [
-    "COUNTRY DUEL (standard from 11 Nov 2026): scripts/make_post_duel.py split screen, paired columns per measure, dashed red gap, chevron speed = growth rate, catch-up-years headline; see feedback.md 2026-11-11",
+    "TRUE ECONOMY CHART STYLE (standard from 20 Nov 2026, replaces the Country Duel): one grouped bar chart on a real value axis, each country's bars side by side (e.g. GDP in blue + growth in teal at true scale), flags under the first bar of each group, static, no gold KPI box, no gap outlines; scripts/make_post_chart.py; see feedback.md 2026-11-20",
+    "(retired 20 Nov) Country Duel split screen with gold KPI box: scripts/make_post_duel.py",
     "head-to-head split with big numbers and winner marker",
     "mirrored bars",
     "slope chart (then vs now)",

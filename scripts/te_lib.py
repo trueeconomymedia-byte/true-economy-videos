@@ -120,6 +120,22 @@ class Card:
         and sizes (+-25%) are random but fixed, spread evenly across the width. size = base size in canvas px; shape "chevron" (thin open ^, the preferred style, size ~13) or "arrow" (solid rounded arrow, size ~24). direction "up" for growth (green) or "down" for a fall (red); NEVER sideways. avoid = optional list of (x, y, w, h) text boxes: chevrons fade to ~10% near them so text on the block stays readable (pass the "toplabels" text box). Only use when it shows something that grew/is growing or fell/is falling. Use on the focal block instead of pulse. cycles = fixed passes per loop for every chevron (int); with equal cycles a taller block moves its chevrons faster, so chevron SPEED can encode a rate (country_vs_country duel)."""
         s.anim.setdefault("arrows", []).append([x, y, w, h, list(rgb), n, alpha, size, shape, direction, [list(a_) for a_ in (avoid or [])], cycles])
     _uid = 0
+    def rough(s, x, y, w, h, fill, seed=0, level=0.55):
+        """Slightly imperfect hand-printed bar / key square (user-approved option "A Subtle", 20 Nov 2026): faint waver on
+        every edge, flat top, still pure vector. Use for EVERY bar, column and key square in bar/line chart Shorts."""
+        import random as _r
+        r = _r.Random(seed); a = min(1.4, max(0.25, min(h, w) * 0.045)) * level
+        def edge(p0, p1, n):
+            ph = [r.uniform(0, 6.28) for _ in range(3)]; out = []
+            for i in range(n + 1):
+                t = i / n; nx = p1[1] - p0[1]; ny = -(p1[0] - p0[0]); L = math.hypot(nx, ny) or 1
+                d = a * (0.55 * math.sin(t * 6.28 * 1.3 + ph[0]) + 0.3 * math.sin(t * 6.28 * 3.7 + ph[1]) + 0.15 * math.sin(t * 6.28 * 9 + ph[2])) * math.sin(math.pi * t)
+                d += r.uniform(-0.18, 0.18) * a
+                out.append((p0[0] + (p1[0] - p0[0]) * t + nx / L * d, p0[1] + (p1[1] - p0[1]) * t + ny / L * d))
+            return out
+        P = [(x, y + h), (x, y), (x + w, y), (x + w, y + h)]
+        pts = edge(P[0], P[1], max(8, int(h / 12))) + edge(P[1], P[2], 14)[1:] + edge(P[2], P[3], max(8, int(h / 12)))[1:]
+        s._o('<path d="M' + " L".join(f"{px:.2f},{py:.2f}" for px, py in pts) + f' Z" fill="{solid(fill, 1)}"/>')
     def flag(s, cx, cy, r, code):
         """round flag icon. Known: US UK JP KR HK FR DE IT IE NL BE ES PL RU CH CN IN BR CA SE NO DK AU(approx none). Unknown code -> grey disc with the code."""
         Card._uid += 1; u = f"f{Card._uid}"; x0_, y0_, w_ = cx - r, cy - r, 2 * r
