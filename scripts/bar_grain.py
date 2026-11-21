@@ -3,7 +3,8 @@
 Only the bars move (grain); text, paper, banner and the other bars stay still. First frame ~ last frame (seamless loop).
 Why it survives platform re-encodes: brightness-only (no colour noise), soft/clumpy (gaussian-blurred), +-10 levels, and a NEW pattern only every 3rd frame (10/s).
 Tested at a harsh 1.5 Mbps re-encode: no blocking or flicker.
-usage: python3 -I bar_grain.py IN.mp4 OUT.mp4 AUDIO.wav "x,y,w,h;x,y,w,h" [amp=10] [hold=3] [sigma=2.2]
+usage: python3 -I bar_grain.py IN.mp4 OUT.mp4 AUDIO.wav "x,y,w,h[,amp];x,y,w,h[,amp]" [amp=10] [hold=3] [sigma=2.2]
+  A 5th number on a rect sets that bar's own grain strength (e.g. 4 for quiet context bars, 10 for focal bars).
   IN.mp4  = the finished static 4K card video (video_card.py output, 2160x3840); rects = bars in CARD CANVAS units (948x1300; 4K px = 132+2x, 620+2y).
   Pick which bars get grain (usually the focal / current-period bars; light context bars stay still). Re-encode result with crf 24 as usual."""
 import sys, subprocess, numpy as np
@@ -17,9 +18,9 @@ subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", inp, "-frames:v", "1", "/tm
 base = np.array(Image.open("/tmp/_bg_base.png").convert("RGB")).astype(np.float32); H4, W4 = base.shape[:2]
 dur = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", inp]))
 N = round(dur * 30)
-boxes = []
+boxes = []; amps = []
 for r in rs.split(";"):
-    x, y, w, h = [float(v) for v in r.split(",")]
+    vals = [float(v) for v in r.split(",")]; x, y, w, h = vals[:4]; amps.append(vals[4] if len(vals) > 4 else amp)
     boxes.append((int(132 + 2 * x) + 2, int(620 + 2 * y) + 2, int(132 + 2 * (x + w)) - 2, int(620 + 2 * (y + h)) - 2))
 rng = np.random.default_rng(11)
 p = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W4}x{H4}", "-r", "30", "-i", "-", "-i", audio,
@@ -27,8 +28,8 @@ p = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt
 for f in range(N):
     if f % HOLD == 0:
         noise = []
-        for (x0, y0, x1, y1) in boxes:
-            g = gaussian_filter(rng.standard_normal((y1 - y0, x1 - x0)).astype(np.float32), sig); g /= g.std(); noise.append(g * amp)
+        for (x0, y0, x1, y1), a_ in zip(boxes, amps):
+            g = gaussian_filter(rng.standard_normal((y1 - y0, x1 - x0)).astype(np.float32), sig); g /= g.std(); noise.append(g * a_)
     fr = base.copy()
     for (x0, y0, x1, y1), g in zip(boxes, noise): fr[y0:y1, x0:x1] += g[..., None]
     p.stdin.write(np.clip(fr, 0, 255).astype(np.uint8).tobytes())
