@@ -250,8 +250,6 @@ Reference build: scripts/make_post_chart.py (+ Card.rough in te_lib). Reference 
 - MOTION: the chart is STATIC (render with video_card.py as usual; no draw-on, no flashing, no chevrons on these charts). The user tried an axis draw-on and a soft flash and rejected both for this style. First frame = last frame.
 - Source line on every real number (Card.source), footer takeaway (Card.footer).
 
-## 2026-11-21 BAR GRAIN: OPTIONAL "ALIVE" EFFECT FOR SOLID BARS (user approved after previews; saved as a FUTURE OPTION for bar charts, NOT a default)
-- WHAT: soft film grain inside solid-coloured bars of a static bar/chart card, so the chart "feels alive" without anything moving in a direction. Only the bars carry it; text, paper, banner and light context bars stay still. Used first on the US home-sales card (2026 bars only), 21 Nov.
-- WHY THIS RECIPE (sparkle/twinkle specks were tried and rejected by the user; directional chevrons/streaks were not wanted here): brightness-only grain (no colour noise), gaussian-softened/clumpy (not fine pixel noise), about +-10 levels, and a NEW pattern only every 3rd frame (10/s). Survived a harsh 1.5 Mbps re-encode with no blocking or flicker. Never use fine per-frame colour noise: platform encoders turn it into glitchy blocks.
-- HOW: after video_card.py renders the static card, run `python3 -I scripts/bar_grain.py IN.mp4 OUT.mp4 AUDIO.wav "x,y,w,h;x,y,w,h"` with the bars' rectangles in card canvas units (4K px = 132+2x, 620+2y); optional args amp=10 hold=3 sigma=2.2. Then re-encode crf 24. Grain goes on the focal / current-period bars; light-blue context bars stay still. Log "bar grain" in the form field.
-- WHEN: only when the user asks for it or when a bar chart card would look flat; it conflicts with nothing in the 20 Nov chart style (bars stay true scale, nothing draws on or flashes).
+## 2026-11-21 NO FILM GRAIN OR SPARKLE INSIDE BARS (user tried sparkle specks and soft grain on the home-sales card, then said "drop the film grain and drop it as an option")
+- Bars stay plain solid colour. Do not add grain, sparkle or twinkle inside bars, and do not offer them as an option. Bar charts follow the 20 Nov chart style (static).
+- Colour scheme the user liked on this card: blue = good/steady, red = bad, last period in light blue (#B3C9ED). Not yet made a standing rule (user gave no preference when asked).
