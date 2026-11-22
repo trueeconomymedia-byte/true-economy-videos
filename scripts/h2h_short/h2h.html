@@ -37,8 +37,10 @@ const ROW0=712,RH=160,ZS=1.4,ZY=806,L=220; // ZY 806 (user 22 Nov 2026): the rou
 function BUILD(d){
  D=d;N=D.rounds.length;ROWY=D.rounds.map((r,i)=>ROW0+i*RH);
  // timeline: each round = camera to row, header, bars grow, values, judgement; pull back before the decider; reveal
- TL={rounds:[]};let t=0.6;
- for(let i=0;i<N-1;i++){TL.rounds.push({cam:t-0.8,a:t,grow:[t+0.6,t+2.0],vals:t+0.6,judge:t+3.1});t+=5.0}
+ // NO PAUSE AT THE START (user 22 Nov 2026): round 1's bars start growing on the first frames (0.1 s) so nobody scrolls away
+ TL={rounds:[]};let t=0;
+ TL.rounds.push({cam:-0.8,a:0,grow:[0.1,1.5],vals:0.1,judge:2.6});t=4.5;
+ for(let i=1;i<N-1;i++){TL.rounds.push({cam:t-0.8,a:t,grow:[t+0.6,t+2.0],vals:t+0.6,judge:t+3.1});t+=5.0}
  TL.pull1=[t-0.9,t+0.2];TL.hold=t+0.4;t+=2.6;
  TL.rounds.push({cam:t-0.8,a:t,grow:[t+0.7,t+3.0],vals:t+0.7,judge:t+4.2});t+=4.2;
  TL.pull2=[t+0.6,t+1.6];TL.ans=t+1.8;TL.end=t+7.2;
