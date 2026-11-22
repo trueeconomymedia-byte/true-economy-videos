@@ -1,16 +1,96 @@
 [
  {
-  "id": "how_company:facebook:weak",
+  "id": "markets_daily:facebook:weak",
   "kind": "series_platform_weak",
-  "series": "how_company",
+  "series": "markets_daily",
   "platform": "facebook",
   "big": true,
   "evidence": {
-   "n": 4,
-   "median_index": 0.19,
-   "same_side_share": 0.75,
+   "n": 6,
+   "median_index": 0.57,
+   "same_side_share": 0.83,
    "watch_index": null
   },
-  "recommendation": "Consider stopping / replacing how_company on facebook"
+  "recommendation": "Consider stopping / replacing markets_daily on facebook"
+ },
+ {
+  "id": "wave:instagram:strong",
+  "kind": "series_platform_strong",
+  "series": "wave",
+  "platform": "instagram",
+  "big": true,
+  "evidence": {
+   "n": 4,
+   "median_index": 5.69,
+   "same_side_share": 0.75,
+   "watch_index": 1.6353677621283256
+  },
+  "recommendation": "Keep/expand wave on instagram"
+ },
+ {
+  "id": "wave:tiktok:strong",
+  "kind": "series_platform_strong",
+  "series": "wave",
+  "platform": "tiktok",
+  "big": true,
+  "evidence": {
+   "n": 5,
+   "median_index": 5.9,
+   "same_side_share": 0.8,
+   "watch_index": 1.646322378716745
+  },
+  "recommendation": "Keep/expand wave on tiktok"
+ },
+ {
+  "id": "caption:tiktok:has a call to action",
+  "kind": "caption_style",
+  "platform": "tiktok",
+  "big": false,
+  "evidence": {
+   "with_n": 10,
+   "with_median": 0.76,
+   "without_n": 57,
+   "without_median": 1.03
+  },
+  "recommendation": "tiktok: captions better without 'has a call to action' perform better (soft guidance, within brand limits)"
+ },
+ {
+  "id": "caption:instagram:starts with a number/money",
+  "kind": "caption_style",
+  "platform": "instagram",
+  "big": false,
+  "evidence": {
+   "with_n": 14,
+   "with_median": 3.92,
+   "without_n": 25,
+   "without_median": 0.59
+  },
+  "recommendation": "instagram: captions better with 'starts with a number/money' perform better (soft guidance, within brand limits)"
+ },
+ {
+  "id": "caption:instagram:has a call to action",
+  "kind": "caption_style",
+  "platform": "instagram",
+  "big": false,
+  "evidence": {
+   "with_n": 24,
+   "with_median": 2.93,
+   "without_n": 15,
+   "without_median": 0.48
+  },
+  "recommendation": "instagram: captions better with 'has a call to action' perform better (soft guidance, within brand limits)"
+ },
+ {
+  "id": "caption:facebook:starts with a number/money",
+  "kind": "caption_style",
+  "platform": "facebook",
+  "big": false,
+  "evidence": {
+   "with_n": 16,
+   "with_median": 1.17,
+   "without_n": 24,
+   "without_median": 0.82
+  },
+  "recommendation": "facebook: captions better with 'starts with a number/money' perform better (soft guidance, within brand limits)"
  }
 ]
