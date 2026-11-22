@@ -15,7 +15,7 @@ still). No black tab. Built into the renderer: never change it per episode.
 TITLE (user default 13 Nov 2026): short and obvious, "<A> vs <B>:" on line 1 with the gold marker on "<A> vs <B>", and
 the subject in one or two words on line 2, e.g. ["UK vs Germany:", "Economies", "UK vs Germany"],
 ["Apple vs Microsoft:", "Business", "Apple vs Microsoft"]. Not "5 economic rounds".
-The camera zooms into each round with a slow drift, the round being played on the TOP line right under the scoreboard (user 22 Nov 2026; earlier rounds are hidden above while zoomed), pulls back before the LAST round (the decider, shown as "?" with
+The camera zooms into each round with a slow drift, the round being played on the TOP line right under the scoreboard (user 22 Nov 2026; earlier rounds are hidden above while zoomed) and the rounds still to come queue faintly underneath like a treadmill, each smaller and fainter with an empty track and "?" on both sides, rolling up one place per round (user 22 Nov 2026), pulls back before the LAST round (the decider, shown as "?" with
 "Final score: A ? – ? B"), then the winner lands in gold. About 34 s. Same video for YouTube and Buffer; Buffer cover
 = thumbnailOffset `thumb_ms` from SLUG-build.json (the table with the decider hidden).
 Renderer: `python3 scripts/h2h_short/h2h_short.py data.json OUTDIR SLUG` (read its docstring). Never change the look,

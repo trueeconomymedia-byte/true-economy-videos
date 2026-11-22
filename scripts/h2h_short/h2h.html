@@ -74,20 +74,39 @@ function setTime(t){
   T(sq,x+SQ/2,sy+SQ/2+15,String(shown(side)),42,'#fff','middle',800);
  });
  fitT(T(g,540-SQ-18,sy+SQ/2+11,D.a,30,C.ink,'end',800),300);fitT(T(g,540+SQ+18,sy+SQ/2+11,D.b,30,C.ink,'start',800),300);
- // the table, seen through the camera
- const [s,ty]=camAt(t);const ct=s>1.05?670:625;const cp=el(g,'clipPath',{id:'cl'});el(cp,'rect',{x:0,y:ct,width:1080,height:1455-ct}); // zoomed: hide the faded previous round above the top line
- const clip=el(g,'g',{'clip-path':'url(#cl)'});const cam=el(clip,'g',{transform:`translate(${540*(1-s)},${ty}) scale(${s})`});
- const zoomed=s>1.05;
+ // the table, seen through the camera. TREADMILL (user 22 Nov 2026): while zoomed, the round being played sits on the
+ // top line and the rounds still to come queue faintly underneath, each one smaller and fainter (like a treadmill
+ // running away from the viewer); when a round is done the whole queue rolls up one place. Played rounds leave upwards.
+ const [s,ty]=camAt(t);
+ let kd=1;for(let i=0;i<N;i++){const r=TL.rounds[i];if(t>=r.a&&(i===N-1?t<TL.pull2[0]:t<TL.rounds[i+1].cam&&t<TL.pull1[0]))kd=1+0.03*prog(t,r.a,r.a+5)}
+ const w=clamp((s/kd-1)/(ZS-1));             // 1 = zoomed treadmill, 0 = whole table
+ let c=0;for(let i=1;i<N;i++){const r=TL.rounds[i];if(t>=r.cam)c=(i===N-1)?N-1:(i-1)+eio(prog(t,r.cam,r.a))}
+ const Q=0.8,SP=RH*ZS;
+ const tY=d=>d<0?ZY+SP*d:ZY+70*Math.min(d,1)+SP*(1-Math.pow(Q,d))/(1-Q), tS=d=>d<0?ZS:ZS*Math.pow(Q,d);
+ const tO=d=>d<0?Math.max(0,1+d/0.6):d<=1?1-0.62*d:0.38*Math.pow(0.7,d-1);
+ const ct=625+45*w;const cp=el(g,'clipPath',{id:'cl'});el(cp,'rect',{x:0,y:ct,width:1080,height:1455-ct});
+ const clip=el(g,'g',{'clip-path':'url(#cl)'});
+ const zoomed=w>0.5;
  D.rounds.forEach((R,i)=>{
-  const r=TL.rounds[i],y=ROWY[i];if(i>0&&t<r.cam+0.3&&!(i===N-1&&t>=TL.pull1[0]))return;
+  const r=TL.rounds[i],y=ROWY[i],d=i-c;
+  const inTable=!(i>0&&t<r.cam+0.3&&!(i===N-1&&t>=TL.pull1[0]));   // rows the whole-table view may show
+  const tOp=tO(d),op=w*tOp+(1-w)*(inTable?1:0);if(op<0.005)return;
+  // blend the row's treadmill placement with the table camera
+  const sc1=tS(d)*kd,ty1=ZY-(ZY-(tY(d)-(y+22)*tS(d)))*kd;
+  const sc=w*sc1+(1-w)*s,tyy=w*ty1+(1-w)*ty;
+  const cam=el(clip,'g',{transform:`translate(${540*(1-sc)},${tyy}) scale(${sc})`});
+  const rg=el(cam,'g',{opacity:op});
   const dec=i===N-1,current=t>=r.cam&&(i===N-1||t<TL.rounds[i+1].cam);
-  const op=zoomed&&!current?0.22:1;const rg=el(cam,'g',{opacity:op});
-  const hidden=dec&&t<r.a;   // the decider shows as "?" until it is played
-  const hdr=i===0?1:prog(t,r.a-0.3,r.a+0.2);
+  const preview=t<r.a-0.3&&w>0.001;          // a round still to come, waiting in the queue
+  const hidden=dec&&t<r.a&&!preview;          // the decider shows as "?" in the whole-table view until it is played
+  const hdr0=i===0?1:prog(t,r.a-0.3,r.a+0.2),hdr=w>0.001&&!hidden?1:hdr0;
   T(rg,540,y-50,(dec?'Decider: ':'')+R.name,28,C.ink,'middle',800).setAttribute('opacity',hidden?1:Math.max(hdr,t>r.a?1:0));
   T(rg,540,y-26,R.sub,17,C.grey,'middle',600).setAttribute('opacity',hidden?0:hdr);
   if(hidden){T(rg,540,y+34,'?',44,C.ink,'middle',800);return}
   const gr=eo(prog(t,r.grow[0],r.grow[1])),la=R.fa*L*gr,lb=R.fb*L*gr,judged=t>=r.judge,jk=prog(t,r.judge,r.judge+0.4);
+  const qk=1-prog(t,r.a-0.5,r.grow[0]+0.3);   // empty track + "?" while waiting, fading as the bars arrive
+  if(qk>0){const tk=el(rg,'g',{opacity:qk});el(tk,'rect',{x:540-L,y,width:2*L,height:44,fill:'#E4DED2'});
+   T(tk,540-L-22,y+33,'?',30,C.lblue,'middle',800);T(tk,540+L+22,y+33,'?',30,C.lred,'middle',800)}
   const ca=judged&&R.win==='b'?mix(C.blue,C.lblue,jk):C.blue,cb=judged&&R.win==='a'?mix(C.red,C.lred,jk):C.red;
   el(rg,'rect',{x:540-la,y,width:la,height:44,fill:ca});el(rg,'rect',{x:540,y,width:lb,height:44,fill:cb});
   el(rg,'line',{x1:540,x2:540,y1:y-8,y2:y+52,stroke:C.ink,'stroke-width':3});
@@ -95,7 +114,7 @@ function setTime(t){
   const vk=eo(prog(t,r.vals,r.vals+0.3));
   if(vk>0){const done=gr>=0.999,txa=done?R.ta:cnt(R.va*gr,R.fmt),txb=done?R.tb:cnt(R.vb*gr,R.fmt);
    const va=T(rg,540-la-12,y+31,txa,28,ca,'end',800),vb=T(rg,540+lb+12,y+31,txb,28,cb,'start',800);va.setAttribute('opacity',vk);vb.setAttribute('opacity',vk)}
-  if(R.note){const nt=T(rg,540,y+70,R.note,15,C.grey,'middle',600);nt.setAttribute('opacity',Math.max(hdr,t>r.a?1:0))}
+  if(R.note){const nt=T(rg,540,y+70,R.note,15,C.grey,'middle',600);nt.setAttribute('opacity',Math.max(hdr0,t>r.a?1:0))}
   if(judged&&current&&zoomed){const wtxt=R.win==='tie'?'Draw: no point':'Point: '+(R.win==='a'?D.a:D.b);const p=T(rg,540,y+(R.note?96:78),wtxt,19,R.win==='a'?C.blue:R.win==='b'?C.red:C.grey,'middle',800);p.setAttribute('opacity',jk)}
  });
  // decider pause: the hidden final score; then the reveal
