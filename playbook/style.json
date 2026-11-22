@@ -1,0 +1,1 @@
+{"daily_card_style": "flat", "note": "flat = Animated Shorts paper background, no banner or cut-paper edge (default from 22 Nov 2026, Daily Post and Markets Daily non-stock cards). legacy = previous look (black banner, torn paper, topic background; scripts/video_card_legacy.py). Stock Market Today is unaffected. Change this value to switch back."}
