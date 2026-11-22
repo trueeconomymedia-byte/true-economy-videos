@@ -528,6 +528,6 @@
    "candles",
    "globe"
   ],
-  "rule": "Pick the background motif that fits the topic (chips=tech/semiconductors, contours=geography/energy/land/housing, graph=markets/data/inflation, skyline=cities/property/business/banks, halftone=people/wealth/inequality/wages, candles=stock market/investing/trading, globe=countries/trade/global comparisons). Never the same motif two posts in a row (check log.jsonl `bg`). NOTE 22 Nov 2026: with the new flat card style (playbook/style.json) the motif is no longer drawn: log bg as "flat paper"; this rule applies again only if the style is switched back to "legacy". Pass it as the third argument to video_card.py and set SEED=<YYYYMMDD mod 1000> so each day's pattern differs; log it as `bg`."
+  "rule": "Pick the background motif that fits the topic (chips=tech/semiconductors, contours=geography/energy/land/housing, graph=markets/data/inflation, skyline=cities/property/business/banks, halftone=people/wealth/inequality/wages, candles=stock market/investing/trading, globe=countries/trade/global comparisons). Never the same motif two posts in a row (check log.jsonl `bg`). NOTE 22 Nov 2026: with the new flat card style (playbook/style.json) the motif is no longer drawn: log bg as \"flat paper\"; this rule applies again only if the style is switched back to \"legacy\". Pass it as the third argument to video_card.py and set SEED=<YYYYMMDD mod 1000> so each day's pattern differs; log it as `bg`."
  }
 }
