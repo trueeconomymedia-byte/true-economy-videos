@@ -33,7 +33,7 @@ function headline(g,l1,l2,mark){
  Object.entries({x:xs-6,width:xe-xs+12,y:(in1?T1:T2)-Math.round(fs*.4),height:Math.round(fs*.47)}).forEach(([k,v])=>mk.setAttribute(k,v));
 }
 let D,TL,N,ROWY;
-const ROW0=712,RH=160,ZS=1.4,ZY=1030,L=220;
+const ROW0=712,RH=160,ZS=1.4,ZY=806,L=220; // ZY 806 (user 22 Nov 2026): the round being played sits on the TOP line, right under the scoreboard (was 1030 = second line, previous round ghosted above)
 function BUILD(d){
  D=d;N=D.rounds.length;ROWY=D.rounds.map((r,i)=>ROW0+i*RH);
  // timeline: each round = camera to row, header, bars grow, values, judgement; pull back before the decider; reveal
@@ -75,7 +75,7 @@ function setTime(t){
  });
  fitT(T(g,540-SQ-18,sy+SQ/2+11,D.a,30,C.ink,'end',800),300);fitT(T(g,540+SQ+18,sy+SQ/2+11,D.b,30,C.ink,'start',800),300);
  // the table, seen through the camera
- const [s,ty]=camAt(t);const cp=el(g,'clipPath',{id:'cl'});el(cp,'rect',{x:0,y:625,width:1080,height:830});
+ const [s,ty]=camAt(t);const ct=s>1.05?670:625;const cp=el(g,'clipPath',{id:'cl'});el(cp,'rect',{x:0,y:ct,width:1080,height:1455-ct}); // zoomed: hide the faded previous round above the top line
  const clip=el(g,'g',{'clip-path':'url(#cl)'});const cam=el(clip,'g',{transform:`translate(${540*(1-s)},${ty}) scale(${s})`});
  const zoomed=s>1.05;
  D.rounds.forEach((R,i)=>{
