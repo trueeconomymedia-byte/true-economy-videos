@@ -32,71 +32,71 @@ function headline(g,l1,l2,mark){
  const xs=tx.getStartPositionOfChar(i0).x,xe=tx.getEndPositionOfChar(i0+mark.length-1).x;
  Object.entries({x:xs-6,width:xe-xs+12,y:(in1?T1:T2)-Math.round(fs*.4),height:Math.round(fs*.47)}).forEach(([k,v])=>mk.setAttribute(k,v));
 }
-// ---- layout (v2, flow style): a row of 100 blocks (one household each) at the top; each group's blocks pour DOWN as a
-// ribbon with flowing dashes into its share of the bar at the bottom. A big group pinching into a thin share and one
-// block fanning out into a wide share is the whole story. One ribbon moves at a time; the last is the gold reveal.
-const X0=60,XW=9.6,YT=640,CH=44,YB=1392,BH=44,LG='#FBE3A0',DG='#C89B12';
+// ---- layout (v3, flow style LEFT -> RIGHT, user 22 Nov 2026): a column of 100 blocks (one household each) on the left;
+// each group's blocks flow RIGHT as a ribbon with flowing dashes into its share of the bar on the right. The video OPENS
+// on the finished chart (the last share hidden as "?%": this is the cover), rewinds quickly to the start, then plays one
+// ribbon at a time; the last is the gold reveal, which brings it back to the opening picture (loop).
+const XL0=250,XL1=294,XR0=786,XR1=830,Y0=600,Y1=1500,U=(Y1-Y0)/100,LG='#FBE3A0',DG='#C89B12',COLD=1.25;
 let D,TL,P;
 function BUILD(d){
  D=d;const G=D.groups,last=G[G.length-1];P=[...G.slice(0,-1),...last.split].map(p=>({...p}));
- let n=0,sh=0;P.forEach((p,k)=>{p.a0=X0+n*XW;p.a1=X0+(n+p.n)*XW;p.b0=X0+sh*XW;p.b1=X0+(sh+p.share)*XW;n+=p.n;sh+=p.share;p.i0=n-p.n;
+ let n=0,sh=0;P.forEach((p,k)=>{p.a1=Y1-n*U;p.a0=Y1-(n+p.n)*U;p.b1=Y1-sh*U;p.b0=Y1-(sh+p.share)*U;p.i0=n;n+=p.n;sh+=p.share;
   p.gold=k===P.length-1;p.fill=p.gold?LG:p.colour==='red'?C.lred:C.lblue;p.ink=p.gold?C.gold:p.colour==='red'?C.red:C.blue;p.dash=p.gold?DG:p.ink;
-  let s=17+k*31;const R=()=>{s=(s*9301+49297)%233280;return s/233280};const nd=Math.max(4,Math.round(((p.a1-p.a0)+(p.b1-p.b0))/2/9));
-  p.ds=[];for(let q=0;q<nd;q++)p.ds.push({u:.08+.84*R(),ph:R(),sp:.85+.3*R(),ln:.03+.03*R()})});
- let t=2.1;TL={fill:[0,1.5],grp:[]};
- P.forEach((p,k)=>{const lastp=k===P.length-1;if(lastp){TL.hold=t;t+=2.0}
-  TL.grp.push({a:t,land:t+2.1,num:[t+2.0,t+3.0]});t+=lastp?2.1:4.0});
- TL.ans=t;TL.end=t+4.6;
- window.BEATS={total:TL.end,cold:0,rewind:null,ticks:[],patter:[[0.02,1.5,50,0.11],...TL.grp.map(g=>[g.a,g.land,14,0.07])],
-  rolls:TL.grp.slice(0,-1).map(g=>[g.num[0],g.num[1],9]),glides:TL.grp.map(g=>[g.a,2.0]),swells:[[TL.grp[0].land,1.2]],
-  lands:TL.grp.slice(0,-1).map((g,k)=>[g.land,k?0.8:1.0]),notes:[[1.5,69]],hold:TL.hold,reveal:TL.ans,
-  qa:[0.03,0.8,TL.grp[0].a+1.2,TL.grp[0].land+1.3,TL.grp[1].land+1.3,TL.grp[2].land+1.3,TL.hold+1.5,TL.ans-0.8,TL.ans+2.5],thumb_ms:33};
+  let s=17+k*31;const R=()=>{s=(s*9301+49297)%233280;return s/233280};const nd=Math.max(4,Math.round(((p.a1-p.a0)+(p.b1-p.b0))/2/8));
+  p.ds=[];for(let q=0;q<nd;q++)p.ds.push({u:.08+.84*R(),ph:R(),sp:.85+.3*R(),ln:.035+.035*R()})});
+ let t=COLD+0.35;TL={grp:[]};
+ P.forEach((p,k)=>{const lastp=k===P.length-1;if(lastp){TL.hold=t;t+=1.9}
+  TL.grp.push({a:t,land:t+1.9,num:[t+1.8,t+2.7]});t+=lastp?1.9:3.6});
+ TL.ans=t;TL.end=t+4.4;
+ window.BEATS={total:TL.end,cold:COLD,rewind:[0.05,COLD-0.2,12],ticks:[],patter:TL.grp.map(g=>[g.a,g.land,14,0.07]),
+  rolls:TL.grp.slice(0,-1).map(g=>[g.num[0],g.num[1],9]),glides:TL.grp.map(g=>[g.a,1.8]),swells:[[TL.grp[0].land,1.2]],
+  lands:[[COLD,0.8],...TL.grp.slice(0,-1).map((g,k)=>[g.land,k?0.8:1.0])],notes:[],hold:TL.hold,reveal:TL.ans,
+  qa:[0.0,0.5,0.95,TL.grp[0].a+1.0,TL.grp[0].land+1.2,TL.grp[1].land+1.2,TL.grp[2].land+1.2,TL.hold+1.4,TL.ans-0.6,TL.ans+2.5],thumb_ms:33};
 }
 function setTime(t){FRAME(t)}
-function tease(){FRAME(TL.hold+1.5)}
+function tease(){FRAME(0)}
 function answer(){FRAME(TL.end-0.05)}
 function FRAME(t){
  const sv=document.getElementById('sv');sv.innerHTML='';const g=el(sv,'g',{});const defs=el(sv,'defs',{});
- const ans=prog(t,TL.ans,TL.ans+0.45),nP=P.length;
- headline(el(g,'g',{opacity:1-prog(t,TL.ans,TL.ans+0.35)}),...D.headline_q);
+ const cold=t<COLD,ans=cold?0:prog(t,TL.ans,TL.ans+0.45),nP=P.length;
+ headline(el(g,'g',{opacity:1-ans*1.2}),...D.headline_q);
  headline(el(g,'g',{opacity:prog(t,TL.ans+0.1,TL.ans+0.5)}),...D.headline_a);
- // slow continuous drift so nothing is ever completely still
- const z=1.035-0.035*eo(prog(t,0,2.2))+0.012*prog(t,2.2,TL.end);
- const W=el(g,'g',{transform:`translate(540 1040) scale(${z}) translate(-540 -1040)`});
- const act=k=>t>=TL.grp[k].a-0.5;      // this group's turn has started
- // ---- top row: 100 blocks fill in from the left, already moving on frame 1 ----
- for(let i=0;i<100;i++){const k=P.findIndex(p=>i>=p.i0&&i<p.i0+p.n),p=P[k];
-  const a=-0.25+i*0.0165,pp=eo(prog(t,a,a+0.35));if(pp<=0)continue;
-  let col=C.ink;if(act(k)){col=p.ink}
-  let h=CH*pp,w=XW-2.4,x=X0+i*XW+1.2,y=YT+CH-h;
-  if(p.gold&&t>TL.hold&&ans<=0){const pu=0.5-0.5*Math.cos((t-TL.hold)*Math.PI*2);h=CH+14*pu;y=YT+CH-h}   // the one block that is left pulses
-  el(W,'rect',{x:x.toFixed(2),y:y.toFixed(2),width:w,height:h.toFixed(2),fill:col})}
- {const k=eo(prog(t,0.3,0.8))*(1-eo(prog(t,TL.grp[0].a-0.6,TL.grp[0].a-0.2)));if(k>0)T(el(W,'g',{opacity:k}),540,YT-22,D.unit_note,28,C.ink,'middle',700)}
- // group names above their blocks (narrow groups step up a line so labels never collide)
- P.forEach((p,k)=>{const o=eo(prog(t,TL.grp[k].a-0.5,TL.grp[k].a-0.05));if(o<=0)return;const lg=el(W,'g',{opacity:o});
-  const cx=(p.a0+p.a1)/2,tt=T(lg,cx,YT-20,p.name,28,p.gold?C.ink:p.ink,'middle',800),hw=tt.getComputedTextLength()/2;
-  let x=Math.max(X0+hw,Math.min(1020-hw,cx)),y=YT-20;if(p.a1-p.a0<2*hw&&k===nP-1){y=YT-62;el(lg,'line',{x1:cx,x2:cx,y1:YT-52,y2:YT-6,stroke:C.ink,'stroke-width':3})}
-  tt.setAttribute('x',x);tt.setAttribute('y',y)});
- // ---- ribbons with flowing dashes, pouring down one at a time ----
- const ya=YT+CH,yb=YB,ym=(ya+yb)/2;
- P.forEach((p,k)=>{const tl=TL.grp[k],pour=eio(prog(t,tl.a,tl.land));if(pour<=0)return;const front=ya+(yb-ya)*pour;
-  const cp=el(defs,'clipPath',{id:'c'+k});el(cp,'rect',{x:0,y:ya-2,width:1080,height:front-ya+2});const rg=el(W,'g',{'clip-path':`url(#c${k})`});
-  el(rg,'path',{d:`M${p.a0+1} ${ya} C${p.a0+1} ${ym} ${p.b0+1} ${ym} ${p.b0+1} ${yb} L${p.b1-1} ${yb} C${p.b1-1} ${ym} ${p.a1-1} ${ym} ${p.a1-1} ${ya}Z`,fill:p.fill});
-  for(const d of p.ds){const q=(t-tl.a)*0.34*d.sp-d.ph;if(q<0)continue;const tt=(q%1)*0.94;
-   const xa=p.a0+d.u*(p.a1-p.a0),xb=p.b0+d.u*(p.b1-p.b0);
-   const bx=v=>{const m=1-v;return m*m*m*xa+3*m*m*v*xa+3*m*v*v*xb+v*v*v*xb},by=v=>{const m=1-v;return m*m*m*ya+3*m*m*v*ym+3*m*v*v*ym+v*v*v*yb};
-   el(rg,'line',{x1:bx(tt).toFixed(1),y1:by(tt).toFixed(1),x2:bx(tt+d.ln).toFixed(1),y2:by(tt+d.ln).toFixed(1),stroke:p.dash,'stroke-width':5,'stroke-linecap':'round',opacity:(Math.min(1,tt/.08,(.94-tt)/.08)*.65).toFixed(2)})}});
- // ---- bottom bar: each share lands and its big number counts up; the last share is "?" until the gold reveal ----
- el(W,'line',{x1:X0,x2:1020,y1:YB+BH+1.5,y2:YB+BH+1.5,stroke:C.ink,'stroke-width':3,opacity:eo(prog(t,1.2,1.9))});
- P.forEach((p,k)=>{const tl=TL.grp[k],lp=eo(prog(t,tl.land-0.15,tl.land+0.3));const lastp=k===nP-1;
-  if(lp>0)el(W,'rect',{x:p.b0+1,y:YB,width:p.b1-p.b0-2,height:BH*lp,fill:p.ink});
-  const cx=(p.b0+p.b1)/2,show=lastp?eo(prog(t,TL.hold+0.2,TL.hold+0.7)):lp;if(show<=0)return;
-  const num=lastp?(ans>0?Math.round(p.share)+'%':'?%'):Math.round(p.share*eo(prog(t,tl.num[0],tl.num[1])))+'%';
-  const pop=lastp?1+0.16*Math.sin(Math.PI*clamp(ans)):1,lg=el(W,'g',{opacity:show});
-  const tt=T(lg,cx,YB+BH+78,num,66,lastp?C.ink:p.ink,'middle',800),hw=tt.getComputedTextLength()/2,x=Math.max(X0+hw,Math.min(1020-hw,cx));
-  tt.setAttribute('x',x);tt.setAttribute('transform',`translate(${x} ${YB+BH+56}) scale(${pop}) translate(${-x} ${-(YB+BH+56)})`);
-  if(lastp&&ans>0)lg.insertBefore(el(lg,'rect',{x:x-hw-8,y:YB+BH+52,width:(2*hw+16)*eo(ans),height:30,fill:C.gold}),tt)});
- {const k=eo(prog(t,TL.grp[0].land,TL.grp[0].land+0.5));if(k>0)T(el(W,'g',{opacity:k}),540,YB+BH+124,D.box_label,26,C.grey,'middle',700)}
- {const k=eo(prog(t,TL.ans+0.6,TL.ans+1.1));if(k>0){const s=T(el(g,'g',{opacity:k}),540,1596,D.source,22,'#444','middle',500);const l=s.getComputedTextLength();if(l>900)s.setAttribute('font-size',(22*900/l).toFixed(1))}}
+ const z=cold?1.02-0.02*eio(prog(t,0,COLD)):1+0.012*prog(t,COLD,TL.end);   // never completely still
+ const W=el(g,'g',{transform:`translate(540 1050) scale(${z}) translate(-540 -1050)`});
+ // how far each ribbon has travelled (0..1) and how much of its number shows. Opening: everything is there, then the
+ // ribbons run back right -> left, last group first (the rewind), and the play starts from the empty chart.
+ const st=P.map((p,k)=>{const tl=TL.grp[k];if(cold){const r0=0.05+(nP-1-k)*0.16,pour=1-eio(prog(t,r0,r0+0.62));return {pour,num:1,numOp:prog(pour,0.85,1),act:pour>0.02,land:pour>=0.999?1:0}}
+  return {pour:eio(prog(t,tl.a,tl.land)),num:eo(prog(t,tl.num[0],tl.num[1])),numOp:eo(prog(t,tl.land-0.15,tl.land+0.3)),act:t>=tl.a-0.45,land:eo(prog(t,tl.land-0.15,tl.land+0.3)),nameOp:eo(prog(t,tl.a-0.45,tl.a-0.05))}});
+ // headers and the empty destination bar
+ T(W,(XL0+XL1)/2,Y0-28,D.left_label,26,C.grey,'middle',700);T(W,(XR0+XR1)/2,Y0-28,D.right_label,26,C.grey,'middle',700);
+ el(W,'rect',{x:XR0,y:Y0,width:XR1-XR0,height:Y1-Y0,fill:'none',stroke:C.line,'stroke-width':3});
+ // left column: 100 blocks, bottom group at the bottom
+ for(let i=0;i<100;i++){const k=P.findIndex(p=>i>=p.i0&&i<p.i0+p.n),p=P[k];let col=st[k].act?p.ink:C.ink,x=XL0,w=XL1-XL0;
+  if(p.gold&&!cold&&t>TL.hold&&ans<=0){const pu=0.5-0.5*Math.cos((t-TL.hold)*Math.PI*2);x=XL0-16*pu;w=XL1-XL0+16*pu}   // the one block left pulses
+  el(W,'rect',{x,y:(Y1-(i+1)*U+1).toFixed(2),width:w,height:U-2,fill:col})}
+ // group names left of their blocks
+ P.forEach((p,k)=>{const o=cold?prog(st[k].pour,0.0,0.25):st[k].nameOp;if(o<=0)return;const lg=el(W,'g',{opacity:o});
+  let y=(p.a0+p.a1)/2+11;if(k===nP-1)y=Math.min(y,p.a1+2);
+  T(lg,XL0-18,y,p.name,30,p.gold?C.ink:p.ink,'end',800)});
+ {const k=cold?0:eo(prog(t,COLD+0.05,COLD+0.4))*(1-eo(prog(t,TL.grp[1].a-0.5,TL.grp[1].a)));if(k>0)T(el(W,'g',{opacity:k}),XL1+26,Y0+60,D.unit_note,26,C.ink,'start',700)}
+ // ribbons with flowing dashes, left -> right
+ const xa=XL1,xb=XR0,xm=(xa+xb)/2;
+ P.forEach((p,k)=>{const pour=st[k].pour;if(pour<=0)return;const front=xa+(xb-xa)*pour,tl=TL.grp[k];
+  const cp=el(defs,'clipPath',{id:'c'+k});el(cp,'rect',{x:xa-2,y:0,width:front-xa+2,height:1920});const rg=el(W,'g',{'clip-path':`url(#c${k})`});
+  el(rg,'path',{d:`M${xa} ${p.a0+1} C${xm} ${p.a0+1} ${xm} ${p.b0+1} ${xb} ${p.b0+1} L${xb} ${p.b1-1} C${xm} ${p.b1-1} ${xm} ${p.a1-1} ${xa} ${p.a1-1}Z`,fill:p.fill});
+  for(const d of p.ds){const q=cold?(t*0.34*d.sp+d.ph):((t-tl.a)*0.34*d.sp-d.ph);if(q<0)continue;const tt=(q%1)*0.93;
+   const ya=p.a0+d.u*(p.a1-p.a0),yb=p.b0+d.u*(p.b1-p.b0);
+   const bx=v=>{const m=1-v;return m*m*m*xa+3*m*m*v*xm+3*m*v*v*xm+v*v*v*xb},by=v=>{const m=1-v;return m*m*m*ya+3*m*m*v*ya+3*m*v*v*yb+v*v*v*yb};
+   el(rg,'line',{x1:bx(tt).toFixed(1),y1:by(tt).toFixed(1),x2:bx(tt+d.ln).toFixed(1),y2:by(tt+d.ln).toFixed(1),stroke:p.dash,'stroke-width':5,'stroke-linecap':'round',opacity:(Math.min(1,tt/.08,(.93-tt)/.08)*.65).toFixed(2)})}});
+ // right bar: each share lands with its big number; the last share is "?%" until the gold reveal
+ P.forEach((p,k)=>{const lastp=k===nP-1,lp=st[k].land;
+  if(lp>0)el(W,'rect',{x:XR0,y:p.b0+1,width:(XR1-XR0)*lp,height:p.b1-p.b0-2,fill:p.ink});
+  const show=lastp?(cold?st[k].numOp:eo(prog(t,TL.hold+0.2,TL.hold+0.7))):st[k].numOp;if(show<=0)return;
+  const num=lastp?(ans>0?Math.round(p.share)+'%':'?%'):Math.round(p.share*st[k].num)+'%';
+  const ym=(p.b0+p.b1)/2+24,x=XR1+18,pop=lastp?1+0.16*Math.sin(Math.PI*clamp(ans)):1,lg=el(W,'g',{opacity:show});
+  const tt=T(lg,x,ym,num,66,lastp?C.ink:p.ink,'start',800),w=tt.getComputedTextLength();
+  tt.setAttribute('transform',`translate(${x} ${ym-22}) scale(${pop}) translate(${-x} ${-(ym-22)})`);
+  if(lastp&&ans>0)lg.insertBefore(el(lg,'rect',{x:x-8,y:ym-26,width:(w+16)*eo(ans),height:30,fill:C.gold}),tt)});
+ {const k=eo(prog(t,TL.ans+0.6,TL.ans+1.1));if(k>0){const s=T(el(g,'g',{opacity:k}),540,1570,D.source,22,'#444','middle',500);const l=s.getComputedTextLength();if(l>900)s.setAttribute('font-size',(22*900/l).toFixed(1))}}
 }
 </script></body></html>

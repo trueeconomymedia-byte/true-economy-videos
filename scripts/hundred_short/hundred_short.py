@@ -9,7 +9,7 @@ group is hidden as "?%" until the gold reveal.
 data.json:
   headline_q, headline_a   [line1, line2, words to mark gold] (max 26 characters a line)
   unit_note    e.g. "1 dot = 1 household in 100"
-  box_label    e.g. "The box = all household wealth"
+  left_label, right_label   headers above the two bars, e.g. "100 households" / "Share of wealth"
   groups       play order, e.g. [{"name": "Bottom 50", "n": 50, "share": 9, "colour": "red"},
                {"name": "Middle 40", "n": 40, "share": 50},
                {"name": "Richest 10", "n": 10, "share": 41, "split": [{"name": "Next 9", "n": 9, "share": 31},
@@ -23,7 +23,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(os.pat
 def fail(c, m): print(m); sys.exit(c)
 def main():
     data_path, outdir, slug = sys.argv[1:4]; os.makedirs(outdir, exist_ok=True); d = json.load(open(data_path))
-    for k in ("headline_q", "headline_a", "unit_note", "box_label", "groups", "source"):
+    for k in ("headline_q", "headline_a", "unit_note", "left_label", "right_label", "groups", "source"):
         if k not in d: fail(4, f"data.json missing {k}")
     G = d["groups"]; last = G[-1]
     if len(G) < 2 or len(last.get("split", [])) != 2: fail(4, "CHECK: need 2+ groups and the last group must split into 2 parts")
