@@ -65,20 +65,18 @@ function FRAME(t){
  const W=el(g,'g',{transform:`translate(540 1050) scale(${z}) translate(-540 -1050)`});
  // how far each ribbon has travelled (0..1) and how much of its number shows. Opening: everything is there, then the
  // ribbons run back right -> left, last group first (the rewind), and the play starts from the empty chart.
- const st=P.map((p,k)=>{const tl=TL.grp[k];if(cold){const r0=0.05+(nP-1-k)*0.16,pour=1-eio(prog(t,r0,r0+0.62));return {pour,num:1,numOp:prog(pour,0.85,1),act:pour>0.02,land:pour>=0.999?1:0}}
+ const st=P.map((p,k)=>{const tl=TL.grp[k];if(cold){const r0=0.05+(nP-1-k)*0.16,pour=1-eio(prog(t,r0,r0+0.62));return {pour,num:1,numOp:prog(pour,0.85,1),act:pour>0.02,land:prog(pour,0.9,1)}}
   return {pour:eio(prog(t,tl.a,tl.land)),num:eo(prog(t,tl.num[0],tl.num[1])),numOp:eo(prog(t,tl.land-0.15,tl.land+0.3)),act:t>=tl.a-0.45,land:eo(prog(t,tl.land-0.15,tl.land+0.3)),nameOp:eo(prog(t,tl.a-0.45,tl.a-0.05))}});
  // headers and the empty destination bar
  T(W,(XL0+XL1)/2,Y0-28,D.left_label,26,C.grey,'middle',700);T(W,(XR0+XR1)/2,Y0-28,D.right_label,26,C.grey,'middle',700);
- el(W,'rect',{x:XR0,y:Y0,width:XR1-XR0,height:Y1-Y0,fill:'none',stroke:C.line,'stroke-width':3});
- // left column: 100 blocks, bottom group at the bottom
- for(let i=0;i<100;i++){const k=P.findIndex(p=>i>=p.i0&&i<p.i0+p.n),p=P[k];let col=st[k].act?p.ink:C.ink,x=XL0,w=XL1-XL0;
-  if(p.gold&&!cold&&t>TL.hold&&ans<=0){const pu=0.5-0.5*Math.cos((t-TL.hold)*Math.PI*2);x=XL0-16*pu;w=XL1-XL0+16*pu}   // the one block left pulses
-  el(W,'rect',{x,y:(Y1-(i+1)*U+1).toFixed(2),width:w,height:U-2,fill:col})}
+ // left column: SOLID chunks that stack one at a time, bottom group first (user 22 Nov 2026: no little blocks)
+ P.forEach((p,k)=>{const tl=TL.grp[k],up=cold?prog(st[k].pour,0,0.3):eo(prog(t,tl.a-0.5,tl.a-0.05));if(up<=0)return;
+  let x=XL0,w=XL1-XL0;if(p.gold&&!cold&&t>TL.hold&&ans<=0){const pu=0.5-0.5*Math.cos((t-TL.hold)*Math.PI*2);x=XL0-16*pu;w=XL1-XL0+16*pu}   // the last sliver pulses
+  const h=(p.a1-p.a0)*up;el(W,'rect',{x,y:(p.a1-h+(k?1:0)).toFixed(2),width:w,height:Math.max(0,h-(k?1:0)).toFixed(2),fill:p.ink})});
  // group names left of their blocks
  P.forEach((p,k)=>{const o=cold?prog(st[k].pour,0.0,0.25):st[k].nameOp;if(o<=0)return;const lg=el(W,'g',{opacity:o});
   let y=(p.a0+p.a1)/2+11;if(k===nP-1)y=Math.min(y,p.a1+2);
   T(lg,XL0-18,y,p.name,30,p.gold?C.ink:p.ink,'end',800)});
- {const k=cold?0:eo(prog(t,COLD+0.05,COLD+0.4))*(1-eo(prog(t,TL.grp[1].a-0.5,TL.grp[1].a)));if(k>0)T(el(W,'g',{opacity:k}),XL1+26,Y0+60,D.unit_note,26,C.ink,'start',700)}
  // ribbons with flowing dashes, left -> right
  const xa=XL1,xb=XR0,xm=(xa+xb)/2;
  P.forEach((p,k)=>{const pour=st[k].pour;if(pour<=0)return;const front=xa+(xb-xa)*pour,tl=TL.grp[k];
