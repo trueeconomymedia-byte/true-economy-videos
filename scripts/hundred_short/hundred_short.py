@@ -3,9 +3,9 @@
 
     python3 hundred_short.py data.json OUTDIR SLUG
 
-100 dots (one household / person / pound each) pour into a grid, then each group drops into its slice of a tall box
-that stands for the whole (e.g. all household wealth); slice height = the group's share. The last group lands as one
-block, then splits; its final part is hidden as "?%" until the gold reveal.
+A row of 100 blocks (one household / person each) fills the top; each group pours DOWN as a ribbon with flowing dashes
+into its share of the bar at the bottom (v2 flow style, 22 Nov 2026). One ribbon at a time; the last part of the last
+group is hidden as "?%" until the gold reveal.
 data.json:
   headline_q, headline_a   [line1, line2, words to mark gold] (max 26 characters a line)
   unit_note    e.g. "1 dot = 1 household in 100"
