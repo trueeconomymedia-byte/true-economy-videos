@@ -45,13 +45,13 @@ function BUILD(d){
   let s=17+k*31;const R=()=>{s=(s*9301+49297)%233280;return s/233280};const nd=Math.max(4,Math.round(((p.a1-p.a0)+(p.b1-p.b0))/2/8));
   p.ds=[];for(let q=0;q<nd;q++)p.ds.push({u:.08+.84*R(),ph:R(),sp:.85+.3*R(),ln:.035+.035*R()})});
  let t=COLD+0.35;TL={grp:[]};
- P.forEach((p,k)=>{const lastp=k===P.length-1;if(lastp){TL.hold=t;t+=1.9}
+ P.forEach((p,k)=>{const lastp=k===P.length-1;if(lastp){t-=1.5;TL.hold=t-0.6}   // no wait at the "?%" (user 22 Nov 2026): the last ribbon follows straight on
   TL.grp.push({a:t,land:t+1.9,num:[t+1.8,t+2.7]});t+=lastp?1.9:3.6});
  TL.ans=t;TL.end=t+4.4;
  window.BEATS={total:TL.end,cold:COLD,rewind:[0.05,COLD-0.2,12],ticks:[],patter:TL.grp.map(g=>[g.a,g.land,14,0.07]),
   rolls:TL.grp.slice(0,-1).map(g=>[g.num[0],g.num[1],9]),glides:TL.grp.map(g=>[g.a,1.8]),swells:[[TL.grp[0].land,1.2]],
   lands:[[COLD,0.8],...TL.grp.slice(0,-1).map((g,k)=>[g.land,k?0.8:1.0])],notes:[],hold:TL.hold,reveal:TL.ans,
-  qa:[0.0,0.5,0.95,TL.grp[0].a+1.0,TL.grp[0].land+1.2,TL.grp[1].land+1.2,TL.grp[2].land+1.2,TL.hold+1.4,TL.ans-0.6,TL.ans+2.5],thumb_ms:33};
+  qa:[0.0,0.5,0.95,TL.grp[0].a+1.0,TL.grp[0].land+1.2,TL.grp[1].land+1.2,TL.grp[2].land+0.9,TL.ans-0.9,TL.ans-0.3,TL.ans+2.5],thumb_ms:33};
 }
 function setTime(t){FRAME(t)}
 function tease(){FRAME(0)}
@@ -89,7 +89,7 @@ function FRAME(t){
  // right bar: each share lands with its big number; the last share is "?%" until the gold reveal
  P.forEach((p,k)=>{const lastp=k===nP-1,lp=st[k].land;
   if(lp>0)el(W,'rect',{x:XR0,y:p.b0+1,width:(XR1-XR0)*lp,height:p.b1-p.b0-2,fill:p.ink});
-  const show=lastp?(cold?st[k].numOp:eo(prog(t,TL.hold+0.2,TL.hold+0.7))):st[k].numOp;if(show<=0)return;
+  const show=lastp?(cold?st[k].numOp:eo(prog(t,TL.hold,TL.hold+0.4))):st[k].numOp;if(show<=0)return;
   const num=lastp?(ans>0?Math.round(p.share)+'%':'?%'):Math.round(p.share*st[k].num)+'%';
   const ym=(p.b0+p.b1)/2+24,x=XR1+18,pop=lastp?1+0.16*Math.sin(Math.PI*clamp(ans)):1,lg=el(W,'g',{opacity:show});
   const tt=T(lg,x,ym,num,66,lastp?C.ink:p.ink,'start',800),w=tt.getComputedTextLength();
