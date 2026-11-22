@@ -41,7 +41,8 @@ let D,TL,P;
 function BUILD(d){
  D=d;const G=D.groups,last=G[G.length-1];P=[...G.slice(0,-1),...last.split].map(p=>({...p}));
  let n=0,sh=0;P.forEach((p,k)=>{p.a1=Y1-n*U;p.a0=Y1-(n+p.n)*U;p.b1=Y1-sh*U;p.b0=Y1-(sh+p.share)*U;p.i0=n;n+=p.n;sh+=p.share;
-  p.gold=k===P.length-1;p.fill=p.gold?LG:p.colour==='red'?C.lred:C.lblue;p.ink=p.gold?C.gold:p.colour==='red'?C.red:C.blue;p.dash=p.gold?DG:p.ink;
+  p.gold=k===P.length-1;p.fill=p.gold?LG:p.colour==='red'?C.lred:p.colour==='teal'?'#B2DCCE':C.lblue;p.ink=p.gold?C.gold:p.colour==='red'?C.red:p.colour==='teal'?'#249972':C.blue;   // colours: red, blue (default), teal; the last part is always gold
+  p.dash=p.gold?DG:p.ink;
   let s=17+k*31;const R=()=>{s=(s*9301+49297)%233280;return s/233280};const nd=Math.max(4,Math.round(((p.a1-p.a0)+(p.b1-p.b0))/2/8));
   p.ds=[];for(let q=0;q<nd;q++)p.ds.push({u:.08+.84*R(),ph:R(),sp:.85+.3*R(),ln:.035+.035*R()})});
  let t=COLD+0.35;TL={grp:[]};
