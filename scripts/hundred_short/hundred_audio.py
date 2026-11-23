@@ -2,7 +2,7 @@
 # low hit, piano chord) as the shared Animated Shorts sound (anim_shared/beats_audio.py), but its OWN feel so the series
 # is not a copy of the others: key of D minor (the shared bed is A minor), 108 bpm (shared 96), a rolling piano arpeggio
 # instead of the sparse motif, and two signature effects: a soft "stack" knock as each chunk lands on the left
-# (beats 'stacks': [[t,g]]) and a smooth "pour" whoosh as each ribbon flows across (beats 'pours': [[t,d]]), plus a smooth airy rise and one soft chime as each % counts up (beats 'counts': [[t0,t1]]).
+# (beats 'stacks': [[t,g]]) and a smooth "pour" whoosh as each ribbon flows across (beats 'pours': [[t,d]]), plus low soft stacking thuds as each % counts up (beats 'counts': [[t0,t1]]).
 # Usage: python3 hundred_audio.py beats.json out.wav
 import numpy as np, wave, json, sys
 BEATS=json.load(open(sys.argv[1])); OUT=sys.argv[2]
@@ -101,11 +101,11 @@ for t0,t1,k in B['rolls']:                                                      
 for t0,d in B['glides']: add('fx',glide(d),t0,0.05)
 for te,d in B['swells']: add('fx',swell(d,250,3000 if d<2 else 4200),te-d,0.08 if d<2 else 0.11)
 for tt,g in B['lands']: add('fx',impact(g),tt,0.45+0.25*(g>=1)); hits.append(tt)
-def knock(g=1.0):
+def knock(g=1.0,f0=110):
     # soft "stack": a short felt thud with a little woody body, no click
     n=int(0.5*SR); t=np.arange(n)/SR
-    f=110+60*np.exp(-t*30); sub=np.sin(2*np.pi*np.cumsum(f)/SR)*np.exp(-t*11)
-    body=bp(rng.standard_normal(n),300,1100)*np.exp(-t*45)*0.9
+    f=f0+0.55*f0*np.exp(-t*30); sub=np.sin(2*np.pi*np.cumsum(f)/SR)*np.exp(-t*11)
+    body=bp(rng.standard_normal(n),300*f0/110,1100*f0/110)*np.exp(-t*45)*0.9
     return (sub+body)*(1-np.exp(-t*700))*g
 def pour(d):
     # smooth flowing whoosh: band of air that opens as the ribbon travels and settles as it lands
@@ -118,11 +118,12 @@ for tt,g in B.get('stacks',[]): add('fx',knock(g),tt,0.5)
 for t0,d in B.get('pours',[]):
     add('fx',pour(d),t0,0.085)
     for j in range(10): add('fx',softclick(0.6),t0+d*(0.15+0.75*rng.random()),0.05,rng.uniform(-.5,.5))
-# count-up (user 23 Nov 2026: not a stepped/stacking sound): one smooth airy rise while the % climbs, then a single soft
-# chime as the number lands
+# count-up (user 23 Nov 2026: no high ring or chime): LOW soft stacking thuds as the % climbs on the right - four quiet
+# low knocks that settle into one fuller, lower thud as the number lands
 for t0,t1 in B.get('counts',[]):
-    d=t1-t0; add('fx',swell(d,500,5200),t0,0.07)
-    add('fx',epiano(mf(86),1.8,0.5)+0.5*epiano(mf(93),1.8,0.4),t1-0.02,0.075,0.35)
+    for j in range(4):
+        u=j/4; add('fx',knock(0.55+0.1*j,78),t0+(t1-t0)*(1-(1-u)**1.5),0.30,0.3)
+    add('fx',knock(1.0,62),t1-0.02,0.55,0.3)
 for tt,m in B['notes']: add('fx',epiano(mf(m),2.5,0.6),tt,0.09)
 add('fx',impact(0.45),B['hold'],0.35)
 R=B['reveal']; add('fx',swell(1.4,250,3500),R-1.4,0.10); add('fx',impact(0.9),R,0.75); hits.append(R)
