@@ -143,6 +143,8 @@ def main():
     subprocess.run(["node", os.path.join(HERE, "howbig_render.js"), gpath, outdir, slug], check=True)
     for v in ("youtube",):
         beats = os.path.join(outdir, f"{slug}-beats-{v}.json"); wav = os.path.join(outdir, f"{slug}-{v}.wav")
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(HERE)), 'scripts', 'anim_shared')); import sound_templates
+        sound = sound_templates.apply(beats, 'howbig', slug, os.path.dirname(os.path.dirname(HERE)))
         subprocess.run([sys.executable, os.path.join(HERE, "howbig_audio.py"), beats, wav], check=True)
         silent = os.path.join(outdir, f"{slug}-{v}-silent.mp4"); final = os.path.join(outdir, f"{slug}-{v}.mp4"); tmp = final + ".tmp.mp4"
         subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", silent, "-i", wav, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac",

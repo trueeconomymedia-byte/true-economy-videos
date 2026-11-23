@@ -96,6 +96,8 @@ def main():
     print(f"final: {d['a']} {sa} - {sb} {d['b']}")
     subprocess.run(["node", os.path.join(HERE, "h2h_render.js"), gpath, outdir, slug], check=True)
     beats = os.path.join(outdir, f"{slug}-beats-youtube.json"); wav = os.path.join(outdir, f"{slug}-youtube.wav")
+    sys.path.insert(0, os.path.join(ROOT, 'scripts', 'anim_shared')); import sound_templates
+    sound = sound_templates.apply(beats, 'h2h', slug, ROOT)
     subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "anim_shared", "beats_audio.py"), beats, wav], check=True)
     silent = os.path.join(outdir, f"{slug}-youtube-silent.mp4"); fp = os.path.join(outdir, f"{slug}-youtube.mp4"); tmp = fp + ".tmp.mp4"
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", silent, "-i", wav, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac",

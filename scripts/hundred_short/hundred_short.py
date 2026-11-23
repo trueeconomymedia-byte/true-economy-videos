@@ -46,6 +46,8 @@ def main():
     gpath = os.path.join(outdir, f"{slug}-build.json"); json.dump(d, open(gpath, "w"), ensure_ascii=False, indent=1)
     subprocess.run(["node", os.path.join(HERE, "hundred_render.js"), gpath, outdir, slug], check=True)
     beats = os.path.join(outdir, f"{slug}-beats-youtube.json"); wav = os.path.join(outdir, f"{slug}-youtube.wav")
+    sys.path.insert(0, os.path.join(ROOT, 'scripts', 'anim_shared')); import sound_templates
+    sound = sound_templates.apply(beats, 'hundred', slug, ROOT, default='bright')
     subprocess.run([sys.executable, os.path.join(HERE, "hundred_audio.py"), beats, wav], check=True)
     silent = os.path.join(outdir, f"{slug}-youtube-silent.mp4"); fp = os.path.join(outdir, f"{slug}-youtube.mp4"); tmp = fp + ".tmp.mp4"
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", silent, "-i", wav, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac",

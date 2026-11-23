@@ -27,6 +27,16 @@ fetched in this run; never type a URL from memory or edit a known link (that can
 the unattended run). To reach a specific page (a FRED series, an ONS release, an earnings release), search for it by
 name and fetch the result. No curl/wget/requests for research pages.
 
+## 0c. Sound templates (user, 23 Nov 2026)
+Each series keeps its own effects and reveal; the MUSIC BED rotates automatically between named templates so videos do
+not all sound like one template (scripts/anim_shared/sound_templates.py; allowed list and order per series in
+playbook/animated/sound_templates.json). The renderer picks the next template itself, prints
+"sound template: <name> - <label>" and appends a line to playbook/animated/sound_log.jsonl: never choose or override it
+by hand. ALWAYS put the template name in the log line ("sound") and in the final message ("Sound: <label>"), and commit
+sound_log.jsonl with the other files, so the user can say "replace that sound" about a specific video. A template the
+user dislikes is retired by adding its name to that series' "retired" list (or "retired_everywhere") in
+sound_templates.json; only do that when the user asks.
+
 ## 1. Hard limits (never broken; `python3 scripts/anim_plan.py` applies them)
 - At most 1 animated Short per day across all series.
 - Each series: at most 3 in any rolling 7 days (today + the 6 days before), and never on two days in a row.

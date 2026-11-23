@@ -65,21 +65,11 @@ def stinger(chord,d=4.0):
     sh=np.zeros(n); tt=np.arange(n)/SR
     for f in chord[1:]: sh+=0.12*np.sin(2*np.pi*2*f*tt)*np.exp(-tt*0.9)*(1-np.exp(-tt*8))  # soft shimmer
     return s+lp(sh,4000)
-# ---------- music bed: A minor-ish, 8 s per chord cycle quarter, loops at 30 s ----------
-bpm=108; beat=60/bpm
-chords=[[62,65,69,74],[58,62,65,70],[53,57,60,65],[60,64,67,72]]  # Dm Bb F C (MIDI)
-mf=lambda m:440*2**((m-69)/12)
-bar=4*beat; t=0.0; ci=0
-while t<DUR:
-    ch=chords[ci%4]
-    for m in ch: add('bed',padnote(mf(m-12),bar+1.4),t,0.05)
-    add('bed',padnote(mf(ch[0]-24),bar+1.4)*0.9,t,0.07)
-    # sparse felt-piano motif on beats 1 and 3 (quiet, documentary underscore)
-    for e,m in enumerate([ch[0],ch[2],ch[3],ch[2],ch[1],ch[2],ch[3],ch[2]]):   # rolling 8th-note arpeggio, quiet
-        add('bed',epiano(mf(m),1.6,0.45),t+e*beat/2,0.045 if e%2 else 0.06,(-0.3 if e%2 else 0.3))
-    # muted pulse: soft low tick on 8ths, very quiet (news underscore feel)
-    for e in range(4): add('bed',softclick(0.5),t+e*beat,0.035)
-    t+=bar; ci+=1
+# ---------- music bed: one of the rotating SOUND TEMPLATES (scripts/anim_shared/sound_templates.py) ----------
+import os as _os; sys.path.insert(0,_os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))),'anim_shared'))
+import sound_templates as ST
+TPL=ST.get(BEATS.get('sound'),'bright')
+mf=ST.bed(TPL,add,padnote,epiano,softclick,DUR)   # mf transposes every pitched sound below into the template's key
 # ---------- effects from the renderer's beats ----------
 B=BEATS; hits=[]
 if B.get('cold',0)>0: add('fx',glide(1.2),0.45,0.05)                # cold open: the grid rewinds into Day 1
@@ -136,9 +126,9 @@ def flip(d=0.32):
     return out*np.sin(np.pi*np.arange(n)/n)**2
 add('fx',swell(0.9,200,1800),R-0.9,0.07); add('fx',flip(),R-0.05,0.10); add('fx',flip(),R+0.12,0.07)
 add('fx',knock(1.0,70),R,0.9); add('fx',knock(1.2,48),R+0.16,1.0); add('fx',impact(0.8),R+0.16,0.5)
-for j,m in enumerate((38,50,57,62,65)):                                     # D2 D3 A3 D4 F4: warm and low, no shimmer
+for j,m in enumerate((33,45,52,57,60)):                                     # low root-fifth-root-third shape in the template's key: warm, no shimmer
     add('fx',lp(epiano(mf(m),4.2,0.9-0.1*j),1800),R+0.16+j*0.02,0.26)
-    if m>=50: add('fx',padnote(mf(m),3.6),R+0.16,0.06)
+    if m>=45: add('fx',padnote(mf(m),3.6),R+0.16,0.06)
 duck=np.ones(N)
 for tt in hits:
     i=int(tt*SR); n=int(1.6*SR); d=1-0.45*np.exp(-np.arange(n)/SR*2.2)

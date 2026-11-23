@@ -63,21 +63,11 @@ def stinger(chord,d=4.0):
     sh=np.zeros(n); tt=np.arange(n)/SR
     for f in chord[1:]: sh+=0.12*np.sin(2*np.pi*2*f*tt)*np.exp(-tt*0.9)*(1-np.exp(-tt*8))  # soft shimmer
     return s+lp(sh,4000)
-# ---------- music bed: A minor-ish, 8 s per chord cycle quarter, loops at 30 s ----------
-bpm=96; beat=60/bpm
-chords=[[57,60,64,69],[53,57,60,65],[48,52,55,60],[55,59,62,67]]  # Am F C G (MIDI)
-mf=lambda m:440*2**((m-69)/12)
-bar=4*beat; t=0.0; ci=0
-while t<DUR:
-    ch=chords[ci%4]
-    for m in ch: add('bed',padnote(mf(m-12),bar+1.4),t,0.05)
-    add('bed',padnote(mf(ch[0]-24),bar+1.4)*0.9,t,0.07)
-    # sparse felt-piano motif on beats 1 and 3 (quiet, documentary underscore)
-    for b,m in [(0,ch[-1]+12),(2,ch[1]+12),(3,ch[2]+12)]:
-        add('bed',epiano(mf(m),2.2,0.5),t+b*beat,0.06,(-0.25 if b%2 else 0.25))
-    # muted pulse: soft low tick on 8ths, very quiet (news underscore feel)
-    for e in range(8): add('bed',softclick(0.6 if e%2==0 else 0.35),t+e*beat/2,0.05)
-    t+=bar; ci+=1
+# ---------- music bed: one of the rotating SOUND TEMPLATES (scripts/anim_shared/sound_templates.py) ----------
+import os as _os; sys.path.insert(0,_os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))),'anim_shared'))
+import sound_templates as ST
+TPL=ST.get(BEATS.get('sound'),'classic')
+mf=ST.bed(TPL,add,padnote,epiano,softclick,DUR)   # mf transposes every pitched sound below into the template's key
 # ---------- effects synced to picture (from the renderer's beats json) ----------
 S=[(s['a'],s['b'],s['kind']) for s in BEATS['steps']]; KT=BEATS['kt']; C0=BEATS['cold']; RB=BEATS['revbar']
 if C0>0:

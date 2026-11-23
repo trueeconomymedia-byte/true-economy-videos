@@ -1,0 +1,51 @@
+{
+ "_about": "Which sound templates each animated series may use, in rotation order (scripts/anim_shared/sound_templates.py). To retire one the user dislikes: add its name to that series' 'retired' list (or 'retired_everywhere'). The log of what each video used is sound_log.jsonl.",
+ "retired_everywhere": [],
+ "series": {
+  "funnel": {
+   "templates": [
+    "classic",
+    "steady",
+    "deep",
+    "bright"
+   ],
+   "retired": []
+  },
+  "howbig": {
+   "templates": [
+    "classic",
+    "deep",
+    "bright",
+    "steady"
+   ],
+   "retired": []
+  },
+  "thennow": {
+   "templates": [
+    "classic",
+    "bright",
+    "steady",
+    "deep"
+   ],
+   "retired": []
+  },
+  "h2h": {
+   "templates": [
+    "classic",
+    "steady",
+    "bright",
+    "deep"
+   ],
+   "retired": []
+  },
+  "hundred": {
+   "templates": [
+    "bright",
+    "steady",
+    "deep",
+    "classic"
+   ],
+   "retired": []
+  }
+ }
+}
