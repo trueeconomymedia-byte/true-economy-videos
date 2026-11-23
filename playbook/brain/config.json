@@ -18,14 +18,26 @@
   "stopping a series on a platform (platform routing)",
   "changing posting times or the queue/instant mode",
   "any change to caption rules beyond soft style weights",
-  "anything touching template, colours, verification standards or hashtag limits (these are never changed by the brain)"
+  "anything touching template, colours, verification standards or hashtag limits (these are never changed by the brain)",
+  "resting (benching), scrapping, relaunching or adding a series",
+  "applying ranking slot changes when the Buffer data was not fresh and complete"
  ],
  "auto_allowed": [
   "soft guidance on caption hook style per platform (hook type, length range, question/number first) inside brand.md limits",
   "adding evidence to the scorecard and insights",
-  "flagging a series as 'watch' (no action)"
+  "flagging a series as 'watch' (no action)",
+  "weekly ranking slot changes between series, ONLY when brain_rank.py reports the Buffer data as fresh and complete"
  ],
  "trial_posts_for_new_series": 4,
  "exploration_share": 0.2,
- "min_caption_posts_per_side_for_proposal": 10
+ "min_caption_posts_per_side_for_proposal": 10,
+ "rank": {
+  "enabled": false,
+  "_about": "Series ranking (scripts/brain_rank.py). enabled=true makes scripts/anim_plan.py and scripts/daily_plan.py follow playbook/brain/ranking.json. To post more often change ONE number: animated = playbook/animated/registry.json limits.max_posts_per_day; daily = pools.daily.posts_per_day here. Every other setting has a default in brain_rank.py DEF and can be overridden here.",
+  "pools": {
+   "daily": {
+    "posts_per_day": 1
+   }
+  }
+ }
 }

@@ -3,7 +3,7 @@
 usage: python3 brain_ingest.py <buffer_list_posts_output.json> [more.json ...]
 Accepts the saved list_posts result file(s) (either the raw tool-result file [{type,text}] or plain JSON with edges).
 Appends a metrics SNAPSHOT per post to playbook/brain/metrics.jsonl and upserts playbook/brain/posts.jsonl (post registry:
-platform, series, features of the caption). Series mapping order: video URL prefix -> series_overrides.json (by date/time) ->
+platform, series, features of the caption). Series mapping order: video URL prefix -> same thumbnail as a post mapped that way (TikTok) -> animated log in the 17:00 slot -> series_overrides.json (by date/time) ->
 playbook/log.jsonl (Daily Post, by UK date) -> markets_log.jsonl (Markets Daily) -> 'unmapped'."""
 import json, re, sys, os, datetime as dt
 B = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "playbook", "brain")
@@ -27,15 +27,28 @@ def features(text):
             "number_first": bool(re.match(r"^\W*(?:[\$£€]?\d|\d)", first)) or bool(re.search(r"[\$£€]\s?\d", first)),
             "cta": bool(re.search(r"\b(follow|subscribe|comment|share|save)\b", t, re.I)), "emoji": bool(re.search(r"[\U0001F300-\U0001FAFF]", t)),
             "hook": first[:90]}
-def series_for(node, logs, mlogs, over):
+def thumb_key(node):
+    """Buffer re-hosts a sent TikTok video (the source URL loses our file name) but all platforms of one video share a thumbnail id."""
+    m = re.search(r"images\.buffer\.com/thumbnail/([A-Za-z0-9_-]{20,})", json.dumps(node.get("assets") or []))
+    return m.group(1) if m else None
+def url_series(node):
     s = json.dumps(node.get("assets") or [])
-    m = re.search(r"videos/([a-z_]+?)-[^/\"\\]*?\d{4}-\d{2}-\d{2}\.mp4", s)
-    if m and m.group(1) not in ("markets", "stock", "how"): return m.group(1), "video_url"
-    if re.search(r"videos/markets-", s): return "markets_daily", "video_url"
-    if re.search(r"videos/stock-market-today", s): return "stock_market_today", "video_url"
-    sa = node.get("sentAt") or node.get("dueAt") or ""
+    m = re.search(r"videos/([a-z0-9_]+?)-[^/\"\\]*?\.mp4", s)          # digits allowed (anim_h2h_...); the date may sit anywhere in the name
+    if m and m.group(1) not in ("markets", "stock", "how"): return m.group(1)
+    if re.search(r"videos/markets-", s): return "markets_daily"
+    if re.search(r"videos/stock-market-today", s): return "stock_market_today"
+    return None
+def series_for(node, logs, mlogs, over, thumbs, alogs, anim_time):
+    u = url_series(node)
+    if u: return u, "video_url"
+    tk = thumb_key(node)
+    if tk and tk in thumbs: return thumbs[tk], "sibling"            # same video on another platform already mapped by its file name
+    sa = node.get("dueAt") or node.get("sentAt") or ""
     if not sa: return "unmapped", "none"
     t = uk_date(sa); d = t.strftime("%Y-%m-%d")
+    if abs(t.hour * 60 + t.minute - anim_time) <= 45:               # the Animated Shorts slot: use the animated log, never the Daily Post log
+        for r in alogs:
+            if r.get("date") == d and r.get("status") in ("posted", "scheduled"): return f"anim_{r['style']}_{r.get('episode','')}".rstrip("_"), "anim_log"
     for o in over:                                  # manual backfill rules: {"date","hour_from","hour_to","series"}
         if o["date"] == d and o.get("hour_from", 0) <= t.hour < o.get("hour_to", 24) and (not o.get("match") or re.search(o["match"], node.get("text") or "", re.I)):
             return o["series"], "override"
@@ -45,21 +58,28 @@ def series_for(node, logs, mlogs, over):
         dd = (t - dt.timedelta(days=1 if t.hour < 3 else 0)).strftime("%Y-%m-%d")
         for r in mlogs:
             if r.get("date") == dd and r.get("status") == "posted": return "markets_daily", "markets_log"
-    for r in logs:
-        if r.get("date") == d: return r["series"], "log"
+    if abs(t.hour * 60 + t.minute - (19 * 60 + 30)) <= 90:           # Daily Post slot only (19:30 UK); clips and hand posts at other times are not a series
+        for r in logs:
+            if r.get("date") == d: return r["series"], "log"
     return "unmapped", "none"
 def main(files):
     over = json.load(open(os.path.join(B, "series_overrides.json"))) if os.path.exists(os.path.join(B, "series_overrides.json")) else []
     logs, mlogs = jl(os.path.join(P, "log.jsonl")), jl(os.path.join(P, "markets_log.jsonl"))
     posts = {r["post_id"]: r for r in jl(os.path.join(B, "posts.jsonl"))}
+    alogs = jl(os.path.join(P, "animated", "log.jsonl")); rp = os.path.join(P, "animated", "registry.json")
+    hh, mm = (json.load(open(rp))["limits"].get("post_time_uk", "17:00") if os.path.exists(rp) else "17:00").split(":"); anim_time = int(hh) * 60 + int(mm)
+    nodes = [n for f in files for n in load_edges(f)]
+    thumbs = {r["thumb"]: r["series"] for r in posts.values() if r.get("thumb") and r.get("series_source") == "video_url"}
+    for n in nodes:                                                 # pass 1: videos named by their own file
+        if url_series(n) and thumb_key(n): thumbs[thumb_key(n)] = url_series(n)
     snap_at = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%MZ"); nm = 0
     with open(os.path.join(B, "metrics.jsonl"), "a") as mf:
-        for f in files:
-            for n in load_edges(f):
+        for n in nodes:
+            if True:
                 if n.get("status") != "sent" or not (n.get("text") or "").strip(): continue
                 pid = n["id"]; sa = n.get("sentAt") or ""
-                ser, src = series_for(n, logs, mlogs, over)
-                posts[pid] = {"post_id": pid, "platform": n["channelService"], "sent_at": sa, "series": ser, "series_source": src,
+                ser, src = series_for(n, logs, mlogs, over, thumbs, alogs, anim_time)
+                posts[pid] = {"post_id": pid, "platform": n["channelService"], "sent_at": sa, "series": ser, "series_source": src, "thumb": thumb_key(n),
                               "text_start": (n.get("text") or "")[:100].replace("\n", " "), "features": features(n.get("text"))}
                 mt = {x["type"]: x["value"] for x in (n.get("metrics") or [])}
                 if mt: mf.write(json.dumps({"post_id": pid, "snapshot_at": snap_at, "sent_at": sa, "platform": n["channelService"], **mt}) + "\n"); nm += 1

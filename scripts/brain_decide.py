@@ -3,6 +3,7 @@
   python3 brain_decide.py add <proposals.json>           queue every BIG proposal not yet pending/decided (weekly task)
   python3 brain_decide.py list                           show pending decisions
   python3 brain_decide.py approve <id> ["note"]          user approved: mark approved and append a dated entry to playbook/feedback.md (newest wins) / routing.json
+  python3 brain_decide.py unrest <series>                bring a rested series back / end a relaunch (only after the user says so)
   python3 brain_decide.py decline <id> ["note"]          user declined: remembered, the same proposal is not re-raised for 8 weeks
 The brain NEVER applies a big change itself: only this command, run after the user says approve."""
 import json, os, sys, datetime as dt
@@ -24,6 +25,9 @@ if a[0] == "add":
 elif a[0] == "list":
     for d in dec:
         if d["status"] == "pending": print(d["id"], "|", d["recommendation"], "|", json.dumps(d["evidence"]))
+elif a[0] == "unrest":
+    SP = os.path.join(B, "series_state.json"); stt = json.load(open(SP)) if os.path.exists(SP) else {}
+    stt.pop(a[1], None); json.dump(stt, open(SP, "w"), indent=1); print("live again:", a[1])
 elif a[0] in ("approve", "decline"):
     i = a[1]; note = a[2] if len(a) > 2 else ""
     hit = [d for d in dec if d["id"] == i and d["status"] == "pending"]
@@ -37,4 +41,12 @@ elif a[0] in ("approve", "decline"):
             rt["skip_platforms"].setdefault(d["series"], [])
             if d["platform"] not in rt["skip_platforms"][d["series"]]: rt["skip_platforms"][d["series"]].append(d["platform"])
             json.dump(rt, open(RT, "w"), indent=1)
+        if d["kind"] in ("rank_rest", "rank_relaunch") and d.get("series"):       # bench or second chance (scripts/brain_rank.py reads series_state.json)
+            SP = os.path.join(B, "series_state.json"); stt = json.load(open(SP)) if os.path.exists(SP) else {}
+            stt[d["series"]] = {"status": "rested", "since": today} if d["kind"] == "rank_rest" else {"status": "relaunch", "since": today, "relaunch_from": today}
+            json.dump(stt, open(SP, "w"), indent=1)
+        if d["kind"] == "rank_confirm":                                          # user confirmed slot changes made on incomplete data
+            RK = os.path.join(B, "ranking.json"); rk = json.load(open(RK)); pool = d["id"].split(":")[2]
+            for v in rk["pools"][pool]["series"].values(): v["slots"] = v["suggested_slots"]
+            rk["pools"][pool]["slots_applied"] = True; json.dump(rk, open(RK, "w"), indent=1)
     save(); print(d["status"], d["id"])

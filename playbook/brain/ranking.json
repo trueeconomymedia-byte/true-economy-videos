@@ -1,0 +1,658 @@
+{
+ "generated": "2026-11-23T23:03Z",
+ "week": "2026-W48",
+ "data": {
+  "fresh": true,
+  "why": [],
+  "snapshot_at": "2026-11-23T23:01Z",
+  "coverage": 1.0,
+  "expected": 87,
+  "found": 87
+ },
+ "pools": {
+  "animated": {
+   "window_days": 7,
+   "total_slots": 7,
+   "cap_per_series": 3,
+   "test_slots": 7,
+   "posts_per_day": 1,
+   "unused": 0,
+   "waiting": [],
+   "max_live": 21,
+   "live": 5,
+   "slots_applied": true,
+   "baseline": {
+    "views": {
+     "tiktok": 785,
+     "facebook": 392,
+     "instagram": 2202
+    },
+    "watch": {
+     "tiktok": 7.2,
+     "instagram": 10.7
+    }
+   },
+   "series": {
+    "funnel": {
+     "name": "Funnel",
+     "group": "new",
+     "score": 67.1,
+     "raw_score": 85.4,
+     "videos": 2,
+     "videos_all": 3,
+     "typical_index": 1.75,
+     "watch_index": 1.25,
+     "by_platform": {
+      "tiktok": {
+       "index": 3.97,
+       "n": 2
+      },
+      "facebook": {
+       "index": 0.83,
+       "n": 2
+      },
+      "instagram": {
+       "index": 1.63,
+       "n": 2
+      }
+     },
+     "hit": {
+      "points": 15.3,
+      "index": 68.9,
+      "platform": "tiktok",
+      "day": "2026-11-17",
+      "value": 54101,
+      "fade": 1.0
+     },
+     "recent_hit": true,
+     "last_posted": "2026-11-21",
+     "relaunch": false,
+     "suggested_slots": 2,
+     "slots": 2,
+     "bottom_weeks": 0
+    },
+    "howbig": {
+     "name": "How big is it really?",
+     "group": "new",
+     "score": 50.2,
+     "raw_score": 42.4,
+     "videos": 3,
+     "videos_all": 4,
+     "typical_index": 0.88,
+     "watch_index": 0.8,
+     "by_platform": {
+      "tiktok": {
+       "index": 0.67,
+       "n": 3
+      },
+      "facebook": {
+       "index": 1.0,
+       "n": 3
+      },
+      "instagram": {
+       "index": 1.0,
+       "n": 3
+      }
+     },
+     "hit": null,
+     "recent_hit": false,
+     "last_posted": "2026-11-23",
+     "relaunch": false,
+     "suggested_slots": 1,
+     "slots": 1,
+     "bottom_weeks": 0
+    },
+    "thennow": {
+     "name": "Then vs now",
+     "group": "new",
+     "score": 49.9,
+     "raw_score": 33.8,
+     "videos": 2,
+     "videos_all": 3,
+     "typical_index": 0.61,
+     "watch_index": 0.9,
+     "by_platform": {
+      "tiktok": {
+       "index": 0.51,
+       "n": 2
+      },
+      "facebook": {
+       "index": 1.04,
+       "n": 2
+      },
+      "instagram": {
+       "index": 0.42,
+       "n": 2
+      }
+     },
+     "hit": null,
+     "recent_hit": false,
+     "last_posted": "2026-11-20",
+     "relaunch": false,
+     "suggested_slots": 1,
+     "slots": 1,
+     "bottom_weeks": 0
+    },
+    "h2h": {
+     "name": "Head to head",
+     "group": "new",
+     "score": 49.2,
+     "raw_score": 31.6,
+     "videos": 2,
+     "videos_all": 3,
+     "typical_index": 0.59,
+     "watch_index": 0.83,
+     "by_platform": {
+      "tiktok": {
+       "index": 0.63,
+       "n": 2
+      },
+      "facebook": {
+       "index": 0.71,
+       "n": 2
+      },
+      "instagram": {
+       "index": 0.46,
+       "n": 2
+      }
+     },
+     "hit": null,
+     "recent_hit": false,
+     "last_posted": "2026-11-22",
+     "relaunch": false,
+     "suggested_slots": 1,
+     "slots": 1,
+     "bottom_weeks": 0
+    },
+    "hundred": {
+     "name": "Who gets what",
+     "group": "new",
+     "score": 58,
+     "raw_score": null,
+     "videos": 0,
+     "videos_all": 0,
+     "typical_index": null,
+     "watch_index": null,
+     "by_platform": {},
+     "hit": null,
+     "recent_hit": false,
+     "last_posted": null,
+     "relaunch": false,
+     "suggested_slots": 2,
+     "slots": 2,
+     "bottom_weeks": 0
+    }
+   },
+   "changes": []
+  },
+  "daily": {
+   "window_days": 21,
+   "total_slots": 21,
+   "cap_per_series": 9,
+   "test_slots": 21,
+   "posts_per_day": 1,
+   "unused": 0,
+   "waiting": [],
+   "max_live": 21,
+   "live": 14,
+   "slots_applied": true,
+   "baseline": {
+    "views": {
+     "tiktok": 548,
+     "facebook": 358,
+     "instagram": 471
+    },
+    "watch": {
+     "tiktok": 6.3,
+     "instagram": 6.5
+    }
+   },
+   "series": {
+    "how_company": {
+     "name": "How (company) makes money?",
+     "group": "new",
+     "score": 50.1,
+     "raw_score": 48.6,
+     "videos": 5,
+     "videos_all": 5,
+     "typical_index": 0.49,
+     "watch_index": 1.0,
+     "by_platform": {
+      "tiktok": {
+       "index": 0.66,
+       "n": 6
+      },
+      "facebook": {
+       "index": 0.18,
+       "n": 5
+      },
+      "instagram": {
+       "index": 0.97,
+       "n": 5
+      }
+     },
+     "hit": {
+      "points": 19.2,
+      "index": 202.7,
+      "platform": "facebook",
+      "day": "2026-11-17",
+      "value": 72580,
+      "fade": 1.0
+     },
+     "recent_hit": true,
+     "last_posted": "2026-11-17",
+     "relaunch": false,
+     "suggested_slots": 1,
+     "slots": 1,
+     "bottom_weeks": 0
+    },
+    "country_vs_country": {
+     "name": "Country vs country",
+     "group": "new",
+     "score": 59.2,
+     "raw_score": 61.5,
+     "videos": 2,
+     "videos_all": 4,
+     "typical_index": 1.49,
+     "watch_index": 1.0,
+     "by_platform": {
+      "tiktok": {
+       "index": 0.96,
+       "n": 2
+      },
+      "facebook": {
+       "index": 1.21,
+       "n": 2
+      },
+      "instagram": {
+       "index": 2.85,
+       "n": 2
+      }
+     },
+     "hit": null,
+     "recent_hit": false,
+     "last_posted": "2026-11-23",
+     "relaunch": false,
+     "suggested_slots": 1,
+     "slots": 1,
+     "bottom_weeks": 0
+    },
+    "wave": {
+     "name": "Wave visual: 8-10 countries compared",
+     "group": "new",
+     "score": 90.2,
+     "raw_score": 122.3,
+     "videos": 3,
+     "videos_all": 3,
+     "typical_index": 49.25,
+     "watch_index": 1.98,
+     "by_platform": {
+      "tiktok": {
+       "index": 182.3,
+       "n": 3
+      },
+      "facebook": {
+       "index": 38.96,
+       "n": 3
+      },
+      "instagram": {
+       "index": 16.82,
+       "n": 3
+      }
+     },
+     "hit": {
+      "points": 20.5,
+      "index": 287.2,
+      "platform": "facebook",
+      "day": "2026-11-13",
+      "value": 102829,
+      "fade": 1.0
+     },
+     "recent_hit": true,
+     "last_posted": "2026-11-18",
+     "relaunch": false,
+     "suggested_slots": 6,
+     "slots": 6,
+     "bottom_weeks": 0
+    },
+    "explained": {
+     "name": "Explained: Why are / Why do / What are",
+     "group": "new",
+     "score": 46.2,
+     "raw_score": 40.4,
+     "videos": 4,
+     "videos_all": 5,
+     "typical_index": 0.85,
+     "watch_index": 0.76,
+     "by_platform": {
+      "tiktok": {
+       "index": 0.91,
+       "n": 4
+      },
+      "facebook": {
+       "index": 0.99,
+       "n": 4
+      },
+      "instagram": {
+       "index": 0.68,
+       "n": 4
+      }
+     },
+     "hit": null,
+     "recent_hit": false,
+     "last_posted": "2026-11-21",
+     "relaunch": false,
+     "suggested_slots": 1,
+     "slots": 1,
+     "bottom_weeks": 0
+    },
+    "who_owns": {
+     "name": "Who owns...?",
+     "group": "new",
+     "score": 59.3,
+     "raw_score": 61.8,
+     "videos": 2,
+     "videos_all": 2,
+     "typical_index": 1.06,
+     "watch_index": 1.1,
+     "by_platform": {
+      "tiktok": {
+       "index": 4.65,
+       "n": 2
+      },
+      "facebook": {
+       "index": 0.41,
+       "n": 2
+      },
+      "instagram": {
+       "index": 0.62,
+       "n": 2
+      }
+     },
+     "hit": {
+      "points": 8.5,
+      "index": 10.6,
+      "platform": "tiktok",
+      "day": "2026-11-14",
+      "value": 5788,
+      "fade": 1.0
+     },
+     "recent_hit": true,
+     "last_posted": "2026-11-14",
+     "relaunch": false,
+     "suggested_slots": 1,
+     "slots": 1,
+     "bottom_weeks": 0
+    },
+    "how_business": {
+     "name": "How (business) makes money?",
+     "group": "new",
+     "score": 68.4,
+     "raw_score": 120.3,
+     "videos": 1,
+     "videos_all": 2,
+     "typical_index": 103.88,
+     "watch_index": 1.52,
+     "by_platform": {
+      "tiktok": {
+       "index": 578.0,
+       "n": 1
+      },
+      "facebook": {
+       "index": 234.88,
+       "n": 1
+      },
+      "instagram": {
+       "index": 8.26,
+       "n": 1
+      }
+     },
+     "hit": {
+      "points": 23.0,
+      "index": 578.0,
+      "platform": "tiktok",
+      "day": "2026-11-12",
+      "value": 316743,
+      "fade": 1.0
+     },
+     "recent_hit": true,
+     "last_posted": "2026-11-22",
+     "relaunch": false,
+     "suggested_slots": 2,
+     "slots": 2,
+     "bottom_weeks": 0
+    },
+    "how_finance": {
+     "name": "How (finance) works",
+     "group": "new",
+     "score": 62.9,
+     "raw_score": 87.4,
+     "videos": 1,
+     "videos_all": 1,
+     "typical_index": 3.2,
+     "watch_index": 1.25,
+     "by_platform": {
+      "tiktok": {
+       "index": 1.2,
+       "n": 1
+      },
+      "facebook": {
+       "index": 3.85,
+       "n": 1
+      },
+      "instagram": {
+       "index": 7.09,
+       "n": 1
+      }
+     },
+     "hit": null,
+     "recent_hit": false,
+     "last_posted": "2026-11-19",
+     "relaunch": false,
+     "suggested_slots": 2,
+     "slots": 2,
+     "bottom_weeks": 0
+    },
+    "price_of": {
+     "name": "Price of... comparisons",
+     "group": "new",
+     "score": 58,
+     "raw_score": null,
+     "videos": 0,
+     "videos_all": 0,
+     "typical_index": null,
+     "watch_index": null,
+     "by_platform": {},
+     "hit": null,
+     "recent_hit": false,
+     "last_posted": null,
+     "relaunch": false,
+     "suggested_slots": 1,
+     "slots": 1,
+     "bottom_weeks": 0
+    },
+    "inflation_pocket": {
+     "name": "What \u00a3100 / $100 bought then vs now",
+     "group": "new",
+     "score": 56.2,
+     "raw_score": 47.1,
+     "videos": 1,
+     "videos_all": 1,
+     "typical_index": 0.99,
+     "watch_index": 0.86,
+     "by_platform": {
+      "tiktok": {
+       "index": 0.69,
+       "n": 1
+      },
+      "facebook": {
+       "index": 1.36,
+       "n": 1
+      },
+      "instagram": {
+       "index": 1.03,
+       "n": 1
+      }
+     },
+     "hit": null,
+     "recent_hit": false,
+     "last_posted": "2026-11-08",
+     "relaunch": false,
+     "suggested_slots": 1,
+     "slots": 1,
+     "bottom_weeks": 0
+    },
+    "us_vs_uk": {
+     "name": "US vs UK economy",
+     "group": "new",
+     "score": 59.1,
+     "raw_score": 61.2,
+     "videos": 2,
+     "videos_all": 2,
+     "typical_index": 1.15,
+     "watch_index": 0.92,
+     "by_platform": {
+      "tiktok": {
+       "index": 10.69,
+       "n": 1
+      },
+      "facebook": {
+       "index": 0.19,
+       "n": 2
+      },
+      "instagram": {
+       "index": 0.73,
+       "n": 2
+      }
+     },
+     "hit": {
+      "points": 8.6,
+      "index": 10.7,
+      "platform": "tiktok",
+      "day": "2026-11-07",
+      "value": 5859,
+      "fade": 1.0
+     },
+     "recent_hit": true,
+     "last_posted": "2026-11-07",
+     "relaunch": false,
+     "suggested_slots": 1,
+     "slots": 1,
+     "bottom_weeks": 0
+    },
+    "where_tax_goes": {
+     "name": "Where does the tax go?",
+     "group": "new",
+     "score": 58,
+     "raw_score": null,
+     "videos": 0,
+     "videos_all": 0,
+     "typical_index": null,
+     "watch_index": null,
+     "by_platform": {},
+     "hit": null,
+     "recent_hit": false,
+     "last_posted": null,
+     "relaunch": false,
+     "suggested_slots": 1,
+     "slots": 1,
+     "bottom_weeks": 0
+    },
+    "wealth_gap": {
+     "name": "Wealth and inequality",
+     "group": "new",
+     "score": 54.6,
+     "raw_score": 37.4,
+     "videos": 1,
+     "videos_all": 1,
+     "typical_index": 0.63,
+     "watch_index": 1.04,
+     "by_platform": {
+      "tiktok": {
+       "index": 0.66,
+       "n": 2
+      },
+      "facebook": {
+       "index": 1.05,
+       "n": 1
+      },
+      "instagram": {
+       "index": 0.36,
+       "n": 1
+      }
+     },
+     "hit": null,
+     "recent_hit": false,
+     "last_posted": "2026-10-26",
+     "relaunch": false,
+     "suggested_slots": 1,
+     "slots": 1,
+     "bottom_weeks": 0
+    },
+    "biggest_companies": {
+     "name": "Biggest companies / rankings",
+     "group": "new",
+     "score": 55.7,
+     "raw_score": 44.0,
+     "videos": 1,
+     "videos_all": 1,
+     "typical_index": 0.76,
+     "watch_index": 1.11,
+     "by_platform": {
+      "tiktok": {
+       "index": 1.14,
+       "n": 1
+      },
+      "facebook": {
+       "index": 0.51,
+       "n": 1
+      },
+      "instagram": {
+       "index": 0.76,
+       "n": 1
+      }
+     },
+     "hit": null,
+     "recent_hit": false,
+     "last_posted": "2026-11-01",
+     "relaunch": false,
+     "suggested_slots": 1,
+     "slots": 1,
+     "bottom_weeks": 0
+    },
+    "trend": {
+     "name": "Trending now (economic)",
+     "group": "new",
+     "score": 45.5,
+     "raw_score": 20.6,
+     "videos": 2,
+     "videos_all": 2,
+     "typical_index": 0.52,
+     "watch_index": 0.54,
+     "by_platform": {
+      "tiktok": {
+       "index": 0.61,
+       "n": 2
+      },
+      "facebook": {
+       "index": 0.68,
+       "n": 3
+      },
+      "instagram": {
+       "index": 0.34,
+       "n": 3
+      }
+     },
+     "hit": null,
+     "recent_hit": false,
+     "last_posted": "2026-10-27",
+     "relaunch": false,
+     "suggested_slots": 1,
+     "slots": 1,
+     "bottom_weeks": 0
+    }
+   },
+   "changes": []
+  }
+ }
+}
