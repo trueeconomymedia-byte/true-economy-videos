@@ -1,5 +1,4 @@
-# True Economy "If it were 100" series sound (TEST 23 Nov 2026). Same instruments and the same reveal signature (swell,
-# low hit, piano chord) as the shared Animated Shorts sound (anim_shared/beats_audio.py), but its OWN feel so the series
+# True Economy "If it were 100" series sound (TEST 23 Nov 2026). Same instruments as the shared Animated Shorts sound (anim_shared/beats_audio.py), but its OWN feel so the series
 # is not a copy of the others: key of D minor (the shared bed is A minor), 108 bpm (shared 96), a rolling piano arpeggio
 # instead of the sparse motif, and two signature effects: a soft "stack" knock as each chunk lands on the left
 # (beats 'stacks': [[t,g]]) and a smooth "pour" whoosh as each ribbon flows across (beats 'pours': [[t,d]]), plus low soft stacking thuds as each % counts up (beats 'counts': [[t0,t1]]).
@@ -126,8 +125,20 @@ for t0,t1 in B.get('counts',[]):
     add('fx',knock(1.0,62),t1-0.02,0.80,0.3)
 for tt,m in B['notes']: add('fx',epiano(mf(m),2.5,0.6),tt,0.09)
 add('fx',impact(0.45),B['hold'],0.35)
-R=B['reveal']; add('fx',swell(1.4,250,3500),R-1.4,0.10); add('fx',impact(0.9),R,0.75); hits.append(R)
-add('fx',stinger([mf(m) for m in (62,69,74,77,81)]),R,0.22)   # the same signature chord shape, in this series' key
+# THIS SERIES' OWN REVEAL (user 23 Nov 2026: different from the other series, and no high ring): a quick "flip" sweep for
+# the rotating title, a deep double thud (the last block landing), then a warm LOW piano-and-pad chord that settles
+R=B['reveal']; hits.append(R)
+def flip(d=0.32):
+    n=int(d*SR); x=rng.standard_normal(n); out=np.zeros(n); Bk=512
+    for i in range(0,n,Bk):
+        u=i/n; fc=500*(3200/500)**(1-abs(2*u-1))
+        seg=bp(x[max(0,i-4*Bk):i+Bk],fc*0.6,fc*1.5)[-min(Bk,n-i):]; out[i:i+len(seg)]=seg
+    return out*np.sin(np.pi*np.arange(n)/n)**2
+add('fx',swell(0.9,200,1800),R-0.9,0.07); add('fx',flip(),R-0.05,0.10); add('fx',flip(),R+0.12,0.07)
+add('fx',knock(1.0,70),R,0.9); add('fx',knock(1.2,48),R+0.16,1.0); add('fx',impact(0.8),R+0.16,0.5)
+for j,m in enumerate((38,50,57,62,65)):                                     # D2 D3 A3 D4 F4: warm and low, no shimmer
+    add('fx',lp(epiano(mf(m),4.2,0.9-0.1*j),1800),R+0.16+j*0.02,0.26)
+    if m>=50: add('fx',padnote(mf(m),3.6),R+0.16,0.06)
 duck=np.ones(N)
 for tt in hits:
     i=int(tt*SR); n=int(1.6*SR); d=1-0.45*np.exp(-np.arange(n)/SR*2.2)
