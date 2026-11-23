@@ -58,6 +58,13 @@ Start from the episode `priority` (40-55) and add or subtract:
   strong +10, weak -10; "not enough data" = 0. Never invent this.
 - Variety: -15 if the same EPISODE was the last animated post; -10 if the same episode ran in the last 7 days.
 - Trial series: + `trial_boost` from anim_plan.py (helps a new style get ~1 post a week for its first 4 weeks).
+- SERIES RANKING (user, 23 Nov 2026; on when anim_plan.py prints a `ranking` block): the weekly brain shares the week's slots between
+  series by performance (playbook/brain/ranking.json; rules in playbook/brain/README.md). Each series then shows `rank_slots`,
+  `slots_left`, `over_slots` and `rank_boost`. Add `rank_boost` to that series' candidates (it replaces trial_boost, which is 0).
+  Choose ONLY from series with `slots_left` > 0; a series with `over_slots: true` may be used only when no series with slots left
+  has a verified candidate that reaches its min_score (a day is never left empty because of the ranking). The hard limits in
+  section 1, the min_score and the verification standard are unchanged. In the log `reason` and the final message say the
+  chosen series' rank group, score and slots (e.g. "new, score 67, 1 of 2 slots left"). Never edit ranking.json or the slots.
 - Verifiability: if the numbers cannot be confirmed from a named primary source plus a second source today, the
   candidate is dropped (score irrelevant).
 Post the best candidate only if its score is at least its `min_score` (60 by default; the news bonus needs 75).

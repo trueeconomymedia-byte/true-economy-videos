@@ -32,7 +32,7 @@
  "exploration_share": 0.2,
  "min_caption_posts_per_side_for_proposal": 10,
  "rank": {
-  "enabled": false,
+  "enabled": true,
   "_about": "Series ranking (scripts/brain_rank.py). enabled=true makes scripts/anim_plan.py and scripts/daily_plan.py follow playbook/brain/ranking.json. To post more often change ONE number: animated = playbook/animated/registry.json limits.max_posts_per_day; daily = pools.daily.posts_per_day here. Every other setting has a default in brain_rank.py DEF and can be overridden here.",
   "pools": {
    "daily": {

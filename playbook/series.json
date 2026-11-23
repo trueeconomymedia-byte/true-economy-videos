@@ -1,6 +1,7 @@
 {
  "version": 1,
  "rules": [
+  "SERIES RANKING (23 Nov 2026): run `python3 scripts/daily_plan.py` first. If ranking_on is true, its `order` replaces `rotation` and `fallbacks` (see the 23 Nov entry in feedback.md); the topic rules below still apply.",
   "ONE daily card post. Slot = ISO week number mod 4 -> row of `rotation`, weekday Mon=0 -> column.",
   "Monthly special: if today is a Saturday, no us_vs_uk in the last 28 days, and the month has no us_vs_uk yet, use us_vs_uk instead of the planned series.",
   "how_company only if a candidate company has a NEWER reported quarter than the one in the log; otherwise use `fallbacks`.",
