@@ -22,15 +22,16 @@ function el(p,t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e
 function T(p,x,y,s,size,fill,anchor,w){return el(p,'text',{x,y,'font-family':'Inter','font-weight':w||800,'font-size':size,fill,'text-anchor':anchor||'middle'},s)}
 // shared SAFE title zone (same as every Animated Shorts series): baselines 395/490; all content inside x 60-1020
 const T1=395,T2=490;
-function headline(g,l1,l2,mark){
- const hs=86, mk=el(g,'rect',{fill:C.gold});
- const t1=el(g,'text',{x:540,y:T1,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l1);
- const t2=el(g,'text',{x:540,y:T2,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l2);
+function headline(g,l1,l2,mark,fl){fl=fl||[1,1];   // fl = vertical flip scale of each line (1 = flat, 0 = edge-on) for the rotating reveal
+ const hs=86,g1=el(g,'g',{}),g2=el(g,'g',{}),in1=l1.includes(mark),mk=el(in1?g1:g2,'rect',{fill:C.gold});
+ const t1=el(g1,'text',{x:540,y:T1,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l1);
+ const t2=el(g2,'text',{x:540,y:T2,'text-anchor':'middle','font-family':'Lora','font-weight':700,'font-size':hs,fill:C.ink},l2);
  const w=Math.max(t1.getComputedTextLength(),t2.getComputedTextLength());
  if(w>900){const f=Math.floor(hs*900/w);t1.setAttribute('font-size',f);t2.setAttribute('font-size',f)}
- const in1=l1.includes(mark),tx=in1?t1:t2,line=in1?l1:l2,i0=line.indexOf(mark),fs=+tx.getAttribute('font-size');
+ const tx=in1?t1:t2,line=in1?l1:l2,i0=line.indexOf(mark),fs=+tx.getAttribute('font-size');
  const xs=tx.getStartPositionOfChar(i0).x,xe=tx.getEndPositionOfChar(i0+mark.length-1).x;
  Object.entries({x:xs-6,width:xe-xs+12,y:(in1?T1:T2)-Math.round(fs*.4),height:Math.round(fs*.47)}).forEach(([k,v])=>mk.setAttribute(k,v));
+ [[g1,T1],[g2,T2]].forEach(([gg,y],k)=>{const c=y-fs*.3;gg.setAttribute('transform',`translate(0 ${c}) scale(1 ${Math.max(0.001,fl[k]).toFixed(3)}) translate(0 ${-c})`);if(fl[k]<0.02)gg.setAttribute('opacity',0)});
 }
 // ---- layout (v3, flow style LEFT -> RIGHT, user 22 Nov 2026): a column of 100 blocks (one household each) on the left;
 // each group's blocks flow RIGHT as a ribbon with flowing dashes into its share of the bar on the right. The video OPENS
@@ -60,8 +61,10 @@ function answer(){FRAME(TL.end-0.05)}
 function FRAME(t){
  const sv=document.getElementById('sv');sv.innerHTML='';const g=el(sv,'g',{});const defs=el(sv,'defs',{});
  const cold=t<COLD,ans=cold?0:prog(t,TL.ans,TL.ans+0.45),nP=P.length;
- headline(el(g,'g',{opacity:1-ans*1.2}),...D.headline_q);
- headline(el(g,'g',{opacity:prog(t,TL.ans+0.1,TL.ans+0.5)}),...D.headline_a);
+ // ROTATING REVEAL (user 23 Nov 2026): each title line flips over (edge-on, then back) from the question to the answer,
+ // line 2 a beat after line 1; the "?%" flips to the answer the same way
+ {const A=cold?-9:TL.ans,rot=k=>eio(prog(t,A+k*0.09,A+k*0.09+0.5)),out=k=>Math.cos(Math.PI/2*Math.min(1,rot(k)*2)),inn=k=>Math.sin(Math.PI/2*Math.max(0,rot(k)*2-1));
+  headline(g,...D.headline_q,[out(0),out(1)]);headline(g,...D.headline_a,[inn(0),inn(1)])}
  const z=cold?1.02-0.02*eio(prog(t,0,COLD)):1+0.012*prog(t,COLD,TL.end);   // never completely still
  const W=el(g,'g',{transform:`translate(540 1050) scale(${z}) translate(-540 -1050)`});
  // how far each ribbon has travelled (0..1) and how much of its number shows. Opening: everything is there, then the
@@ -91,11 +94,11 @@ function FRAME(t){
  P.forEach((p,k)=>{const lastp=k===nP-1,lp=st[k].land;
   if(lp>0)el(W,'rect',{x:XR0,y:p.b0+1,width:(XR1-XR0)*lp,height:p.b1-p.b0-2,fill:p.ink});
   const show=lastp?(cold?st[k].numOp:eo(prog(t,TL.hold,TL.hold+0.4))):st[k].numOp;if(show<=0)return;
-  const num=lastp?(ans>0?Math.round(p.share)+'%':'?%'):Math.round(p.share*st[k].num)+'%';
-  const ym=(p.b0+p.b1)/2+24,x=XR1+18,pop=lastp?1+0.16*Math.sin(Math.PI*clamp(ans)):1,lg=el(W,'g',{opacity:show});
+  const fr=cold?0:eio(prog(t,TL.ans,TL.ans+0.5)),num=lastp?(fr>=0.5?Math.round(p.share)+'%':'?%'):Math.round(p.share*st[k].num)+'%';
+  const ym=(p.b0+p.b1)/2+24,x=XR1+18,lg=el(W,'g',{opacity:show});
   const tt=T(lg,x,ym,num,66,lastp?C.ink:p.ink,'start',800),w=tt.getComputedTextLength();
-  tt.setAttribute('transform',`translate(${x} ${ym-22}) scale(${pop}) translate(${-x} ${-(ym-22)})`);
-  if(lastp&&ans>0)lg.insertBefore(el(lg,'rect',{x:x-8,y:ym-26,width:(w+16)*eo(ans),height:30,fill:C.gold}),tt)});
+  if(lastp){lg.setAttribute('transform',`translate(0 ${ym-22}) scale(1 ${Math.max(0.001,Math.abs(Math.cos(Math.PI*fr))).toFixed(3)}) translate(0 ${-(ym-22)})`);
+   if(fr>=0.5)lg.insertBefore(el(lg,'rect',{x:x-8,y:ym-26,width:w+16,height:30,fill:C.gold}),tt)}});
  {const k=eo(prog(t,TL.ans+0.6,TL.ans+1.1));if(k>0){const s=T(el(g,'g',{opacity:k}),540,1570,D.source,22,'#444','middle',500);const l=s.getComputedTextLength();if(l>900)s.setAttribute('font-size',(22*900/l).toFixed(1))}}
 }
 </script></body></html>
