@@ -2,7 +2,7 @@
 # low hit, piano chord) as the shared Animated Shorts sound (anim_shared/beats_audio.py), but its OWN feel so the series
 # is not a copy of the others: key of D minor (the shared bed is A minor), 108 bpm (shared 96), a rolling piano arpeggio
 # instead of the sparse motif, and two signature effects: a soft "stack" knock as each chunk lands on the left
-# (beats 'stacks': [[t,g]]) and a smooth "pour" whoosh as each ribbon flows across (beats 'pours': [[t,d]]).
+# (beats 'stacks': [[t,g]]) and a smooth "pour" whoosh as each ribbon flows across (beats 'pours': [[t,d]]), plus a quiet rising run of piano notes as each % counts up (beats 'counts': [[t0,t1]]).
 # Usage: python3 hundred_audio.py beats.json out.wav
 import numpy as np, wave, json, sys
 BEATS=json.load(open(sys.argv[1])); OUT=sys.argv[2]
@@ -118,6 +118,11 @@ for tt,g in B.get('stacks',[]): add('fx',knock(g),tt,0.5)
 for t0,d in B.get('pours',[]):
     add('fx',pour(d),t0,0.085)
     for j in range(10): add('fx',softclick(0.6),t0+d*(0.15+0.75*rng.random()),0.05,rng.uniform(-.5,.5))
+# count-up: a quick, quiet run of soft piano notes rising with the % on the right, landing on a slightly brighter last note
+for t0,t1 in B.get('counts',[]):
+    run=[62,65,67,69,72,74,77]
+    for j,m in enumerate(run):
+        u=j/(len(run)-1); add('fx',epiano(mf(m+12),0.5 if j<len(run)-1 else 1.4,0.5),t0+(t1-t0)*(1-(1-u)**1.6),0.05+0.03*u,0.35)
 for tt,m in B['notes']: add('fx',epiano(mf(m),2.5,0.6),tt,0.09)
 add('fx',impact(0.45),B['hold'],0.35)
 R=B['reveal']; add('fx',swell(1.4,250,3500),R-1.4,0.10); add('fx',impact(0.9),R,0.75); hits.append(R)
