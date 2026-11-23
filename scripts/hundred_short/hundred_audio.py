@@ -1,4 +1,4 @@
-# True Economy "If it were 100" series sound (TEST 23 Nov 2026). Same instruments as the shared Animated Shorts sound (anim_shared/beats_audio.py), but its OWN feel so the series
+# True Economy "If it were 100" series sound (approved by the user 23 Nov 2026). Same instruments as the shared Animated Shorts sound (anim_shared/beats_audio.py), but its OWN feel so the series
 # is not a copy of the others: key of D minor (the shared bed is A minor), 108 bpm (shared 96), a rolling piano arpeggio
 # instead of the sparse motif, and two signature effects: a soft "stack" knock as each chunk lands on the left
 # (beats 'stacks': [[t,g]]) and a smooth "pour" whoosh as each ribbon flows across (beats 'pours': [[t,d]]), plus low soft stacking thuds as each % counts up (beats 'counts': [[t0,t1]]).

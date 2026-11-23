@@ -258,6 +258,71 @@
      "min_score": 75
     }
    }
+  },
+  "hundred": {
+   "name": "Who gets what (a share-out as a left-to-right flow)",
+   "status": "trial",
+   "since": "2026-11-23",
+   "rules": "playbook/animated/hundred.md",
+   "idea_bank": "playbook/animated/hundred_bank.jsonl",
+   "title_zone": "same SAFE title zone as the other series: 2 centred lines, Lora Bold 86 px (auto-shrinks), baselines y=395 and y=490; chart x 60-1020, y 570-1500",
+   "render": "python3 scripts/hundred_short/hundred_short.py {data} {outdir} {slug}",
+   "outputs": {
+    "buffer": "{slug}-auto.mp4",
+    "youtube": "{slug}-youtube.mp4",
+    "thumb": "{slug}-thumb-tease.png",
+    "thumb_answer": "{slug}-thumb-answer.png",
+    "qa": [
+     "{slug}-qa-youtube.jpg"
+    ],
+    "thumbnail_offset_ms": "thumb_ms in {slug}-build.json (33 = the first frame: the finished chart with the last share hidden as ?%)"
+   },
+   "unsupported_exit": 3,
+   "episodes": {
+    "wealth": {
+     "name": "Who owns the wealth",
+     "gap_days": 7,
+     "max_in_7_days": 1,
+     "repeat_key": "subject + country + data release",
+     "priority": 55
+    },
+    "tax": {
+     "name": "Who pays a tax",
+     "gap_days": 7,
+     "max_in_7_days": 1,
+     "repeat_key": "tax + country + year",
+     "priority": 55
+    },
+    "income": {
+     "name": "Who earns the income",
+     "gap_days": 7,
+     "max_in_7_days": 1,
+     "repeat_key": "subject + country + year",
+     "priority": 50
+    },
+    "assets": {
+     "name": "Who owns one kind of asset",
+     "gap_days": 7,
+     "max_in_7_days": 1,
+     "repeat_key": "asset + country + release",
+     "priority": 45
+    },
+    "world": {
+     "name": "The world shared out",
+     "gap_days": 10,
+     "max_in_7_days": 1,
+     "repeat_key": "subject + report",
+     "priority": 45
+    },
+    "news": {
+     "name": "Bonus: the split behind today's headline",
+     "gap_days": 7,
+     "max_in_7_days": 1,
+     "repeat_key": "story",
+     "priority": 40,
+     "min_score": 75
+    }
+   }
   }
  }
 }
