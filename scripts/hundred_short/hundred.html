@@ -63,7 +63,7 @@ function FRAME(t){
  const cold=t<COLD,ans=cold?0:prog(t,TL.ans,TL.ans+0.45),nP=P.length;
  // ROTATING REVEAL (user 23 Nov 2026): each title line flips over (edge-on, then back) from the question to the answer,
  // line 2 a beat after line 1; the "?%" flips to the answer the same way
- {const A=cold?-9:TL.ans,rot=k=>eio(prog(t,A+k*0.09,A+k*0.09+0.5)),out=k=>Math.cos(Math.PI/2*Math.min(1,rot(k)*2)),inn=k=>Math.sin(Math.PI/2*Math.max(0,rot(k)*2-1));
+ {const A=TL.ans,rot=k=>eio(prog(t,A+k*0.09,A+k*0.09+0.5)),out=k=>Math.cos(Math.PI/2*Math.min(1,rot(k)*2)),inn=k=>Math.sin(Math.PI/2*Math.max(0,rot(k)*2-1));
   headline(g,...D.headline_q,[out(0),out(1)]);headline(g,...D.headline_a,[inn(0),inn(1)])}
  const z=cold?1.02-0.02*eio(prog(t,0,COLD)):1+0.012*prog(t,COLD,TL.end);   // never completely still
  const W=el(g,'g',{transform:`translate(540 1050) scale(${z}) translate(-540 -1050)`});
