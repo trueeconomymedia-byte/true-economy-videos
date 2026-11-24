@@ -1,0 +1,112 @@
+{
+ "series": "wave",
+ "topic": "Share of world CO2 emissions, top-10 emitters 1990 vs 2024",
+ "data_m": {
+  "1990": {
+   "United States": 5.13,
+   "Russia": 2.549,
+   "China": 2.488,
+   "Japan": 1.154,
+   "Germany": 1.055,
+   "Ukraine": 0.707,
+   "United Kingdom": 0.602,
+   "India": 0.584,
+   "Canada": 0.459,
+   "Italy": 0.438
+  },
+  "2024": {
+   "China": 12.401,
+   "United States": 4.912,
+   "India": 3.176,
+   "Russia": 1.788,
+   "Japan": 0.97,
+   "Iran": 0.843,
+   "Indonesia": 0.792,
+   "Saudi Arabia": 0.631,
+   "South Korea": 0.585,
+   "Germany": 0.574
+  }
+ },
+ "mt": {
+  "1990": {
+   "United States": 5130.0,
+   "Russia": 2548.7,
+   "China": 2488.3,
+   "Japan": 1154.2,
+   "Germany": 1054.8,
+   "Ukraine": 706.5,
+   "United Kingdom": 601.9,
+   "India": 584.1,
+   "Canada": 459.2,
+   "Italy": 438.2
+  },
+  "2024": {
+   "China": 12401.1,
+   "United States": 4911.7,
+   "India": 3175.6,
+   "Russia": 1788.5,
+   "Japan": 969.6,
+   "Iran": 842.6,
+   "Indonesia": 791.9,
+   "Saudi Arabia": 630.8,
+   "South Korea": 584.8,
+   "Germany": 573.9
+  }
+ },
+ "world_mt": {
+  "1990": 22779.5,
+  "2024": 38647.4
+ },
+ "sources": [
+  "https://ourworldindata.org/co2-emissions (Global Carbon Project, owid/co2-data GitHub, fossil CO2 + cement)",
+  "https://www.carbonbrief.org/analysis-fossil-fuel-co2-emissions-to-set-new-record-in-2025-as-land-sink-recovers/ (China 32%, US 13%, India 8% of 2025 global)",
+  "https://www.worldometers.info/co2-emissions/china-co2-emissions/ (IEA-EDGAR: China 33.1% 2024, 10.7% 1990)",
+  "https://edgar.jrc.ec.europa.eu/report_2025"
+ ],
+ "data_share": {
+  "1990": {
+   "United States": 22.52,
+   "Russia": 11.189,
+   "China": 10.923,
+   "Japan": 5.067,
+   "Germany": 4.63,
+   "Ukraine": 3.102,
+   "United Kingdom": 2.642,
+   "India": 2.564,
+   "Canada": 2.016,
+   "Italy": 1.924
+  },
+  "2024": {
+   "China": 32.088,
+   "United States": 12.709,
+   "India": 8.217,
+   "Russia": 4.628,
+   "Japan": 2.509,
+   "Iran": 2.18,
+   "Indonesia": 2.049,
+   "Saudi Arabia": 1.632,
+   "South Korea": 1.513,
+   "Germany": 1.485
+  }
+ },
+ "crosscheck_iea_edgar_worldometers_gt": {
+  "1990": {
+   "China": 2.414,
+   "United States": 4.984,
+   "India": 0.601,
+   "Russia": 2.436,
+   "Japan": 1.162,
+   "Germany": 1.013,
+   "World": 22.66
+  },
+  "2024": {
+   "China": 13.125,
+   "United States": 4.632,
+   "India": 3.154,
+   "Russia": 2.009,
+   "Japan": 0.972,
+   "Germany": 0.58,
+   "World": 39.63
+  }
+ }
+}
