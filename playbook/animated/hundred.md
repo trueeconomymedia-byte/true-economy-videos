@@ -10,8 +10,9 @@ Renderer: `python3 scripts/hundred_short/hundred_short.py data.json OUTDIR SLUG`
 look, timing or sound inside the renderer; only the data changes.
 
 FIXED DESIGN (all user rules, 22-23 Nov 2026; renderer defaults, never override):
-- OPENING: the first frame is the finished chart with the LAST share hidden as "?%" (this is the cover, thumbnailOffset
-  33); it rewinds to empty in about a second (never still), then plays. The ending is the same chart with the answer,
+- OPENING (faster, user 24 Nov 2026): the first frame is the finished chart with the LAST share hidden as "?%" (this is
+  the cover, thumbnailOffset 33); it rewinds to empty in 0.75 s (a quick glimpse, never still) and the first chunk starts
+  stacking the moment the rewind ends, so the video gets going fast. The ending is the same chart with the answer,
   so it loops.
 - ONE THING AT A TIME: a chunk stacks on the left, its ribbon flows across, its % counts up on the right; then the next
   chunk stacks on top. No little blocks on the left (solid chunks), no outline on the right.

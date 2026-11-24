@@ -36,7 +36,7 @@ function headline(g,l1,l2,mark,fl){fl=fl||[1,1];   // fl = vertical flip scale o
 // each group's blocks flow RIGHT as a ribbon with flowing dashes into its share of the bar on the right. The video OPENS
 // on the finished chart (the last share hidden as "?%": this is the cover), rewinds quickly to the start, then plays one
 // ribbon at a time; the last is the gold reveal, which brings it back to the opening picture (loop).
-const XL0=250,XL1=294,XR0=786,XR1=830,Y0=600,Y1=1500,U=(Y1-Y0)/100,LG='#FBE3A0',DG='#C89B12',COLD=1.25;
+const XL0=250,XL1=294,XR0=786,XR1=830,Y0=600,Y1=1500,U=(Y1-Y0)/100,LG='#FBE3A0',DG='#C89B12',COLD=0.75;
 let D,TL,P;
 function BUILD(d){
  D=d;const G=D.groups,last=G[G.length-1];P=[...G.slice(0,-1),...last.split].map(p=>({...p}));
@@ -45,7 +45,7 @@ function BUILD(d){
   p.dash=p.gold?DG:p.ink;
   let s=17+k*31;const R=()=>{s=(s*9301+49297)%233280;return s/233280};const nd=Math.max(4,Math.round(((p.a1-p.a0)+(p.b1-p.b0))/2/8));
   p.ds=[];for(let q=0;q<nd;q++)p.ds.push({u:.08+.84*R(),ph:R(),sp:.85+.3*R(),ln:.035+.035*R()})});
- let t=COLD+0.35;TL={grp:[]};
+ let t=COLD+0.5;TL={grp:[]};   // first chunk starts stacking the moment the rewind ends (user 24 Nov 2026: get in quicker)
  P.forEach((p,k)=>{const lastp=k===P.length-1;if(lastp){t-=1.5;TL.hold=t-0.6}   // no wait at the "?%" (user 22 Nov 2026): the last ribbon follows straight on
   TL.grp.push({a:t,land:t+1.9,num:[t+1.8,t+2.7]});t+=lastp?1.9:3.6});
  TL.ans=t;TL.end=t+4.4;
@@ -68,7 +68,7 @@ function FRAME(t){
  const W=el(g,'g',{transform:`translate(540 1050) scale(${z}) translate(-540 -1050)`});
  // how far each ribbon has travelled (0..1) and how much of its number shows. Opening: everything is there, then the
  // ribbons run back right -> left, last group first (the rewind), and the play starts from the empty chart.
- const st=P.map((p,k)=>{const tl=TL.grp[k];if(cold){const r0=0.05+(nP-1-k)*0.16,pour=1-eio(prog(t,r0,r0+0.62));return {pour,num:1,numOp:prog(pour,0.85,1),act:pour>0.02,land:prog(pour,0.9,1)}}
+ const st=P.map((p,k)=>{const tl=TL.grp[k];if(cold){const r0=0.08+(nP-1-k)*0.09,pour=1-eio(prog(t,r0,r0+0.4));return {pour,num:1,numOp:prog(pour,0.85,1),act:pour>0.02,land:prog(pour,0.9,1)}}
   return {pour:eio(prog(t,tl.a,tl.land)),num:eo(prog(t,tl.num[0],tl.num[1])),numOp:eo(prog(t,tl.land-0.15,tl.land+0.3)),act:t>=tl.a-0.45,land:eo(prog(t,tl.land-0.15,tl.land+0.3)),nameOp:eo(prog(t,tl.a-0.45,tl.a-0.05))}});
  // headers and the empty destination bar
  T(W,(XL0+XL1)/2,Y0-28,D.left_label,26,C.grey,'middle',700);T(W,(XR0+XR1)/2,Y0-28,D.right_label,26,C.grey,'middle',700);
