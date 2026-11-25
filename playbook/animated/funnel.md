@@ -70,6 +70,10 @@ flow (dash_density 2, dash_vary true: the renderer default).
   (Ofgem price cap breakdown, quarterly). Other everyday items only with an official or industry breakdown.
 - Steps: taxes first, then the other parts; final = the striking part (e.g. "only 52p is the fuel itself").
 - Eligible: new data (new price cap, a big pump-price move, a new monthly EIA breakdown).
+- USER RULE (25 Nov 2026): a price episode only works when it shows WHERE THE MONEY GOES and WHO KEEPS WHAT (e.g. the
+  bill split into wholesale, networks, policy costs, supplier costs and profit, VAT). Never use the funnel to split a bill
+  by usage vs standing charges, or to show a price RISE (both were tried on the Jan 2027 energy cap and the user found
+  them unclear). If the official cost breakdown cannot be verified today, skip the price episode.
 
 ### household: Where the average household's money goes
 - Data: ONS Family Spending (UK, annual) or BLS Consumer Expenditure Survey (US, annual), plus the matching income
