@@ -58,7 +58,9 @@
 - 5) Then run the cover frame step with TARGET = the captioned Short.
 - Vertical clips already have burned-in captions: skip this step.
 
-## Platforms (user, 11 Nov 2026; overrides older wording about posting to every channel)
-- Clip Shorts are scheduled in Buffer to TikTok ONLY. Do not post clips to Facebook or Instagram (or any other Buffer channel).
+## Platforms (user, 25 Nov 2026: "It needs to send them to Instagram reels and Facebook reels too"; replaces the 11 Nov 2026 TikTok-only rule)
+- Clip Shorts are scheduled in Buffer to THREE channels, all at the same time: TikTok, Instagram (reel, shouldShareToFeed true) and Facebook (reel). Use the per-platform text in "Captions" above (TikTok hook + hashtags; Instagram hook + call to action with hashtags in firstComment; Facebook Reel Title + article caption). Do not post clips to any other Buffer channel.
+- If Instagram or Facebook refuses a clip (length, format), follow the "longer than a platform allows" rule above, still post to the other channels, and say so in the final message. Log one line per platform in clips_log.jsonl and record every platform's post id in clips_index.json.
+- (Demoted 25 Nov 2026: "Clip Shorts are scheduled in Buffer to TikTok ONLY. Do not post clips to Facebook or Instagram", user 11 Nov 2026.)
 - YouTube: the user uploads by hand. Each run sends the user (SendUserFile, display "attach") the exact posted file plus a thumbnail JPG (the cover frame: a full 1080x1920 frame at 0.05 s of the posted file), then a SendUserMessage with a ready-to-paste YouTube title (under 70 characters, ending #Shorts), a 2-sentence description and 3 hashtags. YouTube may not use the first frame as the thumbnail, hence the separate JPG.
 - Files in clips/ready/ whose names contain "-short" (e.g. -short.mp4, -short-cap.mp4) or end "-cover.mp4" are generated versions, never separate clips; only entries in clips_index.json are clips. Move every file listed for a clip (file, short_file, cover file) to posted/ together.
