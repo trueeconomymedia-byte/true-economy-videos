@@ -38,7 +38,9 @@
         "date": "2026-11-26",
         "time_utc": "11:35",
         "platforms": {
-          "tiktok": "6b08059cd91bf30768333098"
+          "tiktok": "6b08059cd91bf30768333098",
+          "instagram": "6b08099ed91bf3076834dc9a",
+          "facebook": "6b08099fd8848786e0d80e51"
         },
         "status": "scheduled"
       }
