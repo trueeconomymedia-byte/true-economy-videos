@@ -32,8 +32,17 @@
     "added": "2026-11-25",
     "priority": "normal",
     "notes": "Clip 1 of 9: \"Sold out, and closing\". Already vertical 1080x1920 with its own title (The nightclub paradox), burned-in captions and its own cover on the first 3 frames: post as it is (no Short step, no captions step, no extra cover frame). Ends on a card saying Watch the full video on YouTube; the full video is live on YouTube under the documentary title.",
-    "last_posted": null,
-    "posts": []
+    "last_posted": "2026-11-26",
+    "posts": [
+      {
+        "date": "2026-11-26",
+        "time_utc": "11:35",
+        "platforms": {
+          "tiktok": "6b08059cd91bf30768333098"
+        },
+        "status": "scheduled"
+      }
+    ]
   },
   {
     "file": "nightclub-paradox_clip2_twice-a-week.mp4",
