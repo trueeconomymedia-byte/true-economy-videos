@@ -429,8 +429,9 @@
    "name": "Where does the tax go?",
    "kind": "evergreen",
    "gap_days": 14,
-   "desc": "Government budget split as a flow chart or donut: where each £/$ of tax goes.",
+   "desc": "Government budget as a top-to-bottom jellyfish flow chart (default): where each £/$ of tax goes, in one unit (pence/cents per £1/$1 of tax).",
    "forms": [
+    "JELLYFISH FLOW (default, user 26 Nov 2026): scripts/make_post_jelly.py - top-to-bottom flow, narrow bell (money in) -> total bar -> ribbons fanning out wider below; one unit; extra layers going down allowed if clearer",
     "Sankey from taxes to spending",
     "donut",
     "dot grid of 100"

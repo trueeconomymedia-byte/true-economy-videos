@@ -2,7 +2,7 @@
 """True Economy Shorts card video, FLAT style (user-approved 22 Nov 2026, new default for Daily Post and Markets Daily non-stock cards).
 Same background as the Animated Shorts: the card paper (assets_public/True-Economy_card-paper_*.png) full frame, unchanged; NO black banner/tab,
 NO cut-paper edge, NO shadow; the chart canvas (948x1300 at 2x, origin 132,620) is printed onto it with the printed-ink finish (scripts/anim_shared/ink.py).
-Animations (ribbon streaks, pulses, chevrons, sweep) work exactly as in video_card_legacy.py. usage: python3 video_card_flat.py chart.svg out.mp4 [ignored background arg]
+Animations (ribbon streaks, pulses, chevrons, sweep) work exactly as in video_card_legacy.py. Also "vflow" (26 Nov 2026): VERTICAL top-to-bottom ribbons [ys, xs0, xs1, yd, xd0, xd1, colour] with streaks running down (jellyfish flow, see make_post_jelly.py). usage: python3 video_card_flat.py chart.svg out.mp4 [ignored background arg]
 env: LOOP_LEN, AUDIO, SEED as before. The previous look (banner + torn paper + topic background) is scripts/video_card_legacy.py."""
 import sys, re, subprocess, math, random, os, json
 import numpy as np
@@ -39,7 +39,7 @@ if not anim and os.environ.get("SWEEP") == "1": anim["sweep"] = {"rgb": [54, 112
 print("animation layers:", list(anim), flush=True)
 
 PCOL = {"#3670D0": (54, 112, 208), "#B3C9ED": (54, 112, 208),
-        "#D94437": (217, 68, 55), "#FFF205": (217, 205, 0), "#EDE22E": (208, 199, 30), "#FACB3A": (232, 178, 36)}
+        "#D94437": (217, 68, 55), "#249972": (36, 153, 114), "#3B3A38": (70, 68, 64), "#C4BFB6": (140, 134, 124), "#FFF205": (217, 205, 0), "#EDE22E": (208, 199, 30), "#FACB3A": (232, 178, 36)}
 parts = []
 for (xs, ys0, ys1, xd, yd0, yd1, col) in anim.get("flow", []):
     hgt = ((ys1 - ys0) + (yd1 - yd0)) / 2; ln = abs(xd - xs) + abs((yd0 - ys0)) * 0.3
@@ -47,6 +47,12 @@ for (xs, ys0, ys1, xd, yd0, yd1, col) in anim.get("flow", []):
     cyc = int(min(8, max(1, round(62 * DUR / max(ln, 1)))))
     for i in range(n):
         parts.append((xs, ys0, ys1, xd, yd0, yd1, (i + rng.random() * 0.8) / n, rng.random(), cyc, PCOL.get(col, (54, 112, 208))))
+for (ys, xs0, xs1, yd, xd0, xd1, col) in anim.get("vflow", []):          # VERTICAL ribbons (top-to-bottom flow): stored transposed, streaks run downward
+    wid = ((xs1 - xs0) + (xd1 - xd0)) / 2; ln = abs(yd - ys) + abs(xd0 - xs0) * 0.3
+    n = int(max(3, round(wid * ln / 27 ** 2)))
+    cyc = int(min(8, max(1, round(62 * DUR / max(ln, 1)))))
+    for i in range(n):
+        parts.append((ys, xs0, xs1, yd, xd0, xd1, (i + rng.random() * 0.8) / n, rng.random(), cyc, PCOL.get(col, (54, 112, 208)), True))
 BEHIND = bool(anim.get("red_behind"))     # red ribbon sits BEHIND the other ribbons: its flow bits are hidden wherever a non-red ribbon covers it (user 13 Nov)
 FRONT_MASK = None
 if BEHIND:
@@ -63,12 +69,13 @@ def chart_state(t):
     img = chart_static.copy()
     lay = Image.new("RGBA", (1896, 2600), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
     lay_red = Image.new("RGBA", (1896, 2600), (0, 0, 0, 0)) if BEHIND else None; d_red = ImageDraw.Draw(lay_red) if BEHIND else None
-    for (xs, ys0, ys1, xd, yd0, yd1, ph, u, cyc, rgb) in parts:                  # money streaks along ribbons
+    for (xs, ys0, ys1, xd, yd0, yd1, ph, u, cyc, rgb, *vv) in parts:            # money streaks along ribbons (vv = vertical flag)
         tt = (ph + cyc * t / DUR) % 1.0
         xm = (xs + xd) / 2
         def pos(q):
             x = bez(xs, xm, xm, xd, q); yt = bez(ys0, ys0, yd0, yd0, q); yb = bez(ys1, ys1, yd1, yd1, q)
-            return x * 2, (yt * (1 - u) + yb * u) * 2
+            p = (x * 2, (yt * (1 - u) + yb * u) * 2)
+            return (p[1], p[0]) if vv else p
         q0 = tt; q1 = max(0.0, tt - 26 / max(abs(xd - xs) * 2, 1))
         edge = min(1.0, tt / 0.1, (1 - tt) / 0.1)
         al = int(255 * 0.5 * max(edge, 0))
