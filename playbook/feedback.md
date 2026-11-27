@@ -275,3 +275,10 @@ Reference build: scripts/make_post_chart.py (+ Card.rough in te_lib). Reference 
 - ONE unit on the chart (cents/pence per $1/£1 of tax); totals in trillions/billions go in the subtitle only. ONE idea. No KPI table (the chart is the hero), no numbered step tags, no equation band (both tried and judged too complex).
 - Colour per output group (main blue, light blue, gold, graphite #3B3A38, warm grey #C4BFB6); money in teal #249972; borrowing/deficit red #D94437. Pastel ribbons with dark edge bars (Meta money-flow style). Streaks flow down every ribbon (anim "vflow", now built into video_card_flat.py; run video_card.py as usual).
 - Extra layers going down (groups -> items) are allowed when they paint a clearer picture; keep about 5 outputs per layer so labels stay big; check the cents add up at every layer.
+
+## 2026-11-27 WEALTH AND INEQUALITY (wealth_gap): CLEAR TITLE + EVERY CHART PART NAMED (user: "Nice ... remember this only for this specific series"; applies to wealth_gap ONLY, not other series)
+Reference build: videos/wealth_gap-top1-vs-bottom90-v2-2026-11-27.mp4 (make_post.py in that run; two 100% stacked columns).
+- Title states the finding in plain words naming who is compared (e.g. "The richest 1% of US households own more than the bottom 90%"); say "richest"/"poorest", not "top"/"bottom half" jargon; subtitle says what the numbers are (share of all US household wealth owned by each group, quarter).
+- Name every group directly on the chart (no colour key): left column = the people/households split into named groups (richest first), right column = their share of the total, with column headings and a small grey line saying what 100% means; dotted guide lines join the same boundaries.
+- Add brackets with a plain label when the headline compares two totals (e.g. "Richest 1% alone" vs "Bottom 90% together = 31.1%").
+- Keep: true scale, poorest group in red, static, flat paper look. Captions use the same wording (richest / poorest).
