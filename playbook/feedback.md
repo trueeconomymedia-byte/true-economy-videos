@@ -282,3 +282,7 @@ Reference build: videos/wealth_gap-top1-vs-bottom90-v2-2026-11-27.mp4 (make_post
 - Name every group directly on the chart (no colour key): left column = the people/households split into named groups (richest first), right column = their share of the total, with column headings and a small grey line saying what 100% means; dotted guide lines join the same boundaries.
 - Add brackets with a plain label when the headline compares two totals (e.g. "Richest 1% alone" vs "Bottom 90% together = 31.1%").
 - Keep: true scale, poorest group in red, static, flat paper look. Captions use the same wording (richest / poorest).
+## PAUSE UNTIL NEXT VIDEO'S CLIPS (user, 27 Nov 2026: "don't post any clips until I give you clips from my next video; only start actively scheduling when my next clips come in")
+- HOLD: the nightclub documentary clips (clips 1-9, added 2026-11-25) are finished with: clip 1 posted 26 Nov, clip 2 scheduled 27 Nov 13:37 UK. Do NOT schedule any other clip already in clips_index.json with "added" on or before 2026-11-27, and do not reuse posted clips.
+- Only clips added to clips_index.json with "added" AFTER 2026-11-27 (the user's next video) are eligible. If there are none, this run: do housekeeping (Step 2: move sent clips to posted/) and then STOP SILENTLY (no Buffer posts, no messages).
+- When new clips appear, resume the normal rules (weekly target, day choice, times) with the new documentary only.
