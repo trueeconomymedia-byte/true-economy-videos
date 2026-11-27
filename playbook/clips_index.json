@@ -44,7 +44,8 @@
         },
         "status": "scheduled"
       }
-    ]
+    ],
+    "status": "posted"
   },
   {
     "file": "nightclub-paradox_clip2_twice-a-week.mp4",
@@ -52,8 +53,19 @@
     "added": "2026-11-25",
     "priority": "normal",
     "notes": "Clip 2 of 9: \"A plane that flies twice a week\". Already vertical 1080x1920 with its own title (The nightclub paradox), burned-in captions and its own cover on the first 3 frames: post as it is (no Short step, no captions step, no extra cover frame). Ends on a card saying Watch the full video on YouTube; the full video is live on YouTube under the documentary title.",
-    "last_posted": null,
-    "posts": []
+    "last_posted": "2026-11-27",
+    "posts": [
+      {
+        "date": "2026-11-27",
+        "time_utc": "13:37",
+        "platforms": {
+          "tiktok": "6b0956dce94385a8fd942c28",
+          "instagram": "6b0956dc049983dcfbaba5b3",
+          "facebook": "6b0956dd062ed764a804df83"
+        },
+        "status": "scheduled"
+      }
+    ]
   },
   {
     "file": "nightclub-paradox_clip3_eight-tables.mp4",
