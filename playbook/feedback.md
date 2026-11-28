@@ -286,3 +286,10 @@ Reference build: videos/wealth_gap-top1-vs-bottom90-v2-2026-11-27.mp4 (make_post
 - HOLD: the nightclub documentary clips (clips 1-9, added 2026-11-25) are finished with: clip 1 posted 26 Nov, clip 2 scheduled 27 Nov 13:37 UK. Do NOT schedule any other clip already in clips_index.json with "added" on or before 2026-11-27, and do not reuse posted clips.
 - Only clips added to clips_index.json with "added" AFTER 2026-11-27 (the user's next video) are eligible. If there are none, this run: do housekeeping (Step 2: move sent clips to posted/) and then STOP SILENTLY (no Buffer posts, no messages).
 - When new clips appear, resume the normal rules (weekly target, day choice, times) with the new documentary only.
+
+## 2026-11-28 EXPANDED PALETTE + COUNTRY COLOURS (user, Daily Post, biggest_companies "US vs China+Germany+Japan" card; applies to all future cards)
+- The user first asked for the three parts of a stacked column to be different colours (not two blues), then suggested colouring each country by its own colour (China red, US blue, Germany gold, Japan light red tint), then said: "you can expand the palette if it improves the visual" and "yes" to making that standing: future cards MAY use extra colours beyond the approved palette when it makes the chart clearer, as long as they work well with the current palette (flat, same warm paper feel, no neon/clashing hues; keep the core blues/red/teal/gold/greys as the base).
+- When items are countries or companies, colouring each by its own flag/brand colour is allowed and encouraged for stacked parts or parallel bars; never give two neighbouring parts the same or near-same hue (e.g. main blue next to light blue reads as two blues).
+- Red #D94437 for a loss/problem still keeps that meaning on charts where red marks a gap; when red is used as a country colour (e.g. China) make sure no other element on that card is red for a "problem" meaning.
+- Text: white on dark fills, ink #111111 on light fills (unchanged).
+- Reference: videos/biggest_companies-us-vs-three-v5-2026-11-28.mp4 (US blue, China red, Germany gold, Japan light red #EFA9A3).
